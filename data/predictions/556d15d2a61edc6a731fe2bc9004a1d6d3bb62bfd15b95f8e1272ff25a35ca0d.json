@@ -1,0 +1,192 @@
+{
+  "document_id": "fs:556d15d2a61edc6a",
+  "pages": 149,
+  "contract_version": "v1",
+  "feature_version": "v1",
+  "decoder_version": "v1",
+  "model_version": "unscored-baseline",
+  "calibration_version": "none",
+  "fields": {
+    "invoice_number": {
+      "value": "148",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.9188627647058824,
+          0.0,
+          0.9406666862745098,
+          0.0
+        ],
+        "token_span": [
+          6
+        ]
+      },
+      "raw_text": "148"
+    },
+    "invoice_date": {
+      "value": "2024-08-01",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.8846404624183006,
+          0.0,
+          0.9407434035947713,
+          0.0
+        ],
+        "token_span": [
+          11
+        ]
+      },
+      "raw_text": "8/01/24"
+    },
+    "due_date": {
+      "value": "2024-08-01",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.7009999803921568,
+          0.0,
+          0.7571029215686275,
+          0.0
+        ],
+        "token_span": [
+          23
+        ]
+      },
+      "raw_text": "8/01/24"
+    },
+    "total_amount_due": {
+      "value": "148.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.9187156862745098,
+          0.0,
+          0.9405196078431372,
+          0.0
+        ],
+        "token_span": [
+          6
+        ]
+      },
+      "raw_text": "148"
+    },
+    "previous_balance": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.16233659803921568,
+          0.0,
+          0.2592549117647059,
+          0.0
+        ],
+        "token_span": [
+          0
+        ]
+      },
+      "raw_text": "P.O.Box211579"
+    },
+    "payments_and_credits": {
+      "value": "-551212879.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.16233659803921568,
+          0.0,
+          0.30467975326797386,
+          0.0
+        ],
+        "token_span": [
+          1
+        ]
+      },
+      "raw_text": "Eagan,MN55121-2879"
+    },
+    "account_number": {
+      "value": "2339133327",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.28333333333333327,
+          0.0,
+          0.3519607843137253,
+          0.0
+        ],
+        "token_span": [
+          103
+        ]
+      },
+      "raw_text": "2339133327"
+    },
+    "carrier_name": {
+      "value": "231-189-0442-071700-5",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.7627450784313725,
+          0.0,
+          0.9412156666666667,
+          0.0
+        ],
+        "token_span": [
+          14
+        ]
+      },
+      "raw_text": "231-189-0442-071700-5"
+    },
+    "document_type": {
+      "value": "PIN",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.5176470392156862,
+          0.0,
+          0.5427499803921568,
+          0.0
+        ],
+        "token_span": [
+          15
+        ]
+      },
+      "raw_text": "PIN"
+    },
+    "currency_code": {
+      "value": "on",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.6587940980392156,
+          0.0,
+          0.6871601111111111,
+          0.0
+        ],
+        "token_span": [
+          52
+        ]
+      },
+      "raw_text": "on"
+    }
+  },
+  "line_items": []
+}

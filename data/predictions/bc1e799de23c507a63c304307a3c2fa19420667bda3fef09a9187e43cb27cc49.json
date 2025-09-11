@@ -1,0 +1,192 @@
+{
+  "document_id": "fs:bc1e799de23c507a",
+  "pages": 2,
+  "contract_version": "v1",
+  "feature_version": "v1",
+  "decoder_version": "v1",
+  "model_version": "unscored-baseline",
+  "calibration_version": "none",
+  "fields": {
+    "invoice_number": {
+      "value": "2024",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.04023529411764706,
+          0.0,
+          0.06864052287581698,
+          0.0
+        ],
+        "token_span": [
+          212
+        ]
+      },
+      "raw_text": "2024"
+    },
+    "invoice_date": {
+      "value": "2024-09-11",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.8275408499183006,
+          0.0,
+          0.863047385866013,
+          0.0
+        ],
+        "token_span": [
+          71
+        ]
+      },
+      "raw_text": "2024"
+    },
+    "due_date": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.029411764705882353,
+          0.0,
+          0.06477124183006536,
+          0.0
+        ],
+        "token_span": [
+          74
+        ]
+      },
+      "raw_text": "Your"
+    },
+    "total_amount_due": {
+      "value": "31.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.7903970588235293,
+          0.0,
+          0.806735294117647,
+          0.0
+        ],
+        "token_span": [
+          15
+        ]
+      },
+      "raw_text": "31,"
+    },
+    "previous_balance": {
+      "value": "21515.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.27988235294117647,
+          0.0,
+          0.31058823529411766,
+          0.0
+        ],
+        "token_span": [
+          7
+        ]
+      },
+      "raw_text": "21515"
+    },
+    "payments_and_credits": {
+      "value": "1200.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.4575424836601307,
+          0.0,
+          0.48461437908496735,
+          0.0
+        ],
+        "token_span": [
+          11
+        ]
+      },
+      "raw_text": "1200"
+    },
+    "account_number": {
+      "value": "2-1",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.37426797385620914,
+          0.0,
+          0.38941176470588235,
+          0.0
+        ],
+        "token_span": [
+          253
+        ]
+      },
+      "raw_text": "2-1"
+    },
+    "carrier_name": {
+      "value": "bill",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.09901960784313725,
+          0.0,
+          0.11983660130718952,
+          0.0
+        ],
+        "token_span": [
+          76
+        ]
+      },
+      "raw_text": "bill"
+    },
+    "document_type": {
+      "value": "days",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.6360522875816996,
+          0.0,
+          0.6599117647058826,
+          0.0
+        ],
+        "token_span": [
+          120
+        ]
+      },
+      "raw_text": "days"
+    },
+    "currency_code": {
+      "value": "Please",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.5608235294117648,
+          0.0,
+          0.5940277777777779,
+          0.0
+        ],
+        "token_span": [
+          144
+        ]
+      },
+      "raw_text": "Please"
+    }
+  },
+  "line_items": []
+}

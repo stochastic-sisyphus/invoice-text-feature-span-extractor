@@ -1,0 +1,106 @@
+{
+  "field_statistics": {
+    "invoice_number": {
+      "PREDICTED": 5
+    },
+    "invoice_date": {
+      "PREDICTED": 4,
+      "ABSTAIN": 1
+    },
+    "due_date": {
+      "ABSTAIN": 3,
+      "PREDICTED": 2
+    },
+    "total_amount_due": {
+      "PREDICTED": 5
+    },
+    "previous_balance": {
+      "PREDICTED": 4,
+      "ABSTAIN": 1
+    },
+    "payments_and_credits": {
+      "PREDICTED": 5
+    },
+    "account_number": {
+      "PREDICTED": 5
+    },
+    "carrier_name": {
+      "PREDICTED": 5
+    },
+    "document_type": {
+      "PREDICTED": 5
+    },
+    "currency_code": {
+      "PREDICTED": 5
+    }
+  },
+  "document_statistics": [
+    {
+      "sha256": "d2b2234e1c1dbb755dd9b63c4c3140b92afc51c950c16f31168771bd76cbce68",
+      "doc_id": "fs:d2b2234e1c1dbb75",
+      "pages": 3,
+      "tokens": 363,
+      "candidates": 75,
+      "predicted": 9,
+      "abstain": 1,
+      "missing": 0
+    },
+    {
+      "sha256": "556d15d2a61edc6a731fe2bc9004a1d6d3bb62bfd15b95f8e1272ff25a35ca0d",
+      "doc_id": "fs:556d15d2a61edc6a",
+      "pages": 149,
+      "tokens": 24611,
+      "candidates": 160,
+      "predicted": 9,
+      "abstain": 1,
+      "missing": 0
+    },
+    {
+      "sha256": "bc1e799de23c507a63c304307a3c2fa19420667bda3fef09a9187e43cb27cc49",
+      "doc_id": "fs:bc1e799de23c507a",
+      "pages": 2,
+      "tokens": 470,
+      "candidates": 71,
+      "predicted": 9,
+      "abstain": 1,
+      "missing": 0
+    },
+    {
+      "sha256": "aaa25ee5b835adf91196ca64d033837e4c3f7945dd345b510cfc37e8f8d03a89",
+      "doc_id": "fs:aaa25ee5b835adf9",
+      "pages": 7,
+      "tokens": 2025,
+      "candidates": 110,
+      "predicted": 8,
+      "abstain": 2,
+      "missing": 0
+    },
+    {
+      "sha256": "a094337e26f2e4f8ac893da5121555c547f3766b4ade8c83bf763bb6734a3edd",
+      "doc_id": "fs:a094337e26f2e4f8",
+      "pages": 7,
+      "tokens": 940,
+      "candidates": 145,
+      "predicted": 10,
+      "abstain": 0,
+      "missing": 0
+    }
+  ],
+  "review_queue_statistics": {
+    "total_entries": 5,
+    "by_field": {
+      "due_date": 3,
+      "previous_balance": 1,
+      "invoice_date": 1
+    },
+    "by_reason": {
+      "ABSTAIN": 5
+    }
+  },
+  "generated_at": "2025-09-11T23:41:00.008415+00:00",
+  "contract_version": "v1",
+  "feature_version": "v1",
+  "decoder_version": "v1",
+  "model_version": "unscored-baseline",
+  "calibration_version": "none"
+}
