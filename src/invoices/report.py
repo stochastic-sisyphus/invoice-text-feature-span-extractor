@@ -136,6 +136,68 @@ def collect_review_queue_statistics() -> Dict[str, Any]:
         }
 
 
+def collect_coverage_statistics() -> Dict[str, Any]:
+    """Collect coverage probe statistics."""
+    try:
+        coverage_stats = candidates.get_coverage_statistics()
+        
+        if not coverage_stats:
+            return {
+                'total_documents': 0,
+                'coverage_probes': {},
+                'bucket_distribution': {},
+            }
+        
+        # Calculate coverage percentages
+        total_candidates = coverage_stats.get('total_candidates', 0)
+        bucket_dist = dict(coverage_stats.get('bucket_distribution', {}))
+        
+        coverage_probes = {}
+        
+        # Field-specific coverage probes
+        field_types = {
+            'invoice_number': 'id_like',
+            'invoice_date': 'date_like', 
+            'due_date': 'date_like',
+            'total_amount_due': 'amount_like',
+            'account_number': 'id_like',
+        }
+        
+        for field, expected_type in field_types.items():
+            type_count = bucket_dist.get(expected_type, 0)
+            proximal_count = bucket_dist.get('keyword_proximal', 0)
+            
+            # Cue-coverage: percentage with keyword proximity
+            cue_coverage = (proximal_count / max(total_candidates, 1)) * 100
+            
+            # Region-coverage: percentage of expected type found
+            region_coverage = (type_count / max(total_candidates, 1)) * 100
+            
+            coverage_probes[field] = {
+                'cue_coverage_percent': round(cue_coverage, 1),
+                'region_coverage_percent': round(region_coverage, 1),
+                'expected_type_count': type_count,
+                'total_candidates': total_candidates,
+            }
+        
+        return {
+            'total_documents': coverage_stats.get('total_documents', 0),
+            'documents_with_candidates': coverage_stats.get('documents_with_candidates', 0),
+            'total_candidates': total_candidates,
+            'coverage_probes': coverage_probes,
+            'bucket_distribution': bucket_dist,
+        }
+    
+    except Exception as e:
+        print(f"Warning: Failed to collect coverage statistics: {e}")
+        return {
+            'total_documents': 0,
+            'coverage_probes': {},
+            'bucket_distribution': {},
+            'error': str(e),
+        }
+
+
 def print_field_report(field_stats: Dict[str, Dict[str, int]]) -> None:
     """Print formatted field statistics report."""
     print("\n" + "="*80)
@@ -222,16 +284,50 @@ def print_review_queue_report(review_stats: Dict[str, Any]) -> None:
     # By field
     by_field = review_stats.get('by_field', {})
     if by_field:
-        print(f"\nEntries by field:")
+        print("Entries by field:")
         for field, count in sorted(by_field.items()):
             print(f"  {field}: {count}")
     
     # By reason
     by_reason = review_stats.get('by_reason', {})
     if by_reason:
-        print(f"\nEntries by reason:")
+        print("Entries by reason:")
         for reason, count in sorted(by_reason.items()):
             print(f"  {reason}: {count}")
+
+
+def print_coverage_report(coverage_stats: Dict[str, Any]) -> None:
+    """Print coverage probe report."""
+    print("\nCOVERAGE PROBES")
+    print("="*50)
+    
+    total_docs = coverage_stats.get('total_documents', 0)
+    docs_with_candidates = coverage_stats.get('documents_with_candidates', 0)
+    total_candidates = coverage_stats.get('total_candidates', 0)
+    
+    print(f"Documents processed: {total_docs}")
+    print(f"Documents with candidates: {docs_with_candidates}")
+    print(f"Total candidates: {total_candidates}")
+    
+    # Coverage probes by field
+    coverage_probes = coverage_stats.get('coverage_probes', {})
+    if coverage_probes:
+        print("\nField Coverage Probes:")
+        print(f"{'Field':<20} {'Cue Coverage':<15} {'Region Coverage':<15}")
+        print("-" * 50)
+        
+        for field, stats in coverage_probes.items():
+            cue_pct = stats.get('cue_coverage_percent', 0)
+            region_pct = stats.get('region_coverage_percent', 0)
+            print(f"{field:<20} {cue_pct:>13.1f}% {region_pct:>13.1f}%")
+    
+    # Bucket distribution
+    bucket_dist = coverage_stats.get('bucket_distribution', {})
+    if bucket_dist:
+        print("\nBucket Distribution:")
+        for bucket, count in sorted(bucket_dist.items()):
+            percentage = (count / max(total_candidates, 1)) * 100
+            print(f"  {bucket}: {count} ({percentage:.1f}%)")
 
 
 def generate_report() -> Dict[str, Any]:
@@ -248,17 +344,20 @@ def generate_report() -> Dict[str, Any]:
         field_stats = collect_field_statistics()
         doc_stats = collect_document_statistics()
         review_stats = collect_review_queue_statistics()
+        coverage_stats = collect_coverage_statistics()
         
         # Print reports
         print_field_report(field_stats)
         print_document_report(doc_stats)
         print_review_queue_report(review_stats)
+        print_coverage_report(coverage_stats)
         
         # Create summary
         report_data = {
             'field_statistics': field_stats,
             'document_statistics': doc_stats,
             'review_queue_statistics': review_stats,
+            'coverage_statistics': coverage_stats,
             'generated_at': utils.get_current_utc_iso(),
             **utils.get_version_stamps(),
         }

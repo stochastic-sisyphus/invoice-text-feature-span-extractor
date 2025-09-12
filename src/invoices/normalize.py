@@ -246,7 +246,7 @@ def normalize_assignments(assignments: Dict[str, Any]) -> Dict[str, Any]:
         else:
             # Normalize the candidate value
             candidate = assignment['candidate']
-            raw_text = candidate['text']
+            raw_text = candidate.get('raw_text', candidate.get('text', ''))
             
             normalization_result = normalize_field_value(field, raw_text)
             

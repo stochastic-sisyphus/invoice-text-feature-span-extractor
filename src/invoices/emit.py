@@ -6,7 +6,7 @@ from typing import Dict, List, Any, Optional, Tuple
 import pandas as pd
 from tqdm import tqdm
 
-from . import paths, utils, ingest, tokenize, candidates, decoder, normalize
+from . import paths, utils, ingest, tokenize, decoder, normalize
 
 
 def create_field_output(field: str, assignment: Dict[str, Any]) -> Dict[str, Any]:
@@ -44,14 +44,14 @@ def create_field_output(field: str, assignment: Dict[str, Any]) -> Dict[str, Any
     
     # Create provenance
     provenance = {
-        'page': candidate['page_idx'],
+        'page': int(candidate['page_idx']),
         'bbox': [
-            candidate['bbox_norm_x0'],
-            candidate['bbox_norm_y0'],
-            candidate['bbox_norm_x1'],
-            candidate['bbox_norm_y1'],
+            float(candidate['bbox_norm_x0']),
+            float(candidate['bbox_norm_y0']),
+            float(candidate['bbox_norm_x1']),
+            float(candidate['bbox_norm_y1']),
         ],
-        'token_span': [candidate['token_idx']],  # Single token span for now
+        'token_span': [str(idx) for idx in candidate.get('token_indices', [candidate.get('token_idx', 0)])],  # Safe string conversion
     }
     
     return {
@@ -93,13 +93,13 @@ def create_review_queue_entry(doc_id: str, field: str, assignment: Dict[str, Any
     if assignment['assignment_type'] == 'CANDIDATE' and 'candidate' in assignment:
         candidate = assignment['candidate']
         entry.update({
-            'page': candidate['page_idx'],
-            'bbox_x0': candidate['bbox_norm_x0'],
-            'bbox_y0': candidate['bbox_norm_y0'],
-            'bbox_x1': candidate['bbox_norm_x1'],
-            'bbox_y1': candidate['bbox_norm_y1'],
-            'token_span': str(candidate['token_idx']),  # Convert to string for parquet
-            'raw_text': assignment.get('raw_text'),
+            'page': int(candidate['page_idx']),
+            'bbox_x0': float(candidate['bbox_norm_x0']),
+            'bbox_y0': float(candidate['bbox_norm_y0']),
+            'bbox_x1': float(candidate['bbox_norm_x1']),
+            'bbox_y1': float(candidate['bbox_norm_y1']),
+            'token_span': ','.join(str(idx) for idx in candidate.get('token_indices', [candidate.get('token_idx', 0)])),  # Safe string conversion
+            'raw_text': str(assignment.get('raw_text', '')),  # Ensure string
         })
     
     return entry

@@ -41,7 +41,12 @@ class TestIdempotency:
         raw_dir = paths.get_ingest_raw_dir()
         raw_files1 = list(raw_dir.glob("*.pdf"))
         
-        assert len(raw_files1) == count1, "Number of raw files should match ingested count"
+        # The count may be 0 if files were already ingested, but files should exist
+        if count1 > 0:
+            assert len(raw_files1) == count1, "Number of raw files should match newly ingested count"
+        else:
+            # Files already existed, should have same number as index rows
+            assert len(raw_files1) == row_count1, "Raw files should match index row count for previously ingested files"
         
         # Second ingestion (should be idempotent)
         count2 = ingest.ingest_seed_folder(str(seed_folder))
