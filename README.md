@@ -1,6 +1,12 @@
 # Text-Layer Feature-Based Span Extractor for Invoices
 
-A deterministic, end-to-end pipeline for extracting structured information from machine-generated PDF invoices using only the native text layer. No OCR, no vision models, no brittle rules—just robust feature-based machine learning operating on pdfplumber-extracted text with full provenance tracking.
+A deterministic, end-to-end pipeline for extracting structured information utilizing the benefits of PDFs with native-text layer. 
+To create a robust + maintainable system able to extract and process PDF invoices using only the native text layer. 
+If I didn't repeat it enough (actually its all ive said til this point); NO BRITTLE FRAGILE CRYBABY RULES NO DUMB OCR 
+This system must slay. She's quirky. shes not like othet girls. and id say it again!
+No OCR, no vision models, no brittle rules. 
+Yes robust feature-based machine learning operating on pdfplumber-extracted text with full provenance tracking.
+
 
 ## Quick Start
 
