@@ -259,7 +259,6 @@ Stop and present two concrete, minimal options with trade-offs and propose the s
 
 ⸻
 
-<<<<<<< HEAD
 End of Prompt. Build now.
 =======
 DONE!
