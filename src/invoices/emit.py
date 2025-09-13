@@ -105,7 +105,7 @@ def create_review_queue_entry(doc_id: str, field: str, assignment: Dict[str, Any
     return entry
 
 
-def emit_document(sha256: str, assignments: Dict[str, Any], contract_version: str = "v1") -> Tuple[str, List[Dict[str, Any]]]:
+def emit_document(sha256: str, assignments: Dict[str, Any], contract_version: str = "v2") -> Tuple[str, List[Dict[str, Any]]]:
     """
     Emit contract JSON for a single document and collect review queue entries.
     
@@ -130,8 +130,7 @@ def emit_document(sha256: str, assignments: Dict[str, Any], contract_version: st
     
     # Create contract JSON with version-specific stamps
     version_stamps = utils.get_version_stamps()
-    if contract_version == "v2":
-        version_stamps['contract_version'] = "v2"
+    version_stamps['contract_version'] = contract_version
     
     contract = {
         'document_id': doc_id,
@@ -179,7 +178,7 @@ def emit_document(sha256: str, assignments: Dict[str, Any], contract_version: st
     return str(predictions_path), review_queue_entries
 
 
-def emit_all_documents(contract_version: str = "v1") -> Dict[str, Any]:
+def emit_all_documents(contract_version: str = "v2") -> Dict[str, Any]:
     """
     Emit contract JSON for all documents and manage review queue.
     

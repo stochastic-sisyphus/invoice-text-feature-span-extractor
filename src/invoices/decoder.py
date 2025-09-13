@@ -158,7 +158,7 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     return max(0.0, base_cost)  # Ensure non-negative
 
 
-def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v1") -> Dict[str, Any]:
+def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v2") -> Dict[str, Any]:
     """
     Decode a single document using Hungarian assignment.
     
@@ -170,8 +170,8 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS, contract_
     Returns:
         Assignment results for each field
     """
-    # Select field set based on contract version
-    field_set = HEADER_FIELDS_V2 if contract_version == "v2" else HEADER_FIELDS
+    # Select field set based on contract version (v2 is primary, v1 is legacy)
+    field_set = HEADER_FIELDS if contract_version == "v1" else HEADER_FIELDS_V2
     # Get candidates
     candidates_df = candidates.get_document_candidates(sha256)
     
@@ -262,12 +262,12 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS, contract_
     return assignments
 
 
-def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v1") -> Dict[str, Dict[str, Any]]:
+def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v2") -> Dict[str, Dict[str, Any]]:
     """Decode all documents in the index."""
     indexed_docs = ingest.get_indexed_documents()
     
-    # Select field set for default NONE assignments
-    field_set = HEADER_FIELDS_V2 if contract_version == "v2" else HEADER_FIELDS
+    # Select field set for default NONE assignments (v2 is primary, v1 is legacy)
+    field_set = HEADER_FIELDS if contract_version == "v1" else HEADER_FIELDS_V2
     
     if indexed_docs.empty:
         print("No documents found in index")

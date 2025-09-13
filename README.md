@@ -14,16 +14,20 @@ Yes robust feature-based machine learning operating on pdfplumber-extracted text
 # Install dependencies
 pip install -e .
 
-# Run complete pipeline
+# Run complete pipeline (uses contract_v2 by default)
 python scripts/run_pipeline.py pipeline --seed-folder /path/to/seed_pdfs
 
 # Or run individual steps
 python scripts/run_pipeline.py ingest --seed-folder /path/to/seed_pdfs
 python scripts/run_pipeline.py tokenize
 python scripts/run_pipeline.py candidates  
-python scripts/run_pipeline.py decode
-python scripts/run_pipeline.py emit
+python scripts/run_pipeline.py decode  # Uses v2 by default
+python scripts/run_pipeline.py emit    # Uses v2 by default
 python scripts/run_pipeline.py report
+
+# Use legacy v1 contract explicitly
+python scripts/run_pipeline.py decode --contract-version v1
+python scripts/run_pipeline.py emit --contract-version v1
 ```
 
 ## Running Tests
@@ -66,7 +70,7 @@ data/
 
 **Candidates**: Proposed field spans (≤200 per document) with `features_v1` including text analysis, geometric properties, style characteristics, and contextual information
 
-**Predictions**: Contract JSON with all header fields (`invoice_number`, `invoice_date`, `due_date`, `total_amount_due`, etc.) containing `value`, `confidence`, `status` ∈ {PREDICTED, ABSTAIN, MISSING}, and full `provenance` (page, bbox, token_span)
+**Predictions**: Contract JSON with expanded field vocabulary (27 fields in v2 including `invoice_number`, `invoice_date`, `due_date`, `total_amount`, `vendor_name`, `customer_account`, etc.; 10 fields in legacy v1) containing `value`, `confidence`, `status` ∈ {PREDICTED, ABSTAIN, MISSING}, and full `provenance` (page, bbox, token_span)
 
 ## Determinism & Idempotency
 
@@ -74,7 +78,7 @@ data/
 
 **Idempotency**: Re-running any pipeline stage skips already-processed work. Ingestion deduplicates by SHA256. Tokenization, candidate generation, and emission check for existing outputs before processing.
 
-**Version Stamping**: All outputs carry version stamps (`contract_version=v1`, `feature_version=v1`, `decoder_version=v1`, `model_version=unscored-baseline`, `calibration_version=none`) for reproducibility and change tracking.
+**Version Stamping**: All outputs carry version stamps (`contract_version=v2` by default, `feature_version=v1`, `decoder_version=v1`, `model_version=unscored-baseline`, `calibration_version=none`) for reproducibility and change tracking. Legacy `contract_version=v1` available via `--contract-version v1` flag.
 
 ## Architecture & Extensibility
 

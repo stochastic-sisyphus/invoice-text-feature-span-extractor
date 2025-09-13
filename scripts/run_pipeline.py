@@ -104,7 +104,7 @@ def candidates_cmd(
 @app.command(name="decode")
 def decode_cmd(
     none_bias: float = typer.Option(10.0, "--none-bias", help="NONE assignment bias (higher = more abstains)"),
-    contract_version: str = typer.Option("v1", "--contract-version", help="Contract version (v1|v2)"),
+    contract_version: str = typer.Option("v2", "--contract-version", help="Contract version (v1|v2)"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Decode all documents using Hungarian assignment."""
@@ -132,7 +132,7 @@ def decode_cmd(
 
 @app.command(name="emit")
 def emit_cmd(
-    contract_version: str = typer.Option("v1", "--contract-version", help="Contract version (v1|v2)"),
+    contract_version: str = typer.Option("v2", "--contract-version", help="Contract version (v1|v2)"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Emit predictions JSON and update review queue."""
@@ -194,6 +194,7 @@ def report_cmd(
 def pipeline(
     seed_folder: str = typer.Option(..., "--seed-folder", help="Path to folder containing PDF files"),
     none_bias: float = typer.Option(10.0, "--none-bias", help="NONE assignment bias"),
+    contract_version: str = typer.Option("v2", "--contract-version", help="Contract version (v1|v2)"),
     save_report: bool = typer.Option(False, "--save-report", help="Save final report"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
@@ -225,13 +226,13 @@ def pipeline(
         print("\n4. DECODING")
         print("-" * 40)
         with utils.Timer("Total decoding"):
-            decode_results = decoder.decode_all_documents(none_bias)
+            decode_results = decoder.decode_all_documents(none_bias, contract_version)
         
         # Step 5: Emit
         print("\n5. EMISSION")
         print("-" * 40)
         with utils.Timer("Total emission"):
-            emit_results = emit.emit_all_documents()
+            emit_results = emit.emit_all_documents(contract_version)
         
         # Step 6: Report
         print("\n6. REPORTING")
