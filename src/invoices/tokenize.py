@@ -8,6 +8,7 @@ import pdfplumber
 from tqdm import tqdm
 
 from . import paths, utils, ingest
+from .normalize import normalize_document_text
 
 
 def extract_page_tokens(page, page_idx: int, doc_id: str) -> List[Dict[str, Any]]:
@@ -216,6 +217,106 @@ def get_document_tokens(sha256: str) -> pd.DataFrame:
         return pd.DataFrame()
     
     return pd.read_parquet(tokens_path)
+
+
+def build_normalized_document(sha256: str) -> Tuple[str, Dict[str, Tuple[int, int]]]:
+    """
+    Build normalized document text with [[PAGE i]] markers and token character offsets.
+    
+    Args:
+        sha256: Document SHA256 hash
+        
+    Returns:
+        Tuple of (normalized_document_text, token_char_offsets)
+        token_char_offsets maps token_id to (char_start, char_end) in normalized text
+    """
+    raw_pdf_path = paths.get_raw_pdf_path(sha256)
+    if not raw_pdf_path.exists():
+        return "", {}
+    
+    doc_info = ingest.get_document_info(sha256)
+    if not doc_info:
+        return "", {}
+    
+    doc_id = doc_info['doc_id']
+    
+    # Extract text by page and build normalized document
+    page_texts = []
+    token_char_offsets = {}
+    current_offset = 0
+    
+    try:
+        with pdfplumber.open(raw_pdf_path) as pdf:
+            for page_idx, page in enumerate(pdf.pages):
+                # Add page marker
+                page_marker = f"[[PAGE {page_idx + 1}]]\n"
+                page_texts.append(page_marker)
+                page_marker_len = len(page_marker)
+                current_offset += page_marker_len
+                
+                # Extract page text
+                page_text = page.extract_text() or ""
+                page_text = normalize_document_text(page_text)
+                
+                if page_text:
+                    # Extract words to compute token offsets
+                    words = page.extract_words()
+                    
+                    # Track position in normalized page text
+                    normalized_page_text = ""
+                    word_positions = []
+                    
+                    # Build normalized page text and track word positions
+                    for word_idx, word in enumerate(words):
+                        word_text = str(word.get('text', ''))
+                        if not word_text.strip():
+                            continue
+                        
+                        # Find position in normalized page text
+                        word_start_in_page = len(normalized_page_text)
+                        if normalized_page_text and not normalized_page_text.endswith(" "):
+                            normalized_page_text += " "
+                            word_start_in_page = len(normalized_page_text)
+                        
+                        normalized_page_text += word_text
+                        word_end_in_page = len(normalized_page_text)
+                        
+                        # Compute stable token ID
+                        bbox_norm = (
+                            float(word.get('x0', 0)) / float(page.width) if page.width > 0 else 0,
+                            float(word.get('y0', 0)) / float(page.height) if page.height > 0 else 0,
+                            float(word.get('x1', 0)) / float(page.width) if page.width > 0 else 0,
+                            float(word.get('y1', 0)) / float(page.height) if page.height > 0 else 0,
+                        )
+                        
+                        token_id = utils.compute_stable_token_id(
+                            doc_id, page_idx, word_idx, word_text, bbox_norm
+                        )
+                        
+                        # Store character offsets in document coordinates
+                        char_start = current_offset + word_start_in_page
+                        char_end = current_offset + word_end_in_page
+                        token_char_offsets[token_id] = (char_start, char_end)
+                    
+                    # Add normalized page text to document
+                    if normalized_page_text:
+                        page_texts.append(normalized_page_text + "\n\n")
+                        current_offset += len(normalized_page_text) + 2  # +2 for \n\n
+                    else:
+                        page_texts.append("\n\n")
+                        current_offset += 2
+    
+    except Exception as e:
+        print(f"Error building normalized document for {sha256[:16]}: {e}")
+        return "", {}
+    
+    # Combine all page texts
+    normalized_document = "".join(page_texts)
+    
+    # Final normalization
+    normalized_document = normalize_document_text(normalized_document)
+    
+    return normalized_document, token_char_offsets
 
 
 def get_token_summary(sha256: str) -> Dict[str, Any]:

@@ -64,6 +64,36 @@ def get_logs_dir() -> Path:
     return get_data_dir() / "logs"
 
 
+def get_labels_dir() -> Path:
+    """Get the labels directory path."""
+    return get_data_dir() / "labels"
+
+
+def get_labels_raw_dir() -> Path:
+    """Get the labels/raw directory path."""
+    return get_labels_dir() / "raw"
+
+
+def get_labels_aligned_dir() -> Path:
+    """Get the labels/aligned directory path."""
+    return get_labels_dir() / "aligned"
+
+
+def get_labels_index_path() -> Path:
+    """Get the labels index parquet file path."""
+    return get_labels_dir() / "index.parquet"
+
+
+def get_labels_raw_path(sha256: str) -> Path:
+    """Get the labels raw JSONL file path for a document."""
+    return get_labels_raw_dir() / f"{sha256}.jsonl"
+
+
+def get_labels_aligned_path(sha256: str) -> Path:
+    """Get the labels aligned parquet file path for a document."""
+    return get_labels_aligned_dir() / f"{sha256}.parquet"
+
+
 def get_tokens_path(sha256: str) -> Path:
     """Get the tokens parquet file path for a document."""
     return get_tokens_dir() / f"{sha256}.parquet"
@@ -95,6 +125,9 @@ def ensure_directories() -> None:
         get_predictions_dir(),
         get_review_dir(),
         get_logs_dir(),
+        get_labels_dir(),
+        get_labels_raw_dir(),
+        get_labels_aligned_dir(),
     ]
     
     for directory in directories:

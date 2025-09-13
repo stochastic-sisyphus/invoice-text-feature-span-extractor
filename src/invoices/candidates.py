@@ -12,6 +12,8 @@ import pandas as pd
 from tqdm import tqdm
 
 from . import paths, ingest, tokenize
+from .normalize import NORMALIZE_VERSION
+from .tokenize import build_normalized_document
 
 
 # Candidate bucket types
@@ -586,6 +588,9 @@ def generate_candidates_enhanced(sha256: str) -> Tuple[int, Dict[str, Any]]:
     random.seed(int(sha256[:8], 16))
     np.random.seed(int(sha256[:8], 16))
     
+    # Build normalized document for character offset computation
+    normalized_doc, token_char_offsets = build_normalized_document(sha256)
+    
     all_candidates = []
     bucket_counts = {
         BUCKET_DATE_LIKE: 0,
@@ -698,6 +703,20 @@ def generate_candidates_enhanced(sha256: str) -> Tuple[int, Dict[str, Any]]:
             
             total_score = base_score + proximity_score * 0.2 + section_prior
             
+            # Compute character ranges in normalized document
+            char_start = None
+            char_end = None
+            if token_char_offsets:
+                # Find character range by looking up token positions
+                token_positions = []
+                for token_id in span['token_ids']:
+                    if token_id in token_char_offsets:
+                        token_positions.append(token_char_offsets[token_id])
+                
+                if token_positions:
+                    char_start = min(pos[0] for pos in token_positions)
+                    char_end = max(pos[1] for pos in token_positions)
+            
             # Create candidate
             candidate_id = f"{doc_id}_{page_idx}_{min(span['token_indices'])}"
             
@@ -716,6 +735,11 @@ def generate_candidates_enhanced(sha256: str) -> Tuple[int, Dict[str, Any]]:
                 'proximity_score': float(proximity_score),
                 'section_prior': float(section_prior),
                 'total_score': float(total_score),
+                
+                # Character ranges in normalized document
+                'char_start': int(char_start) if char_start is not None else None,
+                'char_end': int(char_end) if char_end is not None else None,
+                'normalize_version': str(NORMALIZE_VERSION),
                 
                 # Bounding box
                 'bbox_norm_x0': float(span['bbox_norm'][0]),
@@ -878,6 +902,44 @@ def get_document_candidates(sha256: str) -> pd.DataFrame:
         return pd.DataFrame()
     
     return pd.read_parquet(candidates_path)
+
+
+def char_iou(a_start: int, a_end: int, b_start: int, b_end: int) -> float:
+    """
+    Compute character-based Intersection over Union (IoU) for two half-open intervals.
+    
+    Intervals are half-open: [a_start, a_end) and [b_start, b_end)
+    
+    Args:
+        a_start: Start of first interval (inclusive)
+        a_end: End of first interval (exclusive)
+        b_start: Start of second interval (inclusive)
+        b_end: End of second interval (exclusive)
+        
+    Returns:
+        IoU score between 0.0 and 1.0
+    """
+    if a_start >= a_end or b_start >= b_end:
+        return 0.0
+    
+    # Compute intersection
+    intersection_start = max(a_start, b_start)
+    intersection_end = min(a_end, b_end)
+    
+    if intersection_start >= intersection_end:
+        intersection_size = 0
+    else:
+        intersection_size = intersection_end - intersection_start
+    
+    # Compute union
+    union_start = min(a_start, b_start)
+    union_end = max(a_end, b_end)
+    union_size = union_end - union_start
+    
+    if union_size == 0:
+        return 0.0
+    
+    return intersection_size / union_size
 
 
 def get_coverage_statistics() -> Dict[str, Any]:

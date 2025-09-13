@@ -1,10 +1,14 @@
 """Normalization module for cleaning predicted field values."""
 
 import re
+import unicodedata
 from decimal import Decimal, InvalidOperation
 from typing import Optional, Tuple, Dict, Any
 
 from dateutil import parser as date_parser
+
+# Document text normalization version
+NORMALIZE_VERSION = "doctext_nfc_newline_v1"
 
 
 def normalize_date(raw_text: str) -> Tuple[Optional[str], str]:
@@ -217,6 +221,49 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'raw_text': original_text,
             'currency_code': None,
         }
+
+
+def normalize_document_text(text: str) -> str:
+    """
+    Normalize document text for consistent character-level operations.
+    
+    Implements NORMALIZE_VERSION="doctext_nfc_newline_v1":
+    - Unicode NFC normalization
+    - CR/LF → \n conversion
+    - Strip leading/trailing whitespace
+    
+    Args:
+        text: Raw document text
+        
+    Returns:
+        Normalized document text
+    """
+    if not text:
+        return ""
+    
+    # Unicode NFC normalization
+    normalized = unicodedata.normalize("NFC", text)
+    
+    # Convert CR/LF to newlines
+    normalized = normalized.replace("\r\n", "\n").replace("\r", "\n")
+    
+    # Strip leading/trailing whitespace
+    normalized = normalized.strip()
+    
+    return normalized
+
+
+def text_len(text: str) -> int:
+    """
+    Compute text length for normalization guard checksum.
+    
+    Args:
+        text: Text to measure
+        
+    Returns:
+        Character count of text
+    """
+    return len(text) if text else 0
 
 
 def normalize_assignments(assignments: Dict[str, Any]) -> Dict[str, Any]:

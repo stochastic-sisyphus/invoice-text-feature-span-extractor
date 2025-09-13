@@ -105,13 +105,14 @@ def create_review_queue_entry(doc_id: str, field: str, assignment: Dict[str, Any
     return entry
 
 
-def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[Dict[str, Any]]]:
+def emit_document(sha256: str, assignments: Dict[str, Any], contract_version: str = "v1") -> Tuple[str, List[Dict[str, Any]]]:
     """
     Emit contract JSON for a single document and collect review queue entries.
     
     Args:
         sha256: Document SHA256 hash
         assignments: Normalized assignments from decoder
+        contract_version: Contract version ("v1" or "v2")
         
     Returns:
         Tuple of (predictions_json_path, review_queue_entries)
@@ -127,19 +128,26 @@ def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[D
     tokens_df = tokenize.get_document_tokens(sha256)
     page_count = tokens_df['page_idx'].nunique() if not tokens_df.empty else 0
     
-    # Create contract JSON
+    # Create contract JSON with version-specific stamps
+    version_stamps = utils.get_version_stamps()
+    if contract_version == "v2":
+        version_stamps['contract_version'] = "v2"
+    
     contract = {
         'document_id': doc_id,
         'pages': page_count,
-        **utils.get_version_stamps(),
+        **version_stamps,
         'fields': {},
         'line_items': [],  # Empty for now as specified
     }
     
     review_queue_entries = []
     
+    # Get field set based on contract version
+    field_set = decoder.HEADER_FIELDS_V2 if contract_version == "v2" else decoder.HEADER_FIELDS
+    
     # Process each field
-    for field in decoder.HEADER_FIELDS:
+    for field in field_set:
         if field not in assignments:
             # Missing assignment - should not happen but handle gracefully
             contract['fields'][field] = {
@@ -171,9 +179,12 @@ def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[D
     return str(predictions_path), review_queue_entries
 
 
-def emit_all_documents() -> Dict[str, Any]:
+def emit_all_documents(contract_version: str = "v1") -> Dict[str, Any]:
     """
     Emit contract JSON for all documents and manage review queue.
+    
+    Args:
+        contract_version: Contract version ("v1" or "v2")
     
     Returns:
         Summary statistics
@@ -186,8 +197,8 @@ def emit_all_documents() -> Dict[str, Any]:
         return {}
     
     # Decode all documents first
-    print("Decoding all documents...")
-    all_assignments = decoder.decode_all_documents()
+    print(f"Decoding all documents (contract: {contract_version})...")
+    all_assignments = decoder.decode_all_documents(contract_version=contract_version)
     
     # Normalize assignments
     print("Normalizing assignments...")
@@ -212,7 +223,7 @@ def emit_all_documents() -> Dict[str, Any]:
                 print(f"No assignments found for {doc_id}")
                 continue
             
-            predictions_path, review_entries = emit_document(sha256, assignments)
+            predictions_path, review_entries = emit_document(sha256, assignments, contract_version)
             all_review_entries.extend(review_entries)
             
             # Count statuses

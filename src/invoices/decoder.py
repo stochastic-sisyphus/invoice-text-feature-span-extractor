@@ -9,7 +9,7 @@ import pandas as pd
 from . import paths, utils, ingest, candidates
 
 
-# Header field set as specified
+# Header field set as specified (v1 contract)
 HEADER_FIELDS = [
     'invoice_number',
     'invoice_date', 
@@ -21,6 +21,37 @@ HEADER_FIELDS = [
     'carrier_name',
     'document_type',
     'currency_code',
+]
+
+# Expanded field set for v2 contract
+HEADER_FIELDS_V2 = [
+    'invoice_number',
+    'invoice_date',
+    'due_date',
+    'issue_date',
+    'total_amount',
+    'subtotal',
+    'tax_amount',
+    'discount',
+    'currency',
+    'remittance_address',
+    'bill_to_address',
+    'ship_to_address',
+    'vendor_name',
+    'vendor_address',
+    'customer_name',
+    'customer_account',
+    'purchase_order',
+    'invoice_reference',
+    'payment_terms',
+    'bank_account',
+    'routing_number',
+    'swift_code',
+    'notes',
+    'tax_id',
+    'contact_name',
+    'contact_email',
+    'contact_phone',
 ]
 
 # Default NONE bias (high cost to encourage abstaining)
@@ -127,17 +158,20 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     return max(0.0, base_cost)  # Ensure non-negative
 
 
-def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Any]:
+def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v1") -> Dict[str, Any]:
     """
     Decode a single document using Hungarian assignment.
     
     Args:
         sha256: Document SHA256 hash
         none_bias: Cost for NONE assignment (higher = more likely to abstain)
+        contract_version: Contract version ("v1" or "v2")
         
     Returns:
         Assignment results for each field
     """
+    # Select field set based on contract version
+    field_set = HEADER_FIELDS_V2 if contract_version == "v2" else HEADER_FIELDS
     # Get candidates
     candidates_df = candidates.get_document_candidates(sha256)
     
@@ -148,7 +182,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     # If no candidates, return all NONE assignments
     if candidates_df.empty:
         assignments = {}
-        for field in HEADER_FIELDS:
+        for field in field_set:
             assignments[field] = {
                 'assignment_type': 'NONE',
                 'candidate_index': None,
@@ -159,14 +193,14 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     
     candidates_list = candidates_df.to_dict('records')
     n_candidates = len(candidates_list)
-    n_fields = len(HEADER_FIELDS)
+    n_fields = len(field_set)
     
     # Build cost matrix: fields × (candidates + NONE)
     # Each field can be assigned to any candidate or to NONE
     cost_matrix = np.full((n_fields, n_candidates + 1), 2.0)  # Base cost
     
     # Fill candidate costs
-    for field_idx, field in enumerate(HEADER_FIELDS):
+    for field_idx, field in enumerate(field_set):
         for cand_idx, candidate in enumerate(candidates_list):
             cost = compute_weak_prior_cost(field, candidate)
             cost_matrix[field_idx, cand_idx] = cost
@@ -190,7 +224,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     # Build assignments
     assignments = {}
     
-    for field_idx, field in enumerate(HEADER_FIELDS):
+    for field_idx, field in enumerate(field_set):
         # Find assignment for this field
         field_assignment = None
         for i, (row_idx, col_idx) in enumerate(zip(row_indices, col_indices)):
@@ -228,9 +262,12 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     return assignments
 
 
-def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Dict[str, Any]]:
+def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS, contract_version: str = "v1") -> Dict[str, Dict[str, Any]]:
     """Decode all documents in the index."""
     indexed_docs = ingest.get_indexed_documents()
+    
+    # Select field set for default NONE assignments
+    field_set = HEADER_FIELDS_V2 if contract_version == "v2" else HEADER_FIELDS
     
     if indexed_docs.empty:
         print("No documents found in index")
@@ -244,7 +281,7 @@ def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Dict
         sha256 = doc_info['sha256']
         
         try:
-            assignments = decode_document(sha256, none_bias)
+            assignments = decode_document(sha256, none_bias, contract_version)
             results[sha256] = assignments
             
             # Count assignments
@@ -257,7 +294,7 @@ def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Dict
             print(f"Failed to decode {sha256[:16]}: {e}")
             # Create default NONE assignments
             assignments = {}
-            for field in HEADER_FIELDS:
+            for field in field_set:
                 assignments[field] = {
                     'assignment_type': 'NONE',
                     'candidate_index': None,

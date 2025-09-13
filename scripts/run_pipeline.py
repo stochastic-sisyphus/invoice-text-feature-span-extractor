@@ -12,8 +12,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from invoices import (
     paths, utils, ingest, tokenize, candidates, decoder, 
-    normalize, emit, report
+    emit, report
 )
+from invoices.report import import_label_studio_annotations, align_labels
 
 app = typer.Typer(
     name="run-pipeline",
@@ -103,11 +104,12 @@ def candidates_cmd(
 @app.command(name="decode")
 def decode_cmd(
     none_bias: float = typer.Option(10.0, "--none-bias", help="NONE assignment bias (higher = more abstains)"),
+    contract_version: str = typer.Option("v1", "--contract-version", help="Contract version (v1|v2)"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Decode all documents using Hungarian assignment."""
     try:
-        print(f"Starting decoding with NONE bias {none_bias}...")
+        print(f"Starting decoding with NONE bias {none_bias} (contract: {contract_version})...")
         
         with utils.Timer("Decoding"):
             results = decoder.decode_all_documents(none_bias)
@@ -130,14 +132,15 @@ def decode_cmd(
 
 @app.command(name="emit")
 def emit_cmd(
+    contract_version: str = typer.Option("v1", "--contract-version", help="Contract version (v1|v2)"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Emit predictions JSON and update review queue."""
     try:
-        print("Starting emission (normalization + JSON + review queue)...")
+        print(f"Starting emission (contract: {contract_version})...")
         
         with utils.Timer("Emission"):
-            results = emit.emit_all_documents()
+            results = emit.emit_all_documents(contract_version=contract_version)
         
         if results:
             docs_processed = results.get('documents_processed', 0)
@@ -248,6 +251,64 @@ def pipeline(
         
     except Exception as e:
         print(f"✗ Pipeline failed: {e}")
+        raise typer.Exit(1)
+
+
+# Labels group
+labels_app = typer.Typer(name="labels", help="Label Studio integration commands")
+app.add_typer(labels_app, name="labels")
+
+
+@labels_app.command(name="import")
+def labels_import_cmd(
+    input_file: str = typer.Option(..., "--in", help="Path to Label Studio JSON export file"),
+    allow_unnormalized: bool = typer.Option(False, "--allow-unnormalized", help="Allow import without normalize_version/text_len checks")
+) -> None:
+    """Import Label Studio annotations into data/labels/raw/{sha}.jsonl format."""
+    try:
+        print(f"Importing labels from: {input_file}")
+        
+        with utils.Timer("Label import"):
+            summary = import_label_studio_annotations(input_file, allow_unnormalized)
+        
+        if summary['documents'] > 0:
+            print(f"✓ Imported {summary['documents']} documents with {summary['imported']} annotations")
+        else:
+            print("✓ No documents to import")
+            
+    except Exception as e:
+        print(f"✗ Label import failed: {e}")
+        raise typer.Exit(1)
+
+
+@labels_app.command(name="align")
+def labels_align_cmd(
+    sha: Optional[str] = typer.Option(None, "--sha", help="Process specific document SHA256"),
+    all_docs: bool = typer.Option(False, "--all", help="Process all documents with labels"),
+    iou_threshold: float = typer.Option(0.5, "--iou", help="Minimum IoU threshold for positive matches")
+) -> None:
+    """Align imported labels with candidates using character-range IoU."""
+    if not all_docs and not sha:
+        print("✗ Must specify either --all or --sha <sha256>")
+        raise typer.Exit(1)
+        
+    if all_docs and sha:
+        print("✗ Cannot specify both --all and --sha")
+        raise typer.Exit(1)
+    
+    try:
+        print(f"Aligning labels (IoU threshold: {iou_threshold})...")
+        
+        with utils.Timer("Label alignment"):
+            summary = align_labels(sha, iou_threshold)
+        
+        if summary['documents'] > 0:
+            print(f"✓ Aligned {summary['documents']} documents: {summary['matched']} matched, {summary['unmatched_gold']} unmatched")
+        else:
+            print("✓ No documents to align")
+            
+    except Exception as e:
+        print(f"✗ Label alignment failed: {e}")
         raise typer.Exit(1)
 
 
