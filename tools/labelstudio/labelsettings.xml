@@ -1,0 +1,36 @@
+<View>
+  <Labels name="label" toName="text" allowEmpty="true">
+    <Label value="InvoiceNumber"/>
+    <Label value="InvoiceDate"/>
+    <Label value="DueDate"/>
+    <Label value="IssueDate"/>
+    <Label value="TotalAmount"/>
+    <Label value="Subtotal"/>
+    <Label value="TaxAmount"/>
+    <Label value="Discount"/>
+    <Label value="Currency"/>
+    <Label value="RemittanceAddress"/>
+    <Label value="BillToAddress"/>
+    <Label value="ShipToAddress"/>
+    <Label value="VendorName"/>
+    <Label value="VendorAddress"/>
+    <Label value="CustomerName"/>
+    <Label value="CustomerAccount"/>
+    <Label value="PurchaseOrder"/>
+    <Label value="InvoiceReference"/>
+    <Label value="PaymentTerms"/>
+    <Label value="BankAccount"/>
+    <Label value="RoutingNumber"/>
+    <Label value="SWIFTCode"/>
+    <Label value="LineItemDescription"/>
+    <Label value="LineItemQuantity"/>
+    <Label value="LineItemUnitPrice"/>
+    <Label value="LineItemTotal"/>
+    <Label value="Notes"/>
+    <Label value="TaxID"/>
+    <Label value="ContactName"/>
+    <Label value="ContactEmail"/>
+    <Label value="ContactPhone"/>
+  </Labels>
+  <Text name="text" value="$text"/>
+</View>
