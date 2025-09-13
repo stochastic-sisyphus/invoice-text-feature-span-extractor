@@ -259,4 +259,154 @@ Stop and present two concrete, minimal options with trade-offs and propose the s
 
 ⸻
 
+<<<<<<< HEAD
 End of Prompt. Build now.
+=======
+DONE!
+
+----
+
+____
+
+NEXT MISSION:
+
+Label Readiness + LS Integration (Native-Text Invoices)
+
+Role & Scope
+
+You will add a label ingestion + alignment path for a production invoice span extractor that operates strictly on the native PDF text layer. Apply surgical, in-place edits only. Preserve repo structure, contracts, determinism, and idempotency. No forks, no duplicate “v2” files, no placeholders, no new dependencies.
+
+Non-Negotiable Invariants
+	•	Extractor: pdfplumber only. No OCR/vision, no templates/regex.
+	•	Determinism & idempotency: same input → same tokens, same candidates (≤200), same JSON skeleton; safe re-runs.
+	•	Provenance: every prediction carries {page, bbox, token_span}.
+	•	Contracts (unchanged today):
+
+contract_version="v1"
+feature_version="v1"
+decoder_version="v1"
+model_version="unscored-baseline"
+calibration_version="none"
+
+
+	•	Normalization guard: single normalize_text() in src/invoices/normalize.py + NORMALIZE_VERSION constant + text_len checksum helper. All LS imports must validate against these.
+	•	Text space: page markers are literal [[PAGE {i}]] inside the document string; all character indices live in this one normalized string.
+	•	Empty-safe behavior: if there are zero annotations, commands still exit 0 and print deterministic zero-summaries.
+
+Field Vocabulary (use these names)
+	•	Singleton fields (one value per document):
+invoice_number, invoice_date, due_date, issue_date, total_amount, subtotal, tax_amount, discount, currency, remittance_address, bill_to_address, ship_to_address, vendor_name, vendor_address, customer_name, customer_account, purchase_order, invoice_reference, payment_terms, bank_account, routing_number, swift_code, notes, tax_id, contact_name, contact_email, contact_phone
+	•	Line-item fields (row-structured):
+line_items: [ { description, quantity, unit_price, line_total, provenance, raw_text } ]
+	•	LS label → contract key mapping (canonical):
+	•	InvoiceNumber→invoice_number; InvoiceDate→invoice_date; DueDate→due_date; IssueDate→issue_date
+	•	TotalAmount→total_amount; Subtotal→subtotal; TaxAmount→tax_amount; Discount→discount; Currency→currency
+	•	RemittanceAddress→remittance_address; BillToAddress→bill_to_address; ShipToAddress→ship_to_address
+	•	VendorName→vendor_name; VendorAddress→vendor_address; CustomerName→customer_name; CustomerAccount→customer_account
+	•	PurchaseOrder→purchase_order; InvoiceReference→invoice_reference; PaymentTerms→payment_terms
+	•	BankAccount→bank_account; RoutingNumber→routing_number; SWIFTCode→swift_code
+	•	Notes→notes; TaxID→tax_id; ContactName→contact_name; ContactEmail→contact_email; ContactPhone→contact_phone
+	•	LineItemDescription→line_items[n].description; LineItemQuantity→line_items[n].quantity; LineItemUnitPrice→line_items[n].unit_price; LineItemTotal→line_items[n].line_total
+
+⸻
+
+Acceptance Criteria (must all pass)
+	1.	New CLI (Typer in scripts/run_pipeline.py):
+	•	labels import --in data/labels/annotations.json
+	•	labels align --all | --sha <sha>
+	•	Empty input: exit 0 with deterministic “0 docs, 0 spans, 0 aligned” summary.
+	•	Non-empty input: write
+	•	data/labels/raw/{sha}.jsonl (rows: {sha, label, char_start, char_end, text, normalize_version}),
+	•	data/labels/aligned/{sha}.parquet (candidates + y∈{0,1}),
+	•	data/labels/index.parquet with aggregates {sha, n_gold, n_matched, n_unmatched_gold, normalize_version, label_set_hash}.
+	•	Hard-fail with a clear message if NORMALIZE_VERSION or text_len checksum mismatches.
+	2.	Alignment logic:
+	•	Use character-range IoU on the normalized document string. Best match per gold span becomes y=1; other candidates for that label in the doc are y=0.
+	•	Count UNMATCHED_GOLD when no candidate overlaps a gold span; do not drop these from metrics.
+	3.	Candidate spans compatibility:
+	•	Every candidate row exposes char_start, char_end in the normalized text space (in addition to page/bbox/typography). Stable ordering; cap ≤200.
+	4.	Line-item assembly rule (deterministic):
+	•	If grouping of line-item labels into rows is ambiguous, emit line_items: [] and queue those spans for review (no guessing).
+	5.	Determinism:
+	•	Repeating labels import + labels align on the same inputs produces byte-identical artifacts and identical index aggregates.
+	6.	Synthetic test (real I/O, no network):
+	•	tests/test_label_alignment.py: build a tiny normalized doc string with [[PAGE 1]]…, write 1–2 synthetic candidates and 1 gold span to the proper locations, run the same IoU matcher, and assert:
+	•	best IoU candidate is y=1; others y=0;
+	•	n_gold, n_matched, n_unmatched_gold counts are correct.
+	7.	Vendor the LS task generator (prevent drift):
+	•	Add tools/labelstudio/tasks_gen.py that imports normalize_text and NORMALIZE_VERSION from src/invoices/normalize.py, computes PDF SHA256, copies each PDF to labeled_pdfs/{sha}.pdf, and writes tasks.json with normalize_version + text_len checksum in each task’s data.
+	•	Commit tools/labelstudio/labelsettings.xml (the exact interface used).
+	•	Update README.md with a short LS workflow + normalization-guard note.
+
+⸻
+
+Plan & Impact (name exact files/functions)
+	•	src/invoices/normalize.py — export normalize_text(), NORMALIZE_VERSION, and text_len() checksum helper.
+	•	src/invoices/candidates.py — ensure per-candidate char_start,char_end exist in normalized space; add a small char_iou(a_start,a_end,b_start,b_end) helper.
+	•	src/invoices/report.py — implement LS importer (JSON → data/labels/raw/*.jsonl) and data/labels/index.parquet writer (with label_set_hash of the active LS labels).
+	•	scripts/run_pipeline.py — add labels import and labels align commands (empty-safe, deterministic summaries; normalization guard on non-empty).
+	•	tests/test_label_alignment.py — minimal synthetic doc/candidates/gold verifying IoU, y labels, and unmatched-gold accounting.
+	•	tools/labelstudio/tasks_gen.py — vendored task generator that imports the pipeline normalizer; writes tasks.json + labeled_pdfs/.
+	•	tools/labelstudio/labelsettings.xml — committed LS schema.
+	•	README.md — 6-line section describing LS workflow and guards.
+
+⸻
+
+Implementation Rules
+	•	No new dependencies; use existing pandas/pyarrow/scipy stack.
+	•	Use src/invoices/paths.py for all paths under data/ (no absolute paths).
+	•	Stable seeds derived from int(sha[:8],16) if sampling is needed.
+	•	Zero randomness in alignment and indexing; sort deterministically.
+	•	Clear, single-purpose functions; no dead code; no TODOs.
+
+⸻
+
+Output Required from the Agent
+	1.	Impact plan (5 lines max, listing exact files/functions you will touch).
+	2.	Continuity check (bullets confirming invariants are preserved; call out and justify any unavoidable variance).
+	3.	Changes Applied — return exactly:
+	•	One atomic commit with message:
+
+labels: add LS import+align, vendor task_gen, enforce normalize guard
+
+Why:
+- Ready the pipeline for incoming annotations without altering spine or deps
+- Prevent normalization drift via version+checksum guard
+- Lock mapping for singleton vs line-item fields per LS interface
+
+What changed:
+- run_pipeline.py — `labels import|align` (empty-safe, deterministic)
+- report.py — LS importer → raw jsonl, index parquet
+- candidates.py — normalized char spans + IoU helper
+- normalize.py — normalize_text(), NORMALIZE_VERSION, text_len()
+- tools/labelstudio/tasks_gen.py — repo-pinned task generator
+- tools/labelstudio/labelsettings.xml — committed interface
+- tests/test_label_alignment.py — synthetic IoU alignment test
+- README.md — LS workflow + normalization guard
+
+QA:
+- All existing tests + new alignment test green
+- Empty-data runs produce identical zero summaries
+- Determinism verified on repeat align
+
+
+	•	Verification transcript: show the key command outputs for:
+
+python scripts/run_pipeline.py labels import --in data/labels/annotations.json
+python scripts/run_pipeline.py labels align --all
+pytest -q
+
+Include the printed zero-summary on empty input and the deterministic rerun proof.
+
+⸻
+
+Notes to Enforce During Edits
+	•	Do not alter existing CLI names for the spine (ingest, tokenize, candidates, decode, emit, report).
+	•	Do not change contract_version defaults or field shapes in v1.
+	•	Do not “guess” line-item grouping—emit line_items: [] when ambiguous and surface in review.
+	•	Fail fast (non-zero) on normalization mismatches with a message including sha, observed_version, expected_version, and both text_len values.
+
+⸻
+
+Begin by in depth understanding of the repo currently. run tree command, and run the pipeline, to see the nuance and context. then give me the 5-line impact plan with exact paths. Then proceed in order.
+>>>>>>> 8ee27ef (setup for labels)
