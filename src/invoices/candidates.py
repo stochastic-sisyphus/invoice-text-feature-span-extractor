@@ -42,66 +42,107 @@ def normalize_text_for_dedup(text: str) -> str:
 
 
 def is_date_like_soft(text: str) -> bool:
-    """Soft check if text looks like a date - no regex, just pattern-based."""
+    """Strict check if text looks like a proper date - no regex, just logical validation."""
     text = text.strip()
-    if len(text) < 4 or len(text) > 20:
+    if len(text) < 4 or len(text) > 25:
+        return False
+    
+    # CRITICAL: Reject garbled text immediately
+    if any(word in text.lower() for word in ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'if', 'will', 'may', 'to']):
         return False
     
     # Count digits and separators
     digits = sum(1 for c in text if c.isdigit())
-    separators = sum(1 for c in text if c in '/-')
+    separators = sum(1 for c in text if c in '/-.')
     letters = sum(1 for c in text if c.isalpha())
     
-    # Date-like if mostly digits with some separators
-    if digits >= 4 and separators >= 1 and digits + separators + letters == len(text):
+    # STRICTER: Must have substantial digits for dates
+    if digits < 2:  # Need at least day/month/year indicators
+        return False
+    
+    # Date-like if mostly digits with separators (stricter)
+    if digits >= 4 and separators >= 1 and digits + separators <= len(text):
+        # Additional check: must not be mostly letters
+        if letters > digits:
+            return False
         return True
     
-    # Month names check
+    # Month names check (enhanced validation)
     month_indicators = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
                        'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     text_lower = text.lower()
-    if any(month in text_lower for month in month_indicators):
+    has_month = any(month in text_lower for month in month_indicators)
+    
+    # If has month name, must also have year-like digits
+    if has_month and digits >= 2:
         return True
     
     return False
 
 
 def is_amount_like_soft(text: str) -> bool:
-    """Soft check if text looks like a monetary amount."""
+    """Strict check if text looks like a proper monetary amount - no garbled text."""
     text = text.strip()
-    if len(text) < 1:
+    if len(text) < 1 or len(text) > 25:
+        return False
+    
+    # CRITICAL: Reject garbled text immediately
+    if any(word in text.lower() for word in ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'if', 'will', 'may', 'to']):
+        return False
+    
+    # CRITICAL: Must have substantial digits for amounts
+    digits = sum(1 for c in text if c.isdigit())
+    if digits < 1:  # Must have at least one digit
         return False
     
     # Check for currency symbols
     has_currency = any(symbol in text for symbol in CURRENCY_SYMBOLS)
     
-    # Count digits and decimal points
-    digits = sum(1 for c in text if c.isdigit())
+    # Count decimal points and commas
     decimals = text.count('.')
     commas = text.count(',')
     
-    # Amount-like if has currency or mostly digits with decimals/commas
-    if has_currency:
+    # STRICTER: Amount-like validation
+    if has_currency and digits >= 1:
         return True
     
-    if digits >= 2 and (decimals == 1 or commas >= 1):
-        return True
+    # Must be mostly digits with reasonable separators
+    if digits >= 2 and (decimals <= 1 and commas <= 3):
+        # Additional check: ratio of digits to total length should be high
+        digit_ratio = digits / len(text)
+        if digit_ratio >= 0.3:  # At least 30% digits
+            return True
     
     return False
 
 
 def is_id_like_soft(text: str) -> bool:
-    """Soft check if text looks like an ID."""
+    """Strict check if text looks like a proper ID - no garbled text."""
     text = text.strip()
-    if len(text) < 3 or len(text) > 30:
+    if len(text) < 2 or len(text) > 30:
         return False
     
-    # Must be alphanumeric with reasonable mix
-    if not all(c.isalnum() or c in '-_#' for c in text):
+    # CRITICAL: Reject garbled text immediately
+    if any(word in text.lower() for word in ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'if', 'will', 'may', 'to']):
         return False
     
-    # Must have at least one digit
+    # CRITICAL: Reject obvious sentence fragments or random words
+    words = text.split()
+    if len(words) > 4:  # IDs shouldn't be long phrases
+        return False
+    
+    # Must be alphanumeric with reasonable punctuation
+    if not all(c.isalnum() or c in '-_#. ' for c in text):
+        return False
+    
+    # Must have at least one digit (most IDs have numbers)
     if not any(c.isdigit() for c in text):
+        return False
+    
+    # STRICTER: Reject if too many common English words
+    common_words = ['the', 'and', 'for', 'with', 'from', 'that', 'this']
+    word_list = [w.lower() for w in words]
+    if any(word in word_list for word in common_words):
         return False
     
     return True
@@ -160,7 +201,7 @@ class SpanBuilder:
         return spans
     
     def _build_line_spans(self, line_tokens: pd.DataFrame) -> List[Dict[str, Any]]:
-        """Build spans within a single line."""
+        """Build spans within a single line with length constraints."""
         if line_tokens.empty:
             return []
         
@@ -169,39 +210,87 @@ class SpanBuilder:
         
         # Start with each token as a potential span start
         for i, (_, start_token) in enumerate(tokens_list):
-            span_tokens = [start_token]
-            
-            # Try to extend the span with adjacent tokens
-            for j in range(i + 1, len(tokens_list)):
-                _, candidate_token = tokens_list[j]
+            # Create spans of various lengths (1-8 tokens max)
+            for span_length in range(1, min(9, len(tokens_list) - i + 1)):
+                span_tokens = []
                 
-                # Check if adjacent (small gap)
-                gap = candidate_token['bbox_norm_x0'] - span_tokens[-1]['bbox_norm_x1']
-                if gap <= self.max_gap:
-                    span_tokens.append(candidate_token)
-                else:
-                    break  # Gap too large, stop extending
-            
-            # Create span from collected tokens
-            if span_tokens:
-                span = self._create_span_from_tokens(span_tokens)
-                if span:
-                    spans.append(span)
+                # Collect consecutive tokens for this span length
+                valid_span = True
+                for j in range(span_length):
+                    if i + j >= len(tokens_list):
+                        valid_span = False
+                        break
+                    
+                    _, token = tokens_list[i + j]
+                    
+                    # Check gap constraint for extension
+                    if j > 0:
+                        prev_token = span_tokens[-1]
+                        gap = token['bbox_norm_x0'] - prev_token['bbox_norm_x1']
+                        if gap > self.max_gap:
+                            valid_span = False
+                            break
+                    
+                    span_tokens.append(token)
+                
+                # Create span if valid
+                if valid_span and span_tokens:
+                    span = self._create_span_from_tokens(span_tokens)
+                    if span:
+                        spans.append(span)
         
         return spans
     
     def _create_span_from_tokens(self, tokens: List[pd.Series]) -> Optional[Dict[str, Any]]:
-        """Create a span from a list of tokens."""
+        """Create a span from a list of tokens with quality constraints and reading order."""
         if not tokens:
             return None
         
-        # Combine text
-        raw_text = ' '.join(token['text'] for token in tokens)
+        # CRITICAL: Sort tokens by reading order (token_idx) to prevent garbled text
+        tokens_sorted = sorted(tokens, key=lambda t: (t['page_idx'], t['token_idx']))
+        
+        # CRITICAL: Verify tokens are contiguous in reading order
+        for i in range(1, len(tokens_sorted)):
+            prev_token = tokens_sorted[i-1]
+            curr_token = tokens_sorted[i]
+            
+            # Must be same page and consecutive or very close token indices
+            if (prev_token['page_idx'] != curr_token['page_idx'] or 
+                curr_token['token_idx'] - prev_token['token_idx'] > 3):
+                return None  # Skip non-contiguous spans
+        
+        # Combine text in proper reading order
+        raw_text = ' '.join(token['text'] for token in tokens_sorted)
         normalized_text = normalize_text_for_dedup(raw_text)
+        
+        # CRITICAL: Reject obvious garbled text patterns
+        words = raw_text.split()
+        if len(words) > 1:
+            # Check for obvious reversed patterns or nonsense
+            reversed_indicators = ['eht', 'sah', 'ekat', 'ruoY', 'morf', 'yaP']
+            if any(indicator in raw_text for indicator in reversed_indicators):
+                return None  # Skip garbled/reversed text
         
         # Skip very short spans
         if len(raw_text.strip()) < 2:
             return None
+        
+        # CRITICAL: Add length constraints for field types
+        text_length = len(raw_text.strip())
+        
+        # Reject excessively long spans (precision over recall)
+        if text_length > 200:  # Hard cap for any field
+            return None
+        
+        # Type-specific length preferences
+        if is_date_like_soft(raw_text) and text_length > 50:
+            return None  # Dates should be short
+        
+        if is_amount_like_soft(raw_text) and text_length > 30:
+            return None  # Amounts should be concise
+        
+        if is_id_like_soft(raw_text) and text_length > 50:
+            return None  # IDs should be short
         
         # Compute bounding box
         min_x = min(token['bbox_norm_x0'] for token in tokens)

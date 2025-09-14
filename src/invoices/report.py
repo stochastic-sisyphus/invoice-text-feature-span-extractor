@@ -8,7 +8,7 @@ import pandas as pd
 
 import hashlib
 from pathlib import Path
-from . import paths, utils, ingest, tokenize, candidates, emit, decoder
+from . import paths, utils, ingest, tokenize, candidates, emit
 from .normalize import normalize_document_text, text_len, NORMALIZE_VERSION
 from .candidates import char_iou
 
@@ -19,6 +19,10 @@ def collect_field_statistics() -> Dict[str, Dict[str, int]]:
     
     if indexed_docs.empty:
         return {}
+    
+    # Load schema to get current field set
+    schema = utils.load_contract_schema()
+    schema_fields = schema['fields']
     
     field_stats = defaultdict(lambda: Counter())
     
@@ -34,13 +38,13 @@ def collect_field_statistics() -> Dict[str, Dict[str, int]]:
                     field_stats[field_name][status] += 1
             else:
                 # No predictions found - mark all as MISSING
-                for field in decoder.HEADER_FIELDS:
+                for field in schema_fields:
                     field_stats[field]['MISSING'] += 1
                     
         except Exception as e:
             print(f"Error reading predictions for {sha256[:16]}: {e}")
             # Mark all fields as MISSING for this document
-            for field in decoder.HEADER_FIELDS:
+            for field in schema_fields:
                 field_stats[field]['MISSING'] += 1
     
     return dict(field_stats)
@@ -52,6 +56,10 @@ def collect_document_statistics() -> List[Dict[str, Any]]:
     
     if indexed_docs.empty:
         return []
+    
+    # Load schema to get field count for error cases
+    schema = utils.load_contract_schema()
+    schema_fields_count = len(schema['fields'])
     
     doc_stats = []
     
@@ -99,7 +107,7 @@ def collect_document_statistics() -> List[Dict[str, Any]]:
                 'candidates': 0,
                 'predicted': 0,
                 'abstain': 0,
-                'missing': len(decoder.HEADER_FIELDS),
+                'missing': schema_fields_count,
                 'error': str(e),
             })
     
@@ -212,12 +220,16 @@ def print_field_report(field_stats: Dict[str, Dict[str, int]]) -> None:
         print("No field statistics available")
         return
     
+    # Load schema to get current field set
+    schema = utils.load_contract_schema()
+    schema_fields = schema['fields']
+    
     # Print header
     print(f"{'Field':<20} {'Predicted':<10} {'Abstain':<10} {'Missing':<10} {'Total':<10}")
     print("-" * 70)
     
     # Print each field
-    for field in decoder.HEADER_FIELDS:
+    for field in schema_fields:
         stats = field_stats.get(field, {})
         predicted = stats.get('PREDICTED', 0)
         abstain = stats.get('ABSTAIN', 0)
@@ -363,7 +375,7 @@ def generate_report() -> Dict[str, Any]:
             'review_queue_statistics': review_stats,
             'coverage_statistics': coverage_stats,
             'generated_at': utils.get_current_utc_iso(),
-            **utils.get_version_stamps(),
+            **utils.get_version_info(),
         }
         
         return report_data
@@ -403,6 +415,93 @@ LS_FIELD_MAPPING = {
     'LineItemUnitPrice': 'line_item_unit_price',
     'LineItemTotal': 'line_item_total',
 }
+
+
+def pull_ls_annotations() -> Dict[str, Any]:
+    """
+    Pull annotations from Label Studio via HTTP API using environment variables.
+    
+    Environment variables required:
+        LS_BASE_URL: Label Studio base URL
+        LS_API_TOKEN: Label Studio API token  
+        LS_PROJECT_ID: Label Studio project ID
+        
+    Returns:
+        Pull summary statistics
+    """
+    import os
+    import urllib.request
+    import urllib.parse
+    import urllib.error
+    
+    # Get environment variables
+    base_url = os.environ.get('LS_BASE_URL')
+    api_token = os.environ.get('LS_API_TOKEN')
+    project_id = os.environ.get('LS_PROJECT_ID')
+    
+    if not all([base_url, api_token, project_id]):
+        missing_vars = []
+        if not base_url: missing_vars.append('LS_BASE_URL')
+        if not api_token: missing_vars.append('LS_API_TOKEN')
+        if not project_id: missing_vars.append('LS_PROJECT_ID')
+        
+        print(f"Missing environment variables: {', '.join(missing_vars)}")
+        print("0 docs, 0 annotations pulled")
+        return {'tasks': 0, 'annotations': 0, 'pulled': 0}
+    
+    # Ensure output directory exists
+    paths.get_labels_raw_dir().mkdir(parents=True, exist_ok=True)
+    
+    try:
+        # Build API URL for export
+        base_url = base_url.rstrip('/')
+        export_url = f"{base_url}/api/projects/{project_id}/export?exportType=JSON"
+        
+        # Create request with authorization header
+        req = urllib.request.Request(export_url)
+        req.add_header('Authorization', f'Token {api_token}')
+        req.add_header('Content-Type', 'application/json')
+        
+        # Make the request
+        with urllib.request.urlopen(req) as response:
+            data = response.read()
+            tasks = json.loads(data.decode('utf-8'))
+        
+        if not tasks:
+            print("0 docs, 0 annotations pulled")
+            return {'tasks': 0, 'annotations': 0, 'pulled': 0}
+        
+        # Write to annotations.jsonl
+        output_path = paths.get_data_dir() / "labels" / "annotations.jsonl"
+        with open(output_path, 'w', encoding='utf-8') as f:
+            for task in tasks:
+                f.write(json.dumps(task, ensure_ascii=False) + '\n')
+        
+        total_annotations = sum(
+            len(ann.get('result', []))
+            for task in tasks
+            for ann in task.get('annotations', [])
+        )
+        
+        print(f"Pulled {len(tasks)} tasks with {total_annotations} annotations")
+        return {
+            'tasks': len(tasks),
+            'annotations': total_annotations,
+            'pulled': total_annotations
+        }
+        
+    except urllib.error.HTTPError as e:
+        print(f"HTTP Error {e.code}: {e.reason}")
+        print("0 docs, 0 annotations pulled")
+        return {'tasks': 0, 'annotations': 0, 'pulled': 0}
+    except urllib.error.URLError as e:
+        print(f"URL Error: {e.reason}")
+        print("0 docs, 0 annotations pulled") 
+        return {'tasks': 0, 'annotations': 0, 'pulled': 0}
+    except Exception as e:
+        print(f"Pull failed: {e}")
+        print("0 docs, 0 annotations pulled")
+        return {'tasks': 0, 'annotations': 0, 'pulled': 0}
 
 
 def import_label_studio_annotations(input_path: str, allow_unnormalized: bool = False) -> Dict[str, Any]:

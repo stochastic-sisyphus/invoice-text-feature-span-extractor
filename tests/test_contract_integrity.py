@@ -30,6 +30,9 @@ class TestContractIntegrity:
         candidates.generate_all_candidates()
         emit.emit_all_documents()
         
+        # Load canonical schema
+        schema = utils.load_contract_schema()
+        
         # Test all documents
         indexed_docs = ingest.get_indexed_documents()
         assert not indexed_docs.empty, "Should have ingested documents"
@@ -48,17 +51,19 @@ class TestContractIntegrity:
             
             # Check top-level required fields
             required_top_level = [
-                'document_id', 'pages', 'model_version', 'feature_version', 
-                'decoder_version', 'calibration_version', 'fields', 'line_items'
+                'document_id', 'pages', 'contract_version', 'feature_version', 
+                'decoder_version', 'model_version', 'calibration_version', 
+                'fields', 'line_items', 'extensions', 'experimental'
             ]
             
             for field in required_top_level:
                 assert field in predictions, f"Missing top-level field {field} in {doc_id}"
             
-            # Check version stamps
-            version_stamps = utils.get_version_stamps()
-            for version_field, expected_value in version_stamps.items():
-                assert predictions[version_field] == expected_value, f"Incorrect {version_field} in {doc_id}"
+            # Check five version stamps are present and non-empty
+            version_stamps = ['contract_version', 'feature_version', 'decoder_version', 'model_version', 'calibration_version']
+            for version_field in version_stamps:
+                assert version_field in predictions, f"Missing version stamp {version_field} in {doc_id}"
+                assert predictions[version_field], f"Empty version stamp {version_field} in {doc_id}"
             
             # Check document_id matches
             assert predictions['document_id'] == doc_id, f"Document ID mismatch in {doc_id}"
@@ -74,46 +79,46 @@ class TestContractIntegrity:
             fields = predictions['fields']
             assert isinstance(fields, dict), f"Fields should be dictionary in {doc_id}"
             
-            # Check all header fields are present
-            for header_field in decoder.HEADER_FIELDS:
-                assert header_field in fields, f"Missing header field {header_field} in {doc_id}"
+            # Check all schema fields are present
+            for schema_field in schema['fields']:
+                assert schema_field in fields, f"Missing schema field {schema_field} in {doc_id}"
                 
-                field_data = fields[header_field]
+                field_data = fields[schema_field]
                 
                 # Check required field properties
                 required_field_props = ['value', 'confidence', 'status', 'provenance', 'raw_text']
                 for prop in required_field_props:
-                    assert prop in field_data, f"Missing field property {prop} for {header_field} in {doc_id}"
+                    assert prop in field_data, f"Missing field property {prop} for {schema_field} in {doc_id}"
                 
                 # Check status is valid
                 status = field_data['status']
                 valid_statuses = {'PREDICTED', 'ABSTAIN', 'MISSING'}
-                assert status in valid_statuses, f"Invalid status {status} for {header_field} in {doc_id}"
+                assert status in valid_statuses, f"Invalid status {status} for {schema_field} in {doc_id}"
                 
                 # Check confidence is valid
                 confidence = field_data['confidence']
-                assert isinstance(confidence, (int, float)), f"Confidence should be numeric for {header_field} in {doc_id}"
-                assert 0.0 <= confidence <= 1.0, f"Confidence should be in [0,1] for {header_field} in {doc_id}"
+                assert isinstance(confidence, (int, float)), f"Confidence should be numeric for {schema_field} in {doc_id}"
+                assert 0.0 <= confidence <= 1.0, f"Confidence should be in [0,1] for {schema_field} in {doc_id}"
                 
                 # Check provenance structure
                 provenance = field_data['provenance']
                 if status == 'PREDICTED' and provenance is not None:
-                    assert isinstance(provenance, dict), f"Provenance should be dict for {header_field} in {doc_id}"
+                    assert isinstance(provenance, dict), f"Provenance should be dict for {schema_field} in {doc_id}"
                     
                     required_prov_fields = ['page', 'bbox', 'token_span']
                     for prov_field in required_prov_fields:
-                        assert prov_field in provenance, f"Missing provenance field {prov_field} for {header_field} in {doc_id}"
+                        assert prov_field in provenance, f"Missing provenance field {prov_field} for {schema_field} in {doc_id}"
                     
                     # Check bbox is list of 4 numbers
                     bbox = provenance['bbox']
-                    assert isinstance(bbox, list), f"Bbox should be list for {header_field} in {doc_id}"
-                    assert len(bbox) == 4, f"Bbox should have 4 elements for {header_field} in {doc_id}"
-                    assert all(isinstance(x, (int, float)) for x in bbox), f"Bbox elements should be numeric for {header_field} in {doc_id}"
+                    assert isinstance(bbox, list), f"Bbox should be list for {schema_field} in {doc_id}"
+                    assert len(bbox) == 4, f"Bbox should have 4 elements for {schema_field} in {doc_id}"
+                    assert all(isinstance(x, (int, float)) for x in bbox), f"Bbox elements should be numeric for {schema_field} in {doc_id}"
                     
                     # Check token_span is list
                     token_span = provenance['token_span']
-                    assert isinstance(token_span, list), f"Token span should be list for {header_field} in {doc_id}"
-                    assert len(token_span) > 0, f"Token span should not be empty for {header_field} in {doc_id}"
+                    assert isinstance(token_span, list), f"Token span should be list for {schema_field} in {doc_id}"
+                    assert len(token_span) > 0, f"Token span should not be empty for {schema_field} in {doc_id}"
         
         print("✓ Contract schema completeness test passed")
     

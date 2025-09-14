@@ -1,527 +1,104 @@
 {
   "document_id": "fs:a094337e26f2e4f8",
   "pages": 7,
-  "contract_version": "v2",
+  "contract_version": "2.0.0+0f724678ccd4",
   "feature_version": "v1",
   "decoder_version": "v1",
   "model_version": "unscored-baseline",
   "calibration_version": "none",
   "fields": {
-    "invoice_number": {
-      "value": "this and",
+    "bank_account": {
+      "value": "of",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.8881381835281477,
+          0.655711742576918,
           0.0,
-          0.9065884052129524,
+          0.6641156119844149,
           0.0
         ],
         "token_span": [
-          "80",
-          "98"
+          "74"
         ]
       },
-      "raw_text": "this and"
-    },
-    "invoice_date": {
-      "value": "2025-09-04",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.07255139056831922,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "Please note that this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "due_date": {
-      "value": "2025-09-04",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.10728536880290206,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "note that this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "issue_date": {
-      "value": "Castle 75202 Akard Number /",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 1,
-        "bbox": [
-          0.11734179766223296,
-          0.0,
-          0.1783806932688432,
-          0.0
-        ],
-        "token_span": [
-          "47",
-          "22",
-          "16",
-          "62",
-          "51"
-        ]
-      },
-      "raw_text": "Castle 75202 Akard Number /"
-    },
-    "total_amount": {
-      "value": "that this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.1313583232567513,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "that this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "subtotal": {
-      "value": "this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.15262998790810156,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "this translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "tax_amount": {
-      "value": "translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.17334744054816603,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "translated copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "discount": {
-      "value": "copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.22430471584038691,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "copy of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "currency": {
-      "value": "of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.2506247480854493,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "of the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "remittance_address": {
-      "value": "the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.2629383313180169,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "the invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "of"
     },
     "bill_to_address": {
-      "value": "invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
+      "value": "in",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 0,
         "bbox": [
-          0.2808544941555824,
+          0.47983507994088404,
           0.0,
-          0.9148512057470105,
+          0.4876746607550719,
           0.0
         ],
         "token_span": [
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "101"
         ]
       },
-      "raw_text": "invoice is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "in"
     },
-    "ship_to_address": {
-      "value": "is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
+    "contact_email": {
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 3,
         "bbox": [
           0.31837968561064095,
           0.0,
-          0.9148512057470105,
+          0.326783555018138,
           0.0
         ],
         "token_span": [
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "9"
         ]
       },
-      "raw_text": "is provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "is"
     },
-    "vendor_name": {
-      "value": "provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
+    "contact_name": {
+      "value": "is",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 3,
         "bbox": [
-          0.329584844820637,
+          0.7030532043530839,
           0.0,
-          0.9148512057470105,
+          0.7114570737605809,
           0.0
         ],
         "token_span": [
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "22"
         ]
       },
-      "raw_text": "provided to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "is"
     },
-    "vendor_address": {
-      "value": "75202 Akard Number /",
+    "contact_phone": {
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
-        "page": 1,
+        "page": 0,
         "bbox": [
-          0.11864671503426037,
+          0.41767264543866717,
           0.0,
-          0.1783806932688432,
+          0.42494793765954586,
           0.0
         ],
         "token_span": [
-          "22",
-          "16",
-          "62",
-          "51"
+          "86"
         ]
       },
-      "raw_text": "75202 Akard Number /"
+      "raw_text": "is"
     },
-    "customer_name": {
-      "value": "to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
+    "currency": {
+      "value": "to",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
@@ -529,365 +106,412 @@
         "bbox": [
           0.37493954050785994,
           0.0,
-          0.9148512057470105,
+          0.3844518339379284,
           0.0
         ],
         "token_span": [
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "11"
         ]
       },
-      "raw_text": "to you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "to"
     },
     "customer_account": {
-      "value": "you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
+      "value": "8 Aug",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.5663744428657799,
+          0.0,
+          0.6014812546352277,
+          0.0
+        ],
+        "token_span": [
+          "67",
+          "68"
+        ]
+      },
+      "raw_text": "8 Aug"
+    },
+    "customer_name": {
+      "value": "of",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 3,
         "bbox": [
-          0.3872531237404274,
+          0.2506247480854493,
           0.0,
-          0.9148512057470105,
+          0.26013704151551786,
           0.0
         ],
         "token_span": [
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "6"
         ]
       },
-      "raw_text": "you for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "of"
     },
-    "purchase_order": {
-      "value": "for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.40797057638049194,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "for information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "invoice_reference": {
-      "value": "information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.4242039500201534,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "information purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "payment_terms": {
-      "value": "purpose only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.48242644095122955,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "purpose only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "bank_account": {
-      "value": "only. Payment of the original invoice is done via this consolidated statement. Page:4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.5249798468359534,
-          0.0,
-          0.9148512057470105,
-          0.0
-        ],
-        "token_span": [
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
-        ]
-      },
-      "raw_text": "only. Payment of the original invoice is done via this consolidated statement. Page:4"
-    },
-    "routing_number": {
-      "value": "and",
+    "discount": {
+      "value": "30.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.8897806663979584,
+          0.6003106946123874,
           0.0,
-          0.9065884052129524,
+          0.615250906892382,
           0.0
         ],
         "token_span": [
+          "10"
+        ]
+      },
+      "raw_text": "30"
+    },
+    "due_date": {
+      "value": "2024-08-08",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.28864033319897897,
+          0.0,
+          0.3685543463657128,
+          0.0
+        ],
+        "token_span": [
+          "97",
           "98"
         ]
       },
-      "raw_text": "and"
+      "raw_text": "- 08/08/2024)"
     },
-    "swift_code": {
-      "value": "Payment of the original invoice is done via this consolidated statement. Page:4",
+    "invoice_date": {
+      "value": "2024-07-28",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 2,
         "bbox": [
-          0.551299879081016,
+          0.2946459760849121,
           0.0,
-          0.9148512057470105,
+          0.37455998925164596,
           0.0
         ],
         "token_span": [
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "87",
+          "88"
         ]
       },
-      "raw_text": "Payment of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "- 28/07/2024)"
+    },
+    "invoice_number": {
+      "value": "Applied 29",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.49243920462179225,
+          0.0,
+          0.5417069729947601,
+          0.0
+        ],
+        "token_span": [
+          "61",
+          "63"
+        ]
+      },
+      "raw_text": "Applied 29"
+    },
+    "invoice_reference": {
+      "value": "Invoice Charge Discount TAX Amount",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.13294370549509607,
+          0.0
+        ],
+        "token_span": [
+          "187",
+          "181",
+          "179",
+          "184",
+          "189"
+        ]
+      },
+      "raw_text": "Invoice Charge Discount TAX Amount"
+    },
+    "issue_date": {
+      "value": "2024-07-28",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.402881902458686,
+          0.0,
+          0.4827959156254198,
+          0.0
+        ],
+        "token_span": [
+          "121",
+          "122"
+        ]
+      },
+      "raw_text": "- 28/07/2024)"
     },
     "notes": {
-      "value": "of the original invoice is done via this consolidated statement. Page:4",
+      "value": "by",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 0,
         "bbox": [
-          0.5961003627569532,
+          0.8572937659545886,
           0.0,
-          0.9148512057470105,
+          0.8679346365712756,
           0.0
         ],
         "token_span": [
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "96"
         ]
       },
-      "raw_text": "of the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "by"
     },
-    "tax_id": {
-      "value": "Akard Number /",
+    "payment_terms": {
+      "value": "to",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.8447736127905414,
+          0.0,
+          0.8559787720005374,
+          0.0
+        ],
+        "token_span": [
+          "189"
+        ]
+      },
+      "raw_text": "to"
+    },
+    "purchase_order": {
+      "value": "at",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.5063952746204488,
+          0.0,
+          0.5176004338304446,
+          0.0
+        ],
+        "token_span": [
+          "115"
+        ]
+      },
+      "raw_text": "at"
+    },
+    "remittance_address": {
+      "value": "at",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 1,
         "bbox": [
-          0.12016492005911597,
+          0.8515165294907967,
           0.0,
-          0.1783806932688432,
+          0.8627216887007928,
           0.0
         ],
         "token_span": [
-          "16",
-          "62",
-          "51"
+          "35"
         ]
       },
-      "raw_text": "Akard Number /"
+      "raw_text": "at"
     },
-    "contact_name": {
-      "value": "the original invoice is done via this consolidated statement. Page:4",
+    "routing_number": {
+      "value": "Applied 1",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 4,
         "bbox": [
-          0.6084139459895207,
+          0.49243920462179225,
           0.0,
-          0.9148512057470105,
+          0.5417069729947601,
           0.0
         ],
         "token_span": [
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "61",
+          "63"
         ]
       },
-      "raw_text": "the original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "Applied 1"
     },
-    "contact_email": {
-      "value": "original invoice is done via this consolidated statement. Page:4",
+    "ship_to_address": {
+      "value": "3,911.38 1,609.88 640.35 6,161.61",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 1,
         "bbox": [
-          0.6263301088270862,
+          0.4434787738982937,
           0.0,
-          0.9148512057470105,
+          0.49576951687827486,
           0.0
         ],
         "token_span": [
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "67",
+          "70",
+          "75",
+          "73"
         ]
       },
-      "raw_text": "original invoice is done via this consolidated statement. Page:4"
+      "raw_text": "3,911.38 1,609.88 640.35 6,161.61"
     },
-    "contact_phone": {
-      "value": "invoice is done via this consolidated statement. Page:4",
+    "subtotal": {
+      "value": "30780386.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 0,
         "bbox": [
-          0.6655280128980253,
+          0.7738613462313583,
           0.0,
-          0.9148512057470105,
+          0.8373572484213355,
           0.0
         ],
         "token_span": [
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28"
+          "173"
         ]
       },
-      "raw_text": "invoice is done via this consolidated statement. Page:4"
+      "raw_text": "30780386,"
+    },
+    "swift_code": {
+      "value": "Applied 9",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.49243920462179225,
+          0.0,
+          0.5417069729947601,
+          0.0
+        ],
+        "token_span": [
+          "63",
+          "61"
+        ]
+      },
+      "raw_text": "Applied 9"
+    },
+    "tax_amount": {
+      "value": "21000089.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.6446526938062608,
+          0.0,
+          0.7156187021362354,
+          0.0
+        ],
+        "token_span": [
+          "170"
+        ]
+      },
+      "raw_text": "021000089,"
+    },
+    "tax_id": {
+      "value": "CITIUS33",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.642408974875722,
+          0.0,
+          0.701390568319226,
+          0.0
+        ],
+        "token_span": [
+          "178"
+        ]
+      },
+      "raw_text": "CITIUS33"
+    },
+    "total_amount": {
+      "value": "0.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.7809166326749966,
+          0.0,
+          0.8070620041649872,
+          0.0
+        ],
+        "token_span": [
+          "113"
+        ]
+      },
+      "raw_text": "0.00"
+    },
+    "vendor_address": {
+      "value": "for",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.46752149670831655,
+          0.0,
+          0.47928086792959823,
+          0.0
+        ],
+        "token_span": [
+          "62"
+        ]
+      },
+      "raw_text": "for"
+    },
+    "vendor_name": {
+      "value": "Charge Discount TAX Amount",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 4,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.12733440816874916,
+          0.0
+        ],
+        "token_span": [
+          "155",
+          "157",
+          "153",
+          "151"
+        ]
+      },
+      "raw_text": "Charge Discount TAX Amount"
     }
   },
-  "line_items": []
+  "line_items": [],
+  "extensions": {},
+  "experimental": {}
 }

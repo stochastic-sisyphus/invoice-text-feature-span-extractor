@@ -94,6 +94,21 @@ def get_labels_aligned_path(sha256: str) -> Path:
     return get_labels_aligned_dir() / f"{sha256}.parquet"
 
 
+def get_models_dir() -> Path:
+    """Get the models directory path."""
+    return get_data_dir() / "models"
+
+
+def get_model_bundle_path() -> Path:
+    """Get the model bundle NPZ file path."""
+    return get_models_dir() / "model_v1.npz"
+
+
+def get_model_manifest_path() -> Path:
+    """Get the model manifest JSON file path."""
+    return get_models_dir() / "manifest.json"
+
+
 def get_tokens_path(sha256: str) -> Path:
     """Get the tokens parquet file path for a document."""
     return get_tokens_dir() / f"{sha256}.parquet"
@@ -128,6 +143,7 @@ def ensure_directories() -> None:
         get_labels_dir(),
         get_labels_raw_dir(),
         get_labels_aligned_dir(),
+        get_models_dir(),
     ]
     
     for directory in directories:

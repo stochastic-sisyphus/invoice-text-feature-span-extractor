@@ -124,12 +124,16 @@ class TestReviewQueue:
         indexed_docs = ingest.get_indexed_documents()
         valid_doc_ids = set(indexed_docs['doc_id'].tolist())
         
+        # Load schema to get valid fields
+        schema = utils.load_contract_schema()
+        valid_fields = set(schema['fields'])
+        
         for _, entry in review_df.iterrows():
             doc_id = entry['doc_id']
             assert doc_id in valid_doc_ids, f"Invalid doc_id in review queue: {doc_id}"
             
             field = entry['field']
-            assert field in decoder.HEADER_FIELDS, f"Invalid field in review queue: {field}"
+            assert field in valid_fields, f"Invalid field in review queue: {field}"
             
             reason = entry['reason']
             assert reason in ['ABSTAIN', 'MISSING'], f"Invalid reason in review queue: {reason}"
@@ -174,12 +178,16 @@ class TestReviewQueue:
             print("✓ Review queue is empty (no abstains/missing)")
             return
         
+        # Load schema to get valid fields
+        schema = utils.load_contract_schema()
+        valid_fields = set(schema['fields'])
+        
         # Check field coverage
         queue_fields = set(review_df['field'].unique())
         
-        # All fields in queue should be valid header fields
+        # All fields in queue should be valid schema fields
         for field in queue_fields:
-            assert field in decoder.HEADER_FIELDS, f"Invalid field in review queue: {field}"
+            assert field in valid_fields, f"Invalid field in review queue: {field}"
         
         # Count entries by field
         field_counts = review_df['field'].value_counts().to_dict()

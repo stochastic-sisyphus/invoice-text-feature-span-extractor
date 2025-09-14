@@ -181,16 +181,57 @@ def normalize_text(raw_text: str) -> Tuple[Optional[str], str]:
 
 def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
     """
-    Normalize a field value based on its type.
+    Normalize a field value with strict validation for precision.
     
     Args:
-        field: Field name from HEADER_FIELDS
+        field: Field name from schema
         raw_text: Raw text value to normalize
         
     Returns:
         Dictionary with normalized value, currency_code (if applicable), and raw_text
     """
-    if field in ['invoice_date', 'due_date']:
+    # CRITICAL: Validate length first - reject obviously bad extractions
+    text_length = len(raw_text.strip())
+    
+    # Field-specific length limits for precision
+    field_length_limits = {
+        'invoice_number': 30,
+        'account_number': 30,
+        'customer_account': 30,
+        'invoice_date': 25,
+        'due_date': 25,
+        'issue_date': 25,
+        'total_amount': 25,
+        'subtotal': 25,
+        'tax_amount': 25,
+        'discount': 25,
+        'currency': 10,
+        'contact_phone': 30,
+        'contact_email': 60,
+        'routing_number': 25,
+        'swift_code': 15,
+        'tax_id': 30,
+        'purchase_order': 50,
+        'invoice_reference': 50,
+        'contact_name': 50,
+    }
+    
+    max_length = field_length_limits.get(field, 150)  # Default for address fields
+    
+    # Reject if too long (fail normalization)
+    if text_length > max_length:
+        return {
+            'value': None,  # Normalization failed
+            'raw_text': raw_text,
+            'currency_code': None,
+        }
+    
+    # Date fields with enhanced validation
+    if field in ['invoice_date', 'due_date', 'issue_date']:
+        # Reject if obviously not a date (too long or no date indicators)
+        if text_length > 25 or text_length < 4:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
         normalized_value, original_text = normalize_date(raw_text)
         return {
             'value': normalized_value,
@@ -198,7 +239,16 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    elif field in ['total_amount_due', 'previous_balance', 'payments_and_credits']:
+    # Amount fields with enhanced validation  
+    elif field in ['total_amount', 'subtotal', 'tax_amount', 'discount']:
+        # Reject if obviously not an amount
+        if text_length > 25 or text_length < 1:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
+        # Must have digits to be a valid amount
+        if not any(c.isdigit() for c in raw_text):
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
         normalized_value, currency_code, original_text = normalize_amount(raw_text)
         return {
             'value': normalized_value,
@@ -206,7 +256,12 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': currency_code,
         }
     
-    elif field in ['invoice_number', 'account_number']:
+    # ID fields with enhanced validation
+    elif field in ['invoice_number', 'account_number', 'customer_account', 'routing_number', 'swift_code', 'tax_id']:
+        # Reject if too long or obviously not an ID
+        if text_length > 30 or text_length < 2:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
         normalized_value, original_text = normalize_id(raw_text)
         return {
             'value': normalized_value,
@@ -214,7 +269,50 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    else:  # carrier_name, document_type, currency_code
+    # Currency field with strict validation
+    elif field == 'currency':
+        # Currency should be very short
+        if text_length > 10 or text_length < 1:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
+        normalized_value, original_text = normalize_text(raw_text)
+        return {
+            'value': normalized_value,
+            'raw_text': original_text,
+            'currency_code': None,
+        }
+    
+    # Contact fields with type validation
+    elif field == 'contact_email':
+        if text_length > 60 or '@' not in raw_text or '.' not in raw_text:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
+        normalized_value, original_text = normalize_text(raw_text)
+        return {
+            'value': normalized_value,
+            'raw_text': original_text,
+            'currency_code': None,
+        }
+    
+    elif field == 'contact_phone':
+        # Phone numbers should have digits
+        digit_count = sum(1 for c in raw_text if c.isdigit())
+        if text_length > 30 or digit_count < 7:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
+        normalized_value, original_text = normalize_text(raw_text)
+        return {
+            'value': normalized_value,
+            'raw_text': original_text,
+            'currency_code': None,
+        }
+    
+    # Address and name fields (moderate length limits)
+    else:
+        # Apply moderate length constraint
+        if text_length > max_length:
+            return {'value': None, 'raw_text': raw_text, 'currency_code': None}
+        
         normalized_value, original_text = normalize_text(raw_text)
         return {
             'value': normalized_value,

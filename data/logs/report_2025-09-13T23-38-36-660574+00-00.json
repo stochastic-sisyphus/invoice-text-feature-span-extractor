@@ -1,0 +1,201 @@
+{
+  "field_statistics": {
+    "bank_account": {
+      "PREDICTED": 5
+    },
+    "bill_to_address": {
+      "PREDICTED": 5
+    },
+    "contact_email": {
+      "PREDICTED": 5
+    },
+    "contact_name": {
+      "PREDICTED": 5
+    },
+    "contact_phone": {
+      "PREDICTED": 5
+    },
+    "currency": {
+      "PREDICTED": 5
+    },
+    "customer_account": {
+      "PREDICTED": 5
+    },
+    "customer_name": {
+      "PREDICTED": 5
+    },
+    "discount": {
+      "PREDICTED": 5
+    },
+    "due_date": {
+      "PREDICTED": 3,
+      "ABSTAIN": 2
+    },
+    "invoice_date": {
+      "ABSTAIN": 4,
+      "PREDICTED": 1
+    },
+    "invoice_number": {
+      "PREDICTED": 5
+    },
+    "invoice_reference": {
+      "PREDICTED": 5
+    },
+    "issue_date": {
+      "PREDICTED": 5
+    },
+    "notes": {
+      "PREDICTED": 5
+    },
+    "payment_terms": {
+      "PREDICTED": 5
+    },
+    "purchase_order": {
+      "PREDICTED": 5
+    },
+    "remittance_address": {
+      "PREDICTED": 5
+    },
+    "routing_number": {
+      "PREDICTED": 5
+    },
+    "ship_to_address": {
+      "PREDICTED": 5
+    },
+    "subtotal": {
+      "PREDICTED": 5
+    },
+    "swift_code": {
+      "PREDICTED": 5
+    },
+    "tax_amount": {
+      "PREDICTED": 5
+    },
+    "tax_id": {
+      "PREDICTED": 5
+    },
+    "total_amount": {
+      "PREDICTED": 5
+    },
+    "vendor_address": {
+      "PREDICTED": 5
+    },
+    "vendor_name": {
+      "PREDICTED": 5
+    }
+  },
+  "document_statistics": [
+    {
+      "sha256": "d2b2234e1c1dbb755dd9b63c4c3140b92afc51c950c16f31168771bd76cbce68",
+      "doc_id": "fs:d2b2234e1c1dbb75",
+      "pages": 3,
+      "tokens": 363,
+      "candidates": 106,
+      "predicted": 26,
+      "abstain": 1,
+      "missing": 0
+    },
+    {
+      "sha256": "556d15d2a61edc6a731fe2bc9004a1d6d3bb62bfd15b95f8e1272ff25a35ca0d",
+      "doc_id": "fs:556d15d2a61edc6a",
+      "pages": 149,
+      "tokens": 24611,
+      "candidates": 87,
+      "predicted": 26,
+      "abstain": 1,
+      "missing": 0
+    },
+    {
+      "sha256": "bc1e799de23c507a63c304307a3c2fa19420667bda3fef09a9187e43cb27cc49",
+      "doc_id": "fs:bc1e799de23c507a",
+      "pages": 2,
+      "tokens": 470,
+      "candidates": 106,
+      "predicted": 25,
+      "abstain": 2,
+      "missing": 0
+    },
+    {
+      "sha256": "aaa25ee5b835adf91196ca64d033837e4c3f7945dd345b510cfc37e8f8d03a89",
+      "doc_id": "fs:aaa25ee5b835adf9",
+      "pages": 7,
+      "tokens": 2025,
+      "candidates": 200,
+      "predicted": 25,
+      "abstain": 2,
+      "missing": 0
+    },
+    {
+      "sha256": "a094337e26f2e4f8ac893da5121555c547f3766b4ade8c83bf763bb6734a3edd",
+      "doc_id": "fs:a094337e26f2e4f8",
+      "pages": 7,
+      "tokens": 940,
+      "candidates": 141,
+      "predicted": 27,
+      "abstain": 0,
+      "missing": 0
+    }
+  ],
+  "review_queue_statistics": {
+    "total_entries": 21,
+    "by_field": {
+      "previous_balance": 5,
+      "payments_and_credits": 5,
+      "due_date": 4,
+      "invoice_date": 4,
+      "total_amount_due": 3
+    },
+    "by_reason": {
+      "ABSTAIN": 21
+    }
+  },
+  "coverage_statistics": {
+    "total_documents": 5,
+    "documents_with_candidates": 5,
+    "total_candidates": 640,
+    "coverage_probes": {
+      "invoice_number": {
+        "cue_coverage_percent": 34.1,
+        "region_coverage_percent": 0.9,
+        "expected_type_count": 6,
+        "total_candidates": 640
+      },
+      "invoice_date": {
+        "cue_coverage_percent": 34.1,
+        "region_coverage_percent": 1.2,
+        "expected_type_count": 8,
+        "total_candidates": 640
+      },
+      "due_date": {
+        "cue_coverage_percent": 34.1,
+        "region_coverage_percent": 1.2,
+        "expected_type_count": 8,
+        "total_candidates": 640
+      },
+      "total_amount_due": {
+        "cue_coverage_percent": 34.1,
+        "region_coverage_percent": 63.7,
+        "expected_type_count": 408,
+        "total_candidates": 640
+      },
+      "account_number": {
+        "cue_coverage_percent": 34.1,
+        "region_coverage_percent": 0.9,
+        "expected_type_count": 6,
+        "total_candidates": 640
+      }
+    },
+    "bucket_distribution": {
+      "amount_like": 408,
+      "keyword_proximal": 218,
+      "id_like": 6,
+      "date_like": 8
+    }
+  },
+  "generated_at": "2025-09-13T23:38:36.660254+00:00",
+  "contract_version": "2.0.0+0f724678ccd4",
+  "feature_version": "v1",
+  "decoder_version": "v1",
+  "model_version": "unscored-baseline",
+  "calibration_version": "none"
+}
