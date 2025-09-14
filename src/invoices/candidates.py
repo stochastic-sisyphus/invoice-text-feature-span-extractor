@@ -42,66 +42,107 @@ def normalize_text_for_dedup(text: str) -> str:
 
 
 def is_date_like_soft(text: str) -> bool:
-    """Soft check if text looks like a date - no regex, just pattern-based."""
+    """Strict validation: text must look like a proper date - no garbled text."""
     text = text.strip()
     if len(text) < 4 or len(text) > 20:
         return False
     
-    # Count digits and separators
+    # CRITICAL: Reject garbled text immediately
+    garbled_words = ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'dluoc', 'gnillac', 'yaPotuA']
+    if any(word in text.lower() for word in garbled_words):
+        return False
+    
+    # CRITICAL: Must have substantial digits for valid dates
     digits = sum(1 for c in text if c.isdigit())
-    separators = sum(1 for c in text if c in '/-')
+    if digits < 4:  # Need year + day/month
+        return False
+    
+    # Count separators and letters
+    separators = sum(1 for c in text if c in '/-.')
     letters = sum(1 for c in text if c.isalpha())
     
-    # Date-like if mostly digits with some separators
-    if digits >= 4 and separators >= 1 and digits + separators + letters == len(text):
+    # Date-like if mostly digits with reasonable separators
+    if digits >= 4 and separators >= 1 and letters <= digits:
         return True
     
-    # Month names check
+    # Month names check (enhanced validation)
     month_indicators = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
                        'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     text_lower = text.lower()
-    if any(month in text_lower for month in month_indicators):
+    has_month = any(month in text_lower for month in month_indicators)
+    
+    # If has month name, must also have year-like digits
+    if has_month and digits >= 2:
         return True
     
     return False
 
 
 def is_amount_like_soft(text: str) -> bool:
-    """Soft check if text looks like a monetary amount."""
+    """Strict validation: text must look like a proper monetary amount - no garbled text."""
     text = text.strip()
-    if len(text) < 1:
+    if len(text) < 1 or len(text) > 25:
+        return False
+    
+    # CRITICAL: Reject garbled text immediately
+    garbled_words = ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'dluoc', 'gnillac', 'yaPotuA']
+    if any(word in text.lower() for word in garbled_words):
+        return False
+    
+    # CRITICAL: Must have digits for valid amounts
+    digits = sum(1 for c in text if c.isdigit())
+    if digits < 1:
         return False
     
     # Check for currency symbols
     has_currency = any(symbol in text for symbol in CURRENCY_SYMBOLS)
     
-    # Count digits and decimal points
-    digits = sum(1 for c in text if c.isdigit())
+    # Count decimal points and commas
     decimals = text.count('.')
     commas = text.count(',')
     
-    # Amount-like if has currency or mostly digits with decimals/commas
-    if has_currency:
+    # STRICTER: Amount validation
+    if has_currency and digits >= 1:
         return True
     
-    if digits >= 2 and (decimals == 1 or commas >= 1):
-        return True
+    # Must be mostly digits with reasonable separators
+    if digits >= 2 and decimals <= 1 and commas <= 3:
+        # Additional: check digit ratio is high
+        digit_ratio = digits / len(text)
+        if digit_ratio >= 0.4:  # At least 40% digits
+            return True
     
     return False
 
 
 def is_id_like_soft(text: str) -> bool:
-    """Soft check if text looks like an ID."""
+    """Strict validation: text must look like a proper ID - no garbled text."""
     text = text.strip()
     if len(text) < 3 or len(text) > 30:
         return False
     
-    # Must be alphanumeric with reasonable mix
-    if not all(c.isalnum() or c in '-_#' for c in text):
+    # CRITICAL: Reject garbled text immediately
+    garbled_words = ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'dluoc', 'gnillac', 'yaPotuA']
+    if any(word in text.lower() for word in garbled_words):
+        return False
+    
+    # CRITICAL: Reject obvious sentence fragments
+    words = text.split()
+    if len(words) > 4:  # IDs shouldn't be long phrases
+        return False
+    
+    # Must be alphanumeric with reasonable punctuation
+    if not all(c.isalnum() or c in '-_#. ' for c in text):
         return False
     
     # Must have at least one digit
     if not any(c.isdigit() for c in text):
+        return False
+    
+    # CRITICAL: Reject common English words
+    common_words = ['the', 'and', 'for', 'with', 'from', 'that', 'this', 'will', 'may', 'can', 'pay', 'payment']
+    word_list = [w.lower() for w in words]
+    if any(word in word_list for word in common_words):
         return False
     
     return True
@@ -191,16 +232,39 @@ class SpanBuilder:
         return spans
     
     def _create_span_from_tokens(self, tokens: List[pd.Series]) -> Optional[Dict[str, Any]]:
-        """Create a span from a list of tokens."""
+        """Create a span from a list of tokens with strict quality constraints."""
         if not tokens:
             return None
         
-        # Combine text
-        raw_text = ' '.join(token['text'] for token in tokens)
+        # CRITICAL: Sort tokens by reading order to prevent garbled text
+        tokens_sorted = sorted(tokens, key=lambda t: (t['page_idx'], t['token_idx']))
+        
+        # CRITICAL: Verify tokens are contiguous in reading order
+        for i in range(1, len(tokens_sorted)):
+            prev_token = tokens_sorted[i-1]
+            curr_token = tokens_sorted[i]
+            
+            # Must be same page and consecutive or very close token indices
+            if (prev_token['page_idx'] != curr_token['page_idx'] or 
+                curr_token['token_idx'] - prev_token['token_idx'] > 2):
+                return None  # Skip non-contiguous spans
+        
+        # Combine text in proper reading order
+        raw_text = ' '.join(token['text'] for token in tokens_sorted)
         normalized_text = normalize_text_for_dedup(raw_text)
         
+        # CRITICAL: Reject garbled/reversed text patterns immediately
+        garbled_indicators = ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'dluoc', 'gnillac', 'yaPotuA', 'ylhtnom', 'eciovni', 'knab', 'tnuocca']
+        if any(indicator in raw_text.lower() for indicator in garbled_indicators):
+            return None  # Skip obviously garbled text
+        
+        # CRITICAL: Strict length limits - NO massive blobs
+        text_length = len(raw_text.strip())
+        if text_length > 50:  # Hard cap for precision
+            return None
+        
         # Skip very short spans
-        if len(raw_text.strip()) < 2:
+        if text_length < 2:
             return None
         
         # Compute bounding box

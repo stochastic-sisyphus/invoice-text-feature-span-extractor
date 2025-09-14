@@ -8,681 +8,6 @@
   "calibration_version": "none",
   "fields": {
     "invoice_number": {
-      "value": "2023",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 1,
-        "bbox": [
-          0.6093464055555555,
-          0.0,
-          0.6408366016339869,
-          0.0
-        ],
-        "token_span": [
-          "13"
-        ]
-      },
-      "raw_text": "2023"
-    },
-    "invoice_date": {
-      "value": "2025-03-03",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8761307165686273,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "46",
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "for Page 3 on of your more our 3"
-    },
-    "due_date": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8235514705882353,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "221",
-          "61",
-          "208",
-          "20",
-          "70",
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "cash your payable 2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "issue_date": {
-      "value": "Page 3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8769411767973857,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "Page 3 on of your more our 3"
-    },
-    "total_amount": {
-      "value": "your payable 2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8246568626960785,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "61",
-          "208",
-          "20",
-          "70",
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "your payable 2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "subtotal": {
-      "value": "payable 2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8281593137254902,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "208",
-          "20",
-          "70",
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "payable 2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "tax_amount": {
-      "value": "with for Page 3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8564999956045752,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "60",
-          "46",
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "with for Page 3 on of your more our 3"
-    },
-    "discount": {
-      "value": "begins order after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8411274509313726,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "70",
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "begins order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "currency": {
-      "value": "3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8769411767973857,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "3 on of your more our 3"
-    },
-    "remittance_address": {
-      "value": "2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8298431375816993,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "20",
-          "70",
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "2023 begins order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "bill_to_address": {
-      "value": "on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8826274495915031,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "on of your more our 3"
-    },
-    "ship_to_address": {
-      "value": "order after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8452696078431372,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "172",
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "order after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "vendor_name": {
-      "value": "2023 internet with for Page 3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8298431375816993,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "20",
-          "33",
-          "60",
-          "46",
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "2023 internet with for Page 3 on of your more our 3"
-    },
-    "vendor_address": {
-      "value": "of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8879084963235294,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "of your more our 3"
-    },
-    "customer_name": {
-      "value": "internet with for Page 3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8326928090686274,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "33",
-          "60",
-          "46",
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "internet with for Page 3 on of your more our 3"
-    },
-    "customer_account": {
-      "value": "after 0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8460686274019608,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "93",
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "after 0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "purchase_order": {
-      "value": "month 2023 internet with for Page 3 on of your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8078823485457517,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "59",
-          "20",
-          "33",
-          "60",
-          "46",
-          "6",
-          "21",
-          "34",
-          "22",
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "month 2023 internet with for Page 3 on of your more our 3"
-    },
-    "invoice_reference": {
-      "value": "0108611 at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8543039215686276,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "184",
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "0108611 at monthly 1 Page to of on Comcast 3"
-    },
-    "payment_terms": {
-      "value": "Page 2 of 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 1,
-        "bbox": [
-          0.8769411767973857,
-          0.0,
-          0.912222221748366,
-          0.0
-        ],
-        "token_span": [
-          "6",
-          "21",
-          "22",
-          "23"
-        ]
-      },
-      "raw_text": "Page 2 of 3"
-    },
-    "bank_account": {
-      "value": "at monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.857524509754902,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "113",
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "at monthly 1 Page to of on Comcast 3"
-    },
-    "routing_number": {
-      "value": "1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8769411767973857,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "1 Page to of on Comcast 3"
-    },
-    "swift_code": {
-      "value": "your more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8888382308986927,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "61",
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "your more our 3"
-    },
-    "notes": {
-      "value": "monthly 1 Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.859053921519608,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "62",
-          "21",
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "monthly 1 Page to of on Comcast 3"
-    },
-    "tax_id": {
-      "value": "our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.9012287567810456,
-          0.0,
-          0.9207581685457515,
-          0.0
-        ],
-        "token_span": [
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "our 3"
-    },
-    "contact_name": {
-      "value": "more our 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.8961568603594771,
-          0.0,
-          0.927202611993464,
-          0.0
-        ],
-        "token_span": [
-          "47",
-          "35",
-          "23"
-        ]
-      },
-      "raw_text": "more our 3"
-    },
-    "contact_email": {
-      "value": "Page to of on Comcast 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8769411767973857,
-          0.0,
-          0.9442500000000001,
-          0.0
-        ],
-        "token_span": [
-          "6",
-          "209",
-          "22",
-          "71",
-          "210",
-          "23"
-        ]
-      },
-      "raw_text": "Page to of on Comcast 3"
-    },
-    "contact_phone": {
       "value": "2 of 3",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -701,6 +26,222 @@
         ]
       },
       "raw_text": "2 of 3"
+    },
+    "invoice_date": {
+      "value": "2025-09-03",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.8878169934477125,
+          0.0,
+          0.912222221748366,
+          0.0
+        ],
+        "token_span": [
+          "22",
+          "23"
+        ]
+      },
+      "raw_text": "of 3"
+    },
+    "due_date": {
+      "value": "2023-09-14",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.6093464055555555,
+          0.0,
+          0.6408366016339869,
+          0.0
+        ],
+        "token_span": [
+          "13"
+        ]
+      },
+      "raw_text": "2023"
+    },
+    "issue_date": {
+      "value": "0108611",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.46933333366013075,
+          0.0,
+          0.5165490199346405,
+          0.0
+        ],
+        "token_span": [
+          "10"
+        ]
+      },
+      "raw_text": "0108611"
+    },
+    "total_amount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "subtotal": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "tax_amount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "discount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "currency": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "remittance_address": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "bill_to_address": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "ship_to_address": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "vendor_name": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "vendor_address": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "customer_name": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "customer_account": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "purchase_order": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "invoice_reference": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "payment_terms": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "bank_account": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "routing_number": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "swift_code": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "notes": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "tax_id": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "contact_name": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "contact_email": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
+    },
+    "contact_phone": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     }
   },
   "line_items": []

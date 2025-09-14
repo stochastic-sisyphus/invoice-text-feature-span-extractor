@@ -54,8 +54,8 @@ HEADER_FIELDS_V2 = [
     'contact_phone',
 ]
 
-# Default NONE bias (high cost to encourage abstaining)
-DEFAULT_NONE_BIAS = 10.0
+# Default NONE bias (MUCH higher to reject garbled spans)
+DEFAULT_NONE_BIAS = 20.0
 
 
 def try_import_scipy_hungarian():
@@ -103,14 +103,50 @@ def simple_hungarian_fallback(cost_matrix: np.ndarray) -> Tuple[np.ndarray, np.n
 
 def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     """
-    Compute weak prior cost for field-candidate assignment.
-    Lower cost = better match.
+    Compute weak prior cost for field-candidate assignment with strict quality constraints.
+    Lower cost = better match. HEAVILY penalize garbled text and long spans.
     """
     bucket = candidate.get('bucket', '')
     center_x = candidate.get('center_x', 0.5)
     center_y = candidate.get('center_y', 0.5)
+    raw_text = candidate.get('raw_text', '')
+    text_length = len(raw_text.strip())
     
     base_cost = 1.0  # Neutral cost
+    
+    # CRITICAL: Immediate rejection for garbled text
+    garbled_indicators = ['eht', 'sah', 'ekat', 'ruoy', 'morf', 'yap', 'dluoc', 'gnillac', 'yaPotuA', 'ylhtnom', 'eciovni', 'knab', 'tnuocca']
+    if any(indicator in raw_text.lower() for indicator in garbled_indicators):
+        return 15.0  # Maximum penalty for garbled text
+    
+    # CRITICAL: Heavy length penalties by field type
+    field_max_lengths = {
+        'invoice_number': 20,
+        'account_number': 20,
+        'customer_account': 20,
+        'invoice_date': 15,
+        'due_date': 15,
+        'issue_date': 15,
+        'total_amount': 15,
+        'subtotal': 15,
+        'tax_amount': 15,
+        'discount': 15,
+        'currency': 5,
+        'routing_number': 12,
+        'swift_code': 12,
+        'tax_id': 20,
+        'contact_phone': 15,
+        'contact_email': 30,
+    }
+    
+    max_length = field_max_lengths.get(field, 40)  # Default for address/name fields
+    if text_length > max_length:
+        # Massive penalty for exceeding length
+        return 10.0 + (text_length - max_length) / 10.0
+    
+    # Global penalty for very long spans (any field)
+    if text_length > 50:
+        return 12.0  # Reject anything over 50 chars
     
     # Field-specific preferences
     if field == 'total_amount_due':

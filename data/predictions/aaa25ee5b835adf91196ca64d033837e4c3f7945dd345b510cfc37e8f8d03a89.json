@@ -8,1039 +8,347 @@
   "calibration_version": "none",
   "fields": {
     "invoice_number": {
-      "value": "MRC Tax MRC MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
+      "value": "1 of 7",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 0,
         "bbox": [
-          0.736079434627451,
+          0.9128477328431374,
           0.0,
-          0.7602303932558775,
+          0.953658268627451,
           0.0
         ],
         "token_span": [
-          "380",
-          "328",
-          "159",
-          "146",
-          "98",
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
+          "271",
+          "272",
+          "273"
         ]
       },
-      "raw_text": "MRC Tax MRC MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
+      "raw_text": "1 of 7"
     },
     "invoice_date": {
-      "value": null,
+      "value": "2025-09-07",
       "confidence": 0.0,
-      "status": "ABSTAIN",
+      "status": "PREDICTED",
       "provenance": {
-        "page": 3,
+        "page": 0,
         "bbox": [
-          0.736079434627451,
+          0.9264736519607844,
           0.0,
-          0.7602303932558775,
+          0.953658268627451,
           0.0
         ],
         "token_span": [
-          "328",
-          "159",
-          "146",
-          "98",
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
+          "272",
+          "273"
         ]
       },
-      "raw_text": "Tax MRC MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
+      "raw_text": "of 7"
     },
     "due_date": {
+      "value": "2025-02-07",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.9128477328431374,
+          0.0,
+          0.953658268627451,
+          0.0
+        ],
+        "token_span": [
+          "50",
+          "51",
+          "52"
+        ]
+      },
+      "raw_text": "2 of 7"
+    },
+    "issue_date": {
+      "value": "Page 2 of 7",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.8701501225490196,
+          0.0,
+          0.953658268627451,
+          0.0
+        ],
+        "token_span": [
+          "49",
+          "50",
+          "51",
+          "52"
+        ]
+      },
+      "raw_text": "Page 2 of 7"
+    },
+    "total_amount": {
+      "value": "LLC",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 1,
+        "bbox": [
+          0.26153214507689954,
+          0.0,
+          0.28683547012656124,
+          0.0
+        ],
+        "token_span": [
+          "41"
+        ]
+      },
+      "raw_text": "LLC"
+    },
+    "subtotal": {
+      "value": "Qty",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.7810667123333334,
+          0.0,
+          0.7983145750637819,
+          0.0
+        ],
+        "token_span": [
+          "21"
+        ]
+      },
+      "raw_text": "Qty"
+    },
+    "tax_amount": {
+      "value": "Type",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.736079434627451,
+          0.0,
+          0.7602303932558775,
+          0.0
+        ],
+        "token_span": [
+          "20"
+        ]
+      },
+      "raw_text": "Type"
+    },
+    "discount": {
+      "value": "Date",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.6847117497469363,
+          0.0,
+          0.707132428463598,
+          0.0
+        ],
+        "token_span": [
+          "10"
+        ]
+      },
+      "raw_text": "Date"
+    },
+    "currency": {
+      "value": "MRC",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.736079434627451,
+          0.0,
+          0.759625948806701,
+          0.0
+        ],
+        "token_span": [
+          "67"
+        ]
+      },
+      "raw_text": "MRC"
+    },
+    "remittance_address": {
+      "value": "of Charges ID",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.09645262724509804,
+          0.0,
+          0.20824038893450245,
+          0.0
+        ],
+        "token_span": [
+          "4",
+          "1",
+          "2"
+        ]
+      },
+      "raw_text": "of Charges ID"
+    },
+    "bill_to_address": {
+      "value": "of Charges",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.11198909895281862,
+          0.0,
+          0.20824038893450245,
+          0.0
+        ],
+        "token_span": [
+          "1",
+          "2"
+        ]
+      },
+      "raw_text": "of Charges"
+    },
+    "ship_to_address": {
+      "value": "Charges",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.13451878530392158,
+          0.0,
+          0.20824038893450245,
+          0.0
+        ],
+        "token_span": [
+          "2"
+        ]
+      },
+      "raw_text": "Charges"
+    },
+    "vendor_name": {
+      "value": "Fees",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 6,
+        "bbox": [
+          0.1926093285916054,
+          0.0,
+          0.2207477172766936,
+          0.0
+        ],
+        "token_span": [
+          "84"
+        ]
+      },
+      "raw_text": "Fees"
+    },
+    "vendor_address": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "159",
-          "146",
-          "98",
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "MRC MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
-    },
-    "issue_date": {
-      "value": "MRC MRC Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "79",
-          "353",
-          "319",
-          "311",
-          "259",
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "MRC MRC Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
-    },
-    "total_amount": {
-      "value": "MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "146",
-          "98",
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "MRC MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
-    },
-    "subtotal": {
-      "value": "MRC Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "353",
-          "319",
-          "311",
-          "259",
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "MRC Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
-    },
-    "tax_amount": {
-      "value": "MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "98",
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "MRC Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
-    },
-    "discount": {
-      "value": "Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "319",
-          "311",
-          "259",
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "Fee MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
-    },
-    "currency": {
-      "value": "Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "261",
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "Tax Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
-    },
-    "remittance_address": {
-      "value": "1 1 1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "55",
-          "381",
-          "68",
-          "111",
-          "368",
-          "160",
-          "147",
-          "12",
-          "174",
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1"
-    },
-    "bill_to_address": {
-      "value": "MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "311",
-          "259",
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "MRC Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
-    },
-    "ship_to_address": {
-      "value": "Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "74",
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "Fee MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
-    },
-    "vendor_name": {
-      "value": "1 1 1 1 1 1 1 1 1 1",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.786797399401098,
-          0.0
-        ],
-        "token_span": [
-          "174",
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 1 1 1"
-    },
-    "vendor_address": {
-      "value": "1 1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "381",
-          "68",
-          "111",
-          "368",
-          "160",
-          "147",
-          "12",
-          "174",
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1"
+      "provenance": null,
+      "raw_text": null
     },
     "customer_name": {
-      "value": "1 1 1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 4,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "347",
-          "27",
-          "296",
-          "160",
-          "82",
-          "175",
-          "309",
-          "241",
-          "226",
-          "254",
-          "38",
-          "12",
-          "188",
-          "70",
-          "117",
-          "130",
-          "360"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "customer_account": {
-      "value": "Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "259",
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "Fee Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "purchase_order": {
-      "value": "MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "300",
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "MRC MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "invoice_reference": {
-      "value": "Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "228",
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "Fee MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "payment_terms": {
-      "value": "MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "24",
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "MRC Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "bank_account": {
-      "value": "1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "68",
-          "111",
-          "368",
-          "160",
-          "147",
-          "12",
-          "174",
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "routing_number": {
-      "value": "1 1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 4,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "27",
-          "296",
-          "160",
-          "82",
-          "175",
-          "309",
-          "241",
-          "226",
-          "254",
-          "38",
-          "12",
-          "188",
-          "70",
-          "117",
-          "130",
-          "360"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "swift_code": {
-      "value": "1 1 1 1 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.786797399401098,
-          0.0
-        ],
-        "token_span": [
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "notes": {
-      "value": "MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "252",
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "MRC MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "tax_id": {
-      "value": "Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "324",
-          "315",
-          "180",
-          "283",
-          "214",
-          "233",
-          "248",
-          "257",
-          "173",
-          "188",
-          "352",
-          "117",
-          "184",
-          "392",
-          "11",
-          "110",
-          "31",
-          "367",
-          "54",
-          "388",
-          "67"
-        ]
-      },
-      "raw_text": "Fee MRC Fee MRC MRC MRC MRC Fee MRC Tax MRC Fee Tax Tax Type MRC Fee MRC MRC Fee MRC"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "contact_name": {
-      "value": "1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "111",
-          "368",
-          "160",
-          "147",
-          "12",
-          "174",
-          "316",
-          "25",
-          "301",
-          "234",
-          "249",
-          "215",
-          "353",
-          "284",
-          "99"
-        ]
-      },
-      "raw_text": "1 1 1 1 Qty 1 1 1 1 1 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "contact_email": {
-      "value": "1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 4,
-        "bbox": [
-          0.7810667123333334,
-          0.0,
-          0.7983145750637819,
-          0.0
-        ],
-        "token_span": [
-          "296",
-          "160",
-          "82",
-          "175",
-          "309",
-          "241",
-          "226",
-          "254",
-          "38",
-          "12",
-          "188",
-          "70",
-          "117",
-          "130",
-          "360"
-        ]
-      },
-      "raw_text": "1 1 1 1 1 1 1 1 1 Qty 1 1 1 1 1"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     },
     "contact_phone": {
-      "value": "MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.736079434627451,
-          0.0,
-          0.7602303932558775,
-          0.0
-        ],
-        "token_span": [
-          "44",
-          "88",
-          "98",
-          "194",
-          "131",
-          "221",
-          "198",
-          "329",
-          "325",
-          "182",
-          "190",
-          "94",
-          "360",
-          "169",
-          "154",
-          "124",
-          "283",
-          "298",
-          "64",
-          "20"
-        ]
-      },
-      "raw_text": "MRC Fee Tax Tax Fee MRC Tax Tax Tax MRC Fee Tax Fee MRC MRC MRC MRC MRC MRC Type"
+      "status": "ABSTAIN",
+      "provenance": null,
+      "raw_text": null
     }
   },
   "line_items": []
