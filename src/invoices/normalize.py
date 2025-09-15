@@ -244,7 +244,7 @@ def _looks_like_date(text: str) -> bool:
     
     # Count digits, separators, and letters
     digits = sum(bool(c.isdigit())
-    separators = sum(1 for c in text if c in '/-.')
+    separators = sum(bool(c in '/-.')
     letters = sum(1 for c in text if c.isalpha())
     
     # Date-like if mostly digits with separators
