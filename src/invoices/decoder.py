@@ -188,8 +188,8 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     
     base_cost = 1.0  # Neutral cost
     
-    # Field-specific preferences
-    if field == 'total_amount_due':
+    # Field-specific preferences using schema field names
+    if field in ['TotalAmount', 'Subtotal']:
         if bucket == 'amount_like':
             base_cost -= 0.5  # Strong preference for amount-like
         
@@ -199,7 +199,7 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
         elif center_y > 0.6:  # Bottom area (summary)
             base_cost -= 0.2
     
-    elif field in ['invoice_date', 'due_date']:
+    elif field in ['InvoiceDate', 'DueDate', 'IssueDate']:
         if bucket == 'date_like':
             base_cost -= 0.5  # Strong preference for date-like
         
@@ -207,7 +207,7 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
         if center_y < 0.3:  # Top 30%
             base_cost -= 0.3
     
-    elif field in ['invoice_number', 'account_number']:
+    elif field in ['InvoiceNumber', 'CustomerAccount', 'TaxID']:
         if bucket == 'id_like':
             base_cost -= 0.5  # Strong preference for id-like
         
@@ -215,13 +215,13 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
         if center_y < 0.3:  # Top 30%
             base_cost -= 0.3
     
-    elif field == 'previous_balance':
+    elif field in ['TaxAmount', 'Discount']:
         if bucket == 'amount_like':
             base_cost -= 0.3  # Moderate preference for amount-like
     
-    elif field == 'payments_and_credits':
-        if bucket == 'amount_like':
-            base_cost -= 0.3  # Moderate preference for amount-like
+    elif field == 'Currency':
+        if bucket == 'id_like' or bucket == 'keyword_proximal':
+            base_cost -= 0.3  # Currency symbols or codes
     
     # Keyword proximity bonus
     if bucket == 'keyword_proximal':

@@ -16,6 +16,10 @@ def collect_field_statistics() -> Dict[str, Dict[str, int]]:
     if indexed_docs.empty:
         return {}
     
+    # Get schema fields for consistent reporting
+    schema_obj = utils.load_contract_schema()
+    schema_fields = schema_obj.get('fields', [])
+    
     field_stats = defaultdict(lambda: Counter())
     
     for _, doc_info in indexed_docs.iterrows():
@@ -29,14 +33,14 @@ def collect_field_statistics() -> Dict[str, Dict[str, int]]:
                     status = field_data.get('status', 'MISSING')
                     field_stats[field_name][status] += 1
             else:
-                # No predictions found - mark all as MISSING
-                for field in decoder.HEADER_FIELDS:
+                # No predictions found - mark all schema fields as MISSING
+                for field in schema_fields:
                     field_stats[field]['MISSING'] += 1
                     
         except Exception as e:
             print(f"Error reading predictions for {sha256[:16]}: {e}")
-            # Mark all fields as MISSING for this document
-            for field in decoder.HEADER_FIELDS:
+            # Mark all schema fields as MISSING for this document
+            for field in schema_fields:
                 field_stats[field]['MISSING'] += 1
     
     return dict(field_stats)
@@ -48,6 +52,10 @@ def collect_document_statistics() -> List[Dict[str, Any]]:
     
     if indexed_docs.empty:
         return []
+    
+    # Get schema fields for consistent reporting
+    schema_obj = utils.load_contract_schema()
+    schema_fields = schema_obj.get('fields', [])
     
     doc_stats = []
     
@@ -95,7 +103,7 @@ def collect_document_statistics() -> List[Dict[str, Any]]:
                 'candidates': 0,
                 'predicted': 0,
                 'abstain': 0,
-                'missing': len(decoder.HEADER_FIELDS),
+                'missing': len(schema_fields),
                 'error': str(e),
             })
     
@@ -212,8 +220,12 @@ def print_field_report(field_stats: Dict[str, Dict[str, int]]) -> None:
     print(f"{'Field':<20} {'Predicted':<10} {'Abstain':<10} {'Missing':<10} {'Total':<10}")
     print("-" * 70)
     
+    # Get schema fields for display
+    schema_obj = utils.load_contract_schema()
+    schema_fields = schema_obj.get('fields', [])
+    
     # Print each field
-    for field in decoder.HEADER_FIELDS:
+    for field in schema_fields:
         stats = field_stats.get(field, {})
         predicted = stats.get('PREDICTED', 0)
         abstain = stats.get('ABSTAIN', 0)

@@ -129,7 +129,11 @@ class TestReviewQueue:
             assert doc_id in valid_doc_ids, f"Invalid doc_id in review queue: {doc_id}"
             
             field = entry['field']
-            assert field in decoder.HEADER_FIELDS, f"Invalid field in review queue: {field}"
+            # Get schema fields for validation
+            from invoices import utils
+            schema_obj = utils.load_contract_schema()
+            schema_fields = schema_obj.get('fields', [])
+            assert field in schema_fields, f"Invalid field in review queue: {field}"
             
             reason = entry['reason']
             assert reason in ['ABSTAIN', 'MISSING'], f"Invalid reason in review queue: {reason}"
@@ -177,9 +181,12 @@ class TestReviewQueue:
         # Check field coverage
         queue_fields = set(review_df['field'].unique())
         
-        # All fields in queue should be valid header fields
+        # All fields in queue should be valid schema fields
+        from invoices import utils
+        schema_obj = utils.load_contract_schema()
+        schema_fields = schema_obj.get('fields', [])
         for field in queue_fields:
-            assert field in decoder.HEADER_FIELDS, f"Invalid field in review queue: {field}"
+            assert field in schema_fields, f"Invalid field in review queue: {field}"
         
         # Count entries by field
         field_counts = review_df['field'].value_counts().to_dict()

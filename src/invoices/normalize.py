@@ -180,13 +180,14 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
     Normalize a field value based on its type.
     
     Args:
-        field: Field name from HEADER_FIELDS
+        field: Field name from schema
         raw_text: Raw text value to normalize
         
     Returns:
         Dictionary with normalized value, currency_code (if applicable), and raw_text
     """
-    if field in ['invoice_date', 'due_date']:
+    # Date fields
+    if field in ['InvoiceDate', 'DueDate', 'IssueDate']:
         normalized_value, original_text = normalize_date(raw_text)
         return {
             'value': normalized_value,
@@ -194,7 +195,8 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    elif field in ['total_amount_due', 'previous_balance', 'payments_and_credits']:
+    # Amount fields
+    elif field in ['TotalAmount', 'Subtotal', 'TaxAmount', 'Discount']:
         normalized_value, currency_code, original_text = normalize_amount(raw_text)
         return {
             'value': normalized_value,
@@ -202,7 +204,8 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': currency_code,
         }
     
-    elif field in ['invoice_number', 'account_number']:
+    # ID/Number fields
+    elif field in ['InvoiceNumber', 'CustomerAccount', 'TaxID', 'PurchaseOrder', 'InvoiceReference']:
         normalized_value, original_text = normalize_id(raw_text)
         return {
             'value': normalized_value,
@@ -210,7 +213,18 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    else:  # carrier_name, document_type, currency_code
+    # Currency field
+    elif field == 'Currency':
+        # Currency should be normalized as ID but validated against currency codes
+        normalized_value, original_text = normalize_id(raw_text)
+        return {
+            'value': normalized_value,
+            'raw_text': original_text,
+            'currency_code': None,
+        }
+    
+    # Text fields (addresses, names, descriptions, etc.)
+    else:
         normalized_value, original_text = normalize_text(raw_text)
         return {
             'value': normalized_value,

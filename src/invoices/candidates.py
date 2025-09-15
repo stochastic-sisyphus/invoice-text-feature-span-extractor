@@ -136,8 +136,9 @@ class PageGrid:
 class SpanBuilder:
     """Build multi-token spans from line-local adjacency."""
     
-    def __init__(self, max_gap: float = 0.02):
+    def __init__(self, max_gap: float = 0.02, max_span_tokens: int = 8):
         self.max_gap = max_gap  # Maximum normalized x-gap between adjacent tokens
+        self.max_span_tokens = max_span_tokens  # Maximum tokens per span
     
     def build_spans(self, page_tokens: pd.DataFrame) -> List[Dict[str, Any]]:
         """Build spans from tokens on a single page."""
@@ -158,35 +159,65 @@ class SpanBuilder:
         return spans
     
     def _build_line_spans(self, line_tokens: pd.DataFrame) -> List[Dict[str, Any]]:
-        """Build spans within a single line."""
+        """Build spans within a single line with controlled length."""
         if line_tokens.empty:
             return []
         
         spans = []
         tokens_list = list(line_tokens.iterrows())
+        used_positions = set()  # Track which token positions are already in spans
         
-        # Start with each token as a potential span start
-        for i, (_, start_token) in enumerate(tokens_list):
-            span_tokens = [start_token]
-            
-            # Try to extend the span with adjacent tokens
-            for j in range(i + 1, len(tokens_list)):
-                _, candidate_token = tokens_list[j]
+        # Build spans of different lengths but avoid explosion
+        for span_length in range(1, min(self.max_span_tokens + 1, len(tokens_list) + 1)):
+            for i in range(len(tokens_list) - span_length + 1):
+                # Skip if this starting position was already used in a longer span
+                if i in used_positions:
+                    continue
                 
-                # Check if adjacent (small gap)
-                gap = candidate_token['bbox_norm_x0'] - span_tokens[-1]['bbox_norm_x1']
-                if gap <= self.max_gap:
-                    span_tokens.append(candidate_token)
-                else:
-                    break  # Gap too large, stop extending
-            
-            # Create span from collected tokens
-            if span_tokens:
-                span = self._create_span_from_tokens(span_tokens)
-                if span:
-                    spans.append(span)
+                span_tokens = []
+                valid_span = True
+                
+                # Try to build span of exactly span_length tokens
+                for j in range(span_length):
+                    _, token = tokens_list[i + j]
+                    
+                    # Check adjacency for multi-token spans
+                    if j > 0:
+                        gap = token['bbox_norm_x0'] - span_tokens[-1]['bbox_norm_x1']
+                        if gap > self.max_gap:
+                            valid_span = False
+                            break
+                    
+                    span_tokens.append(token)
+                
+                # Create span if valid and not too overlapping
+                if valid_span and len(span_tokens) == span_length:
+                    span = self._create_span_from_tokens(span_tokens)
+                    if span and self._is_span_worthwhile(span):
+                        spans.append(span)
+                        # Mark positions as used for longer spans
+                        if span_length >= 3:
+                            for pos in range(i, i + span_length):
+                                used_positions.add(pos)
         
         return spans
+    
+    def _is_span_worthwhile(self, span: Dict[str, Any]) -> bool:
+        """Check if span is worthwhile to keep."""
+        text = span['raw_text'].strip()
+        
+        # Skip very short or very long spans
+        if len(text) < 2 or len(text) > 50:
+            return False
+        
+        # Skip spans that are mostly repeating tokens (like "W W W W")
+        words = text.split()
+        if len(words) > 3:
+            unique_words = set(words)
+            if len(unique_words) / len(words) < 0.3:  # Less than 30% unique words
+                return False
+        
+        return True
     
     def _create_span_from_tokens(self, tokens: List[pd.Series]) -> Optional[Dict[str, Any]]:
         """Create a span from a list of tokens."""
