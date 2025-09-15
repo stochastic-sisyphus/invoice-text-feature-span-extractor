@@ -275,10 +275,8 @@ class TestContractIntegrity:
         old_url = os.environ.get('LABEL_STUDIO_URL')
         old_token = os.environ.get('LABEL_STUDIO_TOKEN')
         
-        if old_url:
-            del os.environ['LABEL_STUDIO_URL']
-        if old_token:
-            del os.environ['LABEL_STUDIO_TOKEN']
+        os.environ.pop('LABEL_STUDIO_URL', None)
+        os.environ.pop('LABEL_STUDIO_TOKEN', None)
         
         try:
             # Should be safe no-op
