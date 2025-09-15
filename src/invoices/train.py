@@ -50,7 +50,7 @@ def create_training_features(candidates_df: pd.DataFrame) -> pd.DataFrame:
         text = str(candidate.get('text', ''))
         char_count = len(text)
         word_count = len(text.split())
-        digit_count = sum(1 for c in text if c.isdigit())
+        digit_count = sum(bool(c.isdigit())
         alpha_count = sum(1 for c in text if c.isalpha())
         
         # Bucket features (one-hot)
