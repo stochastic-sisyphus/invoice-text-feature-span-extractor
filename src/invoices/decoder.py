@@ -180,58 +180,39 @@ def simple_hungarian_fallback(cost_matrix: np.ndarray) -> Tuple[np.ndarray, np.n
 def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     """
     Compute weak prior cost for field-candidate assignment.
+    Uses ML features, not hard-coded rules.
     Lower cost = better match.
     """
     bucket = candidate.get('bucket', '')
-    center_x = candidate.get('center_x', 0.5)
-    center_y = candidate.get('center_y', 0.5)
+    proximity_score = candidate.get('proximity_score', 0.0)
+    section_prior = candidate.get('section_prior', 0.0)
+    cohesion_score = candidate.get('cohesion_score', 0.0)
     
-    base_cost = 1.0  # Neutral cost
+    # Feature-based cost using ML-extracted features
+    base_cost = 1.0
     
-    # Field-specific preferences using schema field names
-    if field in ['TotalAmount', 'Subtotal']:
-        if bucket == 'amount_like':
-            base_cost -= 0.5  # Strong preference for amount-like
-        
-        # Prefer top-right or summary box area
-        if center_x > 0.6 and center_y < 0.4:  # Top-right
-            base_cost -= 0.3
-        elif center_y > 0.6:  # Bottom area (summary)
-            base_cost -= 0.2
+    # Use bucket affinity (learned from text patterns)
+    bucket_bonus = 0.0
+    if bucket == 'amount_like':
+        bucket_bonus = 0.4
+    elif bucket == 'date_like':
+        bucket_bonus = 0.3
+    elif bucket == 'id_like':
+        bucket_bonus = 0.3
+    elif bucket == 'keyword_proximal':
+        bucket_bonus = 0.2
+    elif bucket == 'random_negative':
+        bucket_bonus = -0.3  # Penalty
     
-    elif field in ['InvoiceDate', 'DueDate', 'IssueDate']:
-        if bucket == 'date_like':
-            base_cost -= 0.5  # Strong preference for date-like
-        
-        # Prefer header area
-        if center_y < 0.3:  # Top 30%
-            base_cost -= 0.3
+    # Combine ML features
+    feature_cost = base_cost - (
+        bucket_bonus +
+        proximity_score * 0.2 +
+        section_prior * 0.1 +
+        (cohesion_score / 100.0) * 0.1  # Normalize cohesion
+    )
     
-    elif field in ['InvoiceNumber', 'CustomerAccount', 'TaxID']:
-        if bucket == 'id_like':
-            base_cost -= 0.5  # Strong preference for id-like
-        
-        # Prefer header area
-        if center_y < 0.3:  # Top 30%
-            base_cost -= 0.3
-    
-    elif field in ['TaxAmount', 'Discount']:
-        if bucket == 'amount_like':
-            base_cost -= 0.3  # Moderate preference for amount-like
-    
-    elif field == 'Currency':
-        if bucket == 'id_like' or bucket == 'keyword_proximal':
-            base_cost -= 0.3  # Currency symbols or codes
-    
-    # Keyword proximity bonus
-    if bucket == 'keyword_proximal':
-        base_cost -= 0.2
-    
-    # Penalize random negatives
-    if bucket == 'random_negative':
-        base_cost += 0.5
-    
-    return max(0.0, base_cost)  # Ensure non-negative
+    return max(0.0, feature_cost)
 
 
 def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Any]:

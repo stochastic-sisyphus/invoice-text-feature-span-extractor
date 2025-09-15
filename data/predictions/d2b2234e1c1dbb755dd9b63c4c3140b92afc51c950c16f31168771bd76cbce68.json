@@ -8,141 +8,182 @@
   "calibration_version": "none",
   "fields": {
     "InvoiceNumber": {
-      "value": "137",
+      "value": "8529.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.053647058823529416,
+          0.7515294117647059,
           0.0,
-          0.07256209150326798,
+          0.7938398692810458,
           0.0
         ],
         "token_span": [
-          "211"
+          "218",
+          "206",
+          "187",
+          "181",
+          "169",
+          "201",
+          "17",
+          "219"
         ]
       },
-      "raw_text": "137"
+      "raw_text": "Do Make Nov 8529 check $ to not"
     },
     "InvoiceDate": {
-      "value": "2025-10-14",
+      "value": "8529.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.5592941179738562,
+          0.7515294117647059,
           0.0,
-          0.5924150329575164,
+          0.8036601310457516,
           0.0
         ],
         "token_span": [
-          "11",
-          "38",
-          "226"
+          "206",
+          "187",
+          "181",
+          "169",
+          "201",
+          "17",
+          "219",
+          "18"
         ]
       },
-      "raw_text": "Oct bill Send"
+      "raw_text": "Make Nov 8529 check $ to not Nov"
     },
     "DueDate": {
-      "value": "2025-11-14",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.7785490199346404,
-          0.0,
-          0.8039999956045752,
-          0.0
-        ],
-        "token_span": [
-          "18",
-          "58"
-        ]
-      },
-      "raw_text": "Nov this"
-    },
-    "IssueDate": {
-      "value": "2025-10-14",
+      "value": "234032023.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.5476715685784314,
+          0.8035294117647058,
           0.0,
-          0.5743774509313725,
+          0.8592467320261437,
           0.0
         ],
         "token_span": [
-          "87",
-          "94"
+          "171",
+          "60",
+          "19",
+          "183",
+          "189",
+          "103",
+          "221",
+          "61"
         ]
       },
-      "raw_text": "Any Oct"
+      "raw_text": "money of 23, 403 2023 bill. cash your"
+    },
+    "IssueDate": {
+      "value": "234032023.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.7985686274019608,
+          0.0,
+          0.8592467320261437,
+          0.0
+        ],
+        "token_span": [
+          "112",
+          "171",
+          "60",
+          "19",
+          "183",
+          "189",
+          "103",
+          "221"
+        ]
+      },
+      "raw_text": "balance money of 23, 403 2023 bill. cash"
     },
     "TotalAmount": {
+      "value": "11234032023.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.7981895424836601,
+          0.0,
+          0.8592467320261437,
+          0.0
+        ],
+        "token_span": [
+          "182",
+          "112",
+          "171",
+          "60",
+          "19",
+          "183",
+          "189",
+          "103"
+        ]
+      },
+      "raw_text": "11 balance money of 23, 403 2023 bill."
+    },
+    "Subtotal": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.7574117647058823,
+          0.39458823562091505,
           0.0,
-          0.7753856212418301,
+          0.452352943872549,
           0.0
         ],
         "token_span": [
-          "201",
-          "17"
+          "7",
+          "0",
+          "129",
+          "85",
+          "120",
+          "74",
+          "106",
+          "126"
         ]
       },
-      "raw_text": "$ to"
-    },
-    "Subtotal": {
-      "value": "23.00",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8066862744607843,
-          0.0,
-          0.8266797388888889,
-          0.0
-        ],
-        "token_span": [
-          "60",
-          "19"
-        ]
-      },
-      "raw_text": "of 23,"
+      "raw_text": "8529 Account $194.90 -$194.90 $194.90 $194.90 $0.00 $0.00"
     },
     "TaxAmount": {
-      "value": "10.00",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.21362091503267971,
+          0.39458823562091505,
           0.0,
-          0.24405882352941177,
+          0.452352943872549,
           0.0
         ],
         "token_span": [
-          "45",
-          "133",
-          "155"
+          "0",
+          "129",
+          "85",
+          "120",
+          "74",
+          "106",
+          "126",
+          "8"
         ]
       },
-      "raw_text": "RD, 10, this"
+      "raw_text": "Account $194.90 -$194.90 $194.90 $194.90 $0.00 $0.00 11"
     },
     "Discount": {
-      "value": "24.00",
+      "value": "242023.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
@@ -150,458 +191,596 @@
         "bbox": [
           0.7035163401960784,
           0.0,
-          0.724245097990196,
+          0.7608366016339869,
           0.0
         ],
         "token_span": [
           "15",
-          "99"
+          "99",
+          "167",
+          "90",
+          "168",
+          "16",
+          "100",
+          "5"
         ]
       },
-      "raw_text": "24, up"
+      "raw_text": "24, up on or your 2023 on From"
     },
     "Currency": {
+      "value": "10.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.20776470588235296,
+          0.0,
+          0.26119607843137266,
+          0.0
+        ],
+        "token_span": [
+          "154",
+          "45",
+          "133",
+          "155",
+          "177",
+          "82",
+          "46",
+          "156"
+        ]
+      },
+      "raw_text": "of RD, 10, this with you STE bill"
+    },
+    "RemittanceAddress": {
+      "value": "10.11",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.7828333332843138,
+          0.0,
+          0.8423627450490195,
+          0.0
+        ],
+        "token_span": [
+          "69",
+          "102",
+          "207",
+          "170",
+          "188",
+          "92",
+          "220",
+          "182"
+        ]
+      },
+      "raw_text": "charges next checks or 10, activity send 11"
+    },
+    "BillToAddress": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.5291454250816994,
+          0.3925735258169935,
           0.0,
-          0.5383513074346405,
+          0.4523529434150326,
           0.0
         ],
         "token_span": [
-          "52",
-          "86"
+          "145",
+          "7",
+          "0",
+          "129",
+          "85",
+          "120",
+          "74",
+          "106"
         ]
       },
-      "raw_text": "• •"
-    },
-    "RemittanceAddress": {
-      "value": "# -",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.1842091503267974,
-          0.0,
-          0.1930980392156863,
-          0.0
-        ],
-        "token_span": [
-          "216",
-          "80"
-        ]
-      },
-      "raw_text": "# -"
-    },
-    "BillToAddress": {
-      "value": "up on or",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.7065980391666666,
-          0.0,
-          0.7260833332843137,
-          0.0
-        ],
-        "token_span": [
-          "99",
-          "167",
-          "90"
-        ]
-      },
-      "raw_text": "up on or"
+      "raw_text": "other 8529 Account $194.90 -$194.90 $194.90 $194.90 $0.00"
     },
     "ShipToAddress": {
-      "value": "10 3",
+      "value": "11234032023.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.3049934640522876,
+          0.793514705882353,
           0.0,
-          0.3201960797222222,
+          0.8592467320261437,
           0.0
         ],
         "token_span": [
-          "84",
-          "119"
+          "220",
+          "182",
+          "112",
+          "171",
+          "60",
+          "19",
+          "183",
+          "189"
         ]
       },
-      "raw_text": "10 3"
+      "raw_text": "send 11 balance money of 23, 403 2023"
     },
     "VendorName": {
-      "value": "up on",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.7065980391666666,
+          0.39155555555555555,
           0.0,
-          0.724245097990196,
+          0.4523529434150326,
           0.0
         ],
         "token_span": [
-          "99",
-          "167"
+          "50",
+          "145",
+          "7",
+          "0",
+          "129",
+          "85",
+          "120",
+          "74"
         ]
       },
-      "raw_text": "up on"
+      "raw_text": "MI, other 8529 Account $194.90 -$194.90 $194.90 $194.90"
     },
     "VendorAddress": {
-      "value": "not N 1651",
+      "value": "203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.07302205882352941,
+          0.5808529411764706,
           0.0,
-          0.10030065359477124,
+          0.6460686274019608,
           0.0
         ],
         "token_span": [
-          "174",
-          "212",
-          "41"
+          "186",
+          "164",
+          "108",
+          "12",
+          "76",
+          "231",
+          "65",
+          "227"
         ]
       },
-      "raw_text": "not N 1651"
+      "raw_text": "due your your 20, 3. BOX detailed payment"
     },
     "CustomerName": {
-      "value": "OAK Do 137",
+      "value": "242023.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.053647058823529416,
+          0.696759803872549,
           0.0,
-          0.08103267973856208,
+          0.7585490199346405,
           0.0
         ],
         "token_span": [
-          "222",
-          "173",
-          "211"
+          "58",
+          "15",
+          "99",
+          "167",
+          "90",
+          "168",
+          "16",
+          "100"
         ]
       },
-      "raw_text": "OAK Do 137"
+      "raw_text": "quick 24, up on or your 2023 on"
     },
     "CustomerAccount": {
-      "value": "200",
+      "value": "234032023.20",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 2,
+        "page": 0,
         "bbox": [
-          0.17060457524509806,
+          0.8068235297385621,
           0.0,
-          0.19412091511437907,
+          0.8742132352941177,
           0.0
         ],
         "token_span": [
-          "51"
+          "19",
+          "183",
+          "189",
+          "103",
+          "221",
+          "61",
+          "208",
+          "20"
         ]
       },
-      "raw_text": "200"
+      "raw_text": "23, 403 2023 bill. cash your payable 2023"
     },
     "PurchaseOrder": {
-      "value": "on or",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.707904411764706,
+          0.38921078431372547,
           0.0,
-          0.7260833332843137,
+          0.4523529434150326,
           0.0
         ],
         "token_span": [
-          "167",
-          "90"
+          "161",
+          "50",
+          "145",
+          "7",
+          "0",
+          "129",
+          "85",
+          "120"
         ]
       },
-      "raw_text": "on or"
+      "raw_text": "payment MI, other 8529 Account $194.90 -$194.90 $194.90"
     },
     "InvoiceReference": {
-      "value": "IL MI",
+      "value": "10.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.12487581699346406,
+          0.7785490199346404,
           0.0,
-          0.14329411764705882,
+          0.8423627450490195,
           0.0
         ],
         "token_span": [
-          "224",
-          "197"
+          "18",
+          "69",
+          "102",
+          "207",
+          "170",
+          "188",
+          "92",
+          "220"
         ]
       },
-      "raw_text": "IL MI"
+      "raw_text": "Nov charges next checks or 10, activity send"
     },
     "PaymentTerms": {
-      "value": "on of",
+      "value": "234032023.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 2,
+        "page": 0,
         "bbox": [
-          0.8826274495915031,
+          0.8066862744607843,
           0.0,
-          0.9013464048202613,
+          0.8742132352941177,
           0.0
         ],
         "token_span": [
-          "34",
-          "22"
+          "60",
+          "19",
+          "183",
+          "189",
+          "103",
+          "221",
+          "61",
+          "208"
         ]
       },
-      "raw_text": "on of"
+      "raw_text": "of 23, 403 2023 bill. cash your payable"
     },
     "BankAccount": {
-      "value": "not N",
+      "value": "41112.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.07302205882352941,
+          0.05352941176470588,
           0.0,
-          0.09179656862745099,
+          0.11691503267973857,
           0.0
         ],
         "token_span": [
-          "174",
-          "212"
+          "121",
+          "104",
+          "40",
+          "127",
+          "115",
+          "190",
+          "204",
+          "202"
         ]
       },
-      "raw_text": "not N"
+      "raw_text": "Taxes, Balance For New Regular 41112 ATTN SPARROW"
     },
     "RoutingNumber": {
-      "value": "Do 137",
+      "value": "1123403.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.053647058823529416,
+          0.7904215685784314,
           0.0,
-          0.07256209150326798,
+          0.8538186274019606,
           0.0
         ],
         "token_span": [
-          "173",
-          "211"
+          "92",
+          "220",
+          "182",
+          "112",
+          "171",
+          "60",
+          "19",
+          "183"
         ]
       },
-      "raw_text": "Do 137"
+      "raw_text": "activity send 11 balance money of 23, 403"
     },
     "SWIFTCode": {
-      "value": "with you STE",
+      "value": "203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.23043627450980395,
+          0.5784362744607843,
           0.0,
-          0.2601830065359477,
+          0.6460686274019608,
           0.0
         ],
         "token_span": [
-          "177",
-          "82",
-          "46"
+          "54",
+          "186",
+          "164",
+          "108",
+          "12",
+          "76",
+          "231",
+          "65"
         ]
       },
-      "raw_text": "with you STE"
+      "raw_text": "page due your your 20, 3. BOX detailed"
     },
     "LineItemDescription": {
-      "value": "our 3",
+      "value": "101123.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 2,
+        "page": 0,
         "bbox": [
-          0.9012287567810456,
+          0.7895980392156864,
           0.0,
-          0.9207581685457515,
+          0.8538186274019606,
           0.0
         ],
         "token_span": [
-          "35",
-          "23"
+          "188",
+          "92",
+          "220",
+          "182",
+          "112",
+          "171",
+          "60",
+          "19"
         ]
       },
-      "raw_text": "our 3"
+      "raw_text": "10, activity send 11 balance money of 23,"
     },
     "LineItemQuantity": {
-      "value": "EAST 10 3",
+      "value": "10.11",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.29453594771241826,
+          0.7890318627450981,
           0.0,
-          0.3244705882352941,
+          0.8538186274019606,
           0.0
         ],
         "token_span": [
-          "48",
-          "84",
-          "119"
+          "170",
+          "188",
+          "92",
+          "220",
+          "182",
+          "112",
+          "171",
+          "60"
         ]
       },
-      "raw_text": "EAST 10 3"
+      "raw_text": "or 10, activity send 11 balance money of"
     },
     "LineItemUnitPrice": {
-      "value": "1 Page to",
+      "value": "0.20",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.8769411767973857,
+          0.8176421568137255,
           0.0,
-          0.907712418627451,
+          0.8861568626960785,
           0.0
         ],
         "token_span": [
-          "21",
-          "6",
-          "209"
+          "103",
+          "221",
+          "61",
+          "208",
+          "20",
+          "70",
+          "172",
+          "93"
         ]
       },
-      "raw_text": "1 Page to"
+      "raw_text": "bill. cash your payable 2023 begins order after"
     },
     "LineItemTotal": {
-      "value": "Page 3 on",
+      "value": "2023.20",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 2,
+        "page": 0,
         "bbox": [
-          0.8769411767973857,
+          0.8174754901960785,
           0.0,
-          0.907712418627451,
+          0.8861568626960785,
           0.0
         ],
         "token_span": [
-          "6",
-          "21",
-          "34"
+          "189",
+          "103",
+          "221",
+          "61",
+          "208",
+          "20",
+          "70",
+          "172"
         ]
       },
-      "raw_text": "Page 3 on"
+      "raw_text": "2023 bill. cash your payable 2023 begins order"
     },
     "Notes": {
-      "value": "Page 2 of",
+      "value": "203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 1,
+        "page": 0,
         "bbox": [
-          0.8769411767973857,
+          0.5780833332843137,
           0.0,
-          0.907712418627451,
+          0.6471127450490196,
           0.0
         ],
         "token_span": [
-          "6",
-          "21",
-          "22"
+          "88",
+          "54",
+          "186",
+          "164",
+          "108",
+          "12",
+          "76",
+          "231"
         ]
       },
-      "raw_text": "Page 2 of"
+      "raw_text": "payments page due your your 20, 3. BOX"
     },
     "TaxID": {
-      "value": "1651",
+      "value": "4032023.20",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.07611764705882353,
+          0.8164150326797386,
           0.0,
-          0.10030065359477124,
+          0.8861568626960785,
           0.0
         ],
         "token_span": [
-          "41"
+          "183",
+          "189",
+          "103",
+          "221",
+          "61",
+          "208",
+          "20",
+          "70"
         ]
       },
-      "raw_text": "1651"
+      "raw_text": "403 2023 bill. cash your payable 2023 begins"
     },
     "ContactName": {
-      "value": "11",
+      "value": "20203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.42852287614379087,
+          0.577009803872549,
           0.0,
-          0.4386143794117648,
+          0.6471127450490196,
           0.0
         ],
         "token_span": [
-          "8"
+          "95",
+          "88",
+          "54",
+          "186",
+          "164",
+          "108",
+          "12",
+          "76"
         ]
       },
-      "raw_text": "11"
+      "raw_text": "20, payments page due your your 20, 3."
     },
     "ContactEmail": {
-      "value": "2 your for",
+      "value": "2020.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.3570735258169935,
+          0.5763382352941177,
           0.0,
-          0.38886764346405234,
+          0.6471127450490196,
           0.0
         ],
         "token_span": [
-          "143",
-          "160",
-          "144"
+          "180",
+          "95",
+          "88",
+          "54",
+          "186",
+          "164",
+          "108",
+          "12"
         ]
       },
-      "raw_text": "2 your for"
+      "raw_text": "number 20, payments page due your your 20,"
     },
     "ContactPhone": {
-      "value": "3 on",
+      "value": "20.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 2,
+        "page": 0,
         "bbox": [
-          0.8769411767973857,
+          0.5761568626960784,
           0.0,
-          0.8977777763888887,
+          0.6471127450490196,
           0.0
         ],
         "token_span": [
-          "21",
-          "34"
+          "64",
+          "180",
+          "95",
+          "88",
+          "54",
+          "186",
+          "164",
+          "108"
         ]
       },
-      "raw_text": "3 on"
+      "raw_text": "A number 20, payments page due your your"
     }
   },
   "line_items": [],

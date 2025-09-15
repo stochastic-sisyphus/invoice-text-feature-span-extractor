@@ -177,7 +177,7 @@ def normalize_text(raw_text: str) -> Tuple[Optional[str], str]:
 
 def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
     """
-    Normalize a field value based on its type.
+    Normalize a field value using pattern-based inference, not field name rules.
     
     Args:
         field: Field name from schema
@@ -186,8 +186,18 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
     Returns:
         Dictionary with normalized value, currency_code (if applicable), and raw_text
     """
-    # Date fields
-    if field in ['InvoiceDate', 'DueDate', 'IssueDate']:
+    if not raw_text or not raw_text.strip():
+        return {
+            'value': None,
+            'raw_text': raw_text,
+            'currency_code': None,
+        }
+    
+    # Infer normalization type from text patterns, not field names
+    clean_text = raw_text.strip()
+    
+    # Try date parsing if text looks date-like
+    if _looks_like_date(clean_text):
         normalized_value, original_text = normalize_date(raw_text)
         return {
             'value': normalized_value,
@@ -195,8 +205,8 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    # Amount fields
-    elif field in ['TotalAmount', 'Subtotal', 'TaxAmount', 'Discount']:
+    # Try amount parsing if text looks amount-like
+    elif _looks_like_amount(clean_text):
         normalized_value, currency_code, original_text = normalize_amount(raw_text)
         return {
             'value': normalized_value,
@@ -204,8 +214,8 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': currency_code,
         }
     
-    # ID/Number fields
-    elif field in ['InvoiceNumber', 'CustomerAccount', 'TaxID', 'PurchaseOrder', 'InvoiceReference']:
+    # Try ID parsing if text looks ID-like
+    elif _looks_like_id(clean_text):
         normalized_value, original_text = normalize_id(raw_text)
         return {
             'value': normalized_value,
@@ -213,17 +223,7 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'currency_code': None,
         }
     
-    # Currency field
-    elif field == 'Currency':
-        # Currency should be normalized as ID but validated against currency codes
-        normalized_value, original_text = normalize_id(raw_text)
-        return {
-            'value': normalized_value,
-            'raw_text': original_text,
-            'currency_code': None,
-        }
-    
-    # Text fields (addresses, names, descriptions, etc.)
+    # Default to text normalization
     else:
         normalized_value, original_text = normalize_text(raw_text)
         return {
@@ -231,6 +231,63 @@ def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
             'raw_text': original_text,
             'currency_code': None,
         }
+
+
+def _looks_like_date(text: str) -> bool:
+    """Pattern-based date detection."""
+    text = text.strip()
+    if len(text) < 4 or len(text) > 20:
+        return False
+    
+    # Count digits, separators, and letters
+    digits = sum(1 for c in text if c.isdigit())
+    separators = sum(1 for c in text if c in '/-.')
+    letters = sum(1 for c in text if c.isalpha())
+    
+    # Date-like if mostly digits with separators
+    if digits >= 4 and separators >= 1:
+        return True
+    
+    # Month name check
+    month_words = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
+                   'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    text_lower = text.lower()
+    if any(month in text_lower for month in month_words):
+        return True
+    
+    return False
+
+
+def _looks_like_amount(text: str) -> bool:
+    """Pattern-based amount detection."""
+    text = text.strip()
+    if len(text) < 1:
+        return False
+    
+    # Currency symbols
+    currency_symbols = {'$', '€', '£', '¥', '₹', '₽', 'USD', 'EUR', 'GBP', 'CAD'}
+    has_currency = any(symbol in text for symbol in currency_symbols)
+    
+    # Numeric patterns
+    digits = sum(1 for c in text if c.isdigit())
+    decimals = text.count('.')
+    commas = text.count(',')
+    
+    return has_currency or (digits >= 2 and (decimals == 1 or commas >= 1))
+
+
+def _looks_like_id(text: str) -> bool:
+    """Pattern-based ID detection."""
+    text = text.strip()
+    if len(text) < 3 or len(text) > 30:
+        return False
+    
+    # Must be alphanumeric with some structure
+    if not all(c.isalnum() or c in '-_#.' for c in text):
+        return False
+    
+    # Must have at least one digit
+    return any(c.isdigit() for c in text)
 
 
 def normalize_assignments(assignments: Dict[str, Any]) -> Dict[str, Any]:

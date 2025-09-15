@@ -8,121 +8,6 @@
   "calibration_version": "none",
   "fields": {
     "InvoiceNumber": {
-      "value": "220",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.2627418379685611,
-          0.0,
-          0.28515215638855307,
-          0.0
-        ],
-        "token_span": [
-          "136"
-        ]
-      },
-      "raw_text": "220"
-    },
-    "InvoiceDate": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 5,
-        "bbox": [
-          0.5036443638317882,
-          0.0,
-          0.5208148595996238,
-          0.0
-        ],
-        "token_span": [
-          "64",
-          "58"
-        ]
-      },
-      "raw_text": "Jul Jul"
-    },
-    "DueDate": {
-      "value": "2025-07-14",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.41152760983474407,
-          0.0,
-          0.43084609700389626,
-          0.0
-        ],
-        "token_span": [
-          "212",
-          "148"
-        ]
-      },
-      "raw_text": "for Jul"
-    },
-    "IssueDate": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.5111144699717856,
-          0.0,
-          0.5327724036006986,
-          0.0
-        ],
-        "token_span": [
-          "64",
-          "58"
-        ]
-      },
-      "raw_text": "Jun Jun"
-    },
-    "TotalAmount": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 5,
-        "bbox": [
-          0.6640114873035066,
-          0.0,
-          0.6923737068386403,
-          0.0
-        ],
-        "token_span": [
-          "171",
-          "111",
-          "28"
-        ]
-      },
-      "raw_text": "USD USD call"
-    },
-    "Subtotal": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.6640114873035066,
-          0.0,
-          0.6923737068386403,
-          0.0
-        ],
-        "token_span": [
-          "90",
-          "135",
-          "152"
-        ]
-      },
-      "raw_text": "USD USD USD"
-    },
-    "TaxAmount": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -135,470 +20,767 @@
           0.0
         ],
         "token_span": [
+          "125",
+          "114",
           "145",
           "137",
-          "103"
+          "103",
+          "92",
+          "154",
+          "159"
         ]
       },
-      "raw_text": "USD USD USD"
+      "raw_text": "USD USD USD USD USD USD USD USD"
+    },
+    "InvoiceDate": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.8121002955797393,
+          0.0,
+          0.847781476420798,
+          0.0
+        ],
+        "token_span": [
+          "114",
+          "145",
+          "137",
+          "103",
+          "92",
+          "154",
+          "159",
+          "32"
+        ]
+      },
+      "raw_text": "USD USD USD USD USD USD USD Desk)"
+    },
+    "DueDate": {
+      "value": "208.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.11688163374983206,
+          0.0
+        ],
+        "token_span": [
+          "55",
+          "3",
+          "12",
+          "21",
+          "19",
+          "34",
+          "44",
+          "81"
+        ]
+      },
+      "raw_text": "USA AT&T 208 Texas Dallas US M. ID"
+    },
+    "IssueDate": {
+      "value": "208.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.11912535268037083,
+          0.0
+        ],
+        "token_span": [
+          "162",
+          "55",
+          "3",
+          "12",
+          "21",
+          "19",
+          "34",
+          "44"
+        ]
+      },
+      "raw_text": "Charge USA AT&T 208 Texas Dallas US M."
+    },
+    "TotalAmount": {
+      "value": "208.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.11912535268037083,
+          0.0
+        ],
+        "token_span": [
+          "198",
+          "21",
+          "34",
+          "3",
+          "19",
+          "12",
+          "44",
+          "81"
+        ]
+      },
+      "raw_text": "Charge Texas US AT&T Dallas 208 M. ID"
+    },
+    "Subtotal": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.7996288454924089,
+          0.0,
+          0.840462515114873,
+          0.0
+        ],
+        "token_span": [
+          "181",
+          "165",
+          "125",
+          "114",
+          "145",
+          "137",
+          "103",
+          "92"
+        ]
+      },
+      "raw_text": "0.00 0.00 USD USD USD USD USD USD"
+    },
+    "TaxAmount": {
+      "value": "0.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.7996288454924089,
+          0.0,
+          0.840462515114873,
+          0.0
+        ],
+        "token_span": [
+          "165",
+          "125",
+          "114",
+          "145",
+          "137",
+          "103",
+          "92",
+          "154"
+        ]
+      },
+      "raw_text": "0.00 USD USD USD USD USD USD USD"
     },
     "Discount": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
       "provenance": {
-        "page": 4,
+        "page": 2,
         "bbox": [
-          0.3590286174929464,
+          0.8121002955797393,
           0.0,
-          0.3931512722188633,
+          0.8591747279322853,
           0.0
         ],
         "token_span": [
-          "42",
-          "150",
-          "112"
+          "145",
+          "137",
+          "103",
+          "92",
+          "154",
+          "159",
+          "32",
+          "182"
         ]
       },
-      "raw_text": "for: USD) -"
+      "raw_text": "USD USD USD USD USD USD Desk) USD"
     },
     "Currency": {
-      "value": "to IT IT",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
-        "page": 0,
+        "page": 2,
         "bbox": [
-          0.12034126024452506,
+          0.8121002955797393,
           0.0,
-          0.13356005642885935,
+          0.8591747279322853,
           0.0
         ],
         "token_span": [
-          "205",
-          "38",
-          "130"
+          "137",
+          "103",
+          "92",
+          "154",
+          "159",
+          "32",
+          "182",
+          "166"
         ]
       },
-      "raw_text": "to IT IT"
+      "raw_text": "USD USD USD USD USD Desk) USD USD"
     },
     "RemittanceAddress": {
-      "value": "to -",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
-        "page": 4,
+        "page": 5,
         "bbox": [
-          0.37493954050785994,
+          0.8121002955797393,
           0.0,
-          0.3844518339379284,
+          0.8591747279322853,
           0.0
         ],
         "token_span": [
-          "170",
-          "102"
+          "130",
+          "122",
+          "164",
+          "173",
+          "32",
+          "200",
+          "183",
+          "186"
         ]
       },
-      "raw_text": "to -"
+      "raw_text": "USD USD USD USD Desk) USD USD USD"
     },
     "BillToAddress": {
-      "value": "- is",
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.8121002955797393,
+          0.0,
+          0.8591747279322853,
+          0.0
+        ],
+        "token_span": [
+          "122",
+          "164",
+          "173",
+          "32",
+          "200",
+          "183",
+          "186",
+          "203"
+        ]
+      },
+      "raw_text": "USD USD USD Desk) USD USD USD USD"
+    },
+    "ShipToAddress": {
+      "value": "6161.61",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.41767264543866717,
+          0.4820821577320972,
           0.0,
-          0.42494793765954586,
-          0.0
-        ],
-        "token_span": [
-          "51",
-          "86"
-        ]
-      },
-      "raw_text": "- is"
-    },
-    "ShipToAddress": {
-      "value": "1 1",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 4,
-        "bbox": [
-          0.49243920462179225,
-          0.0,
-          0.49990931076178957,
+          0.5371137310224372,
           0.0
         ],
         "token_span": [
           "63",
-          "57"
+          "20",
+          "9",
+          "46",
+          "181",
+          "35",
+          "102",
+          "68"
         ]
       },
-      "raw_text": "1 1"
+      "raw_text": "your No Date amount 6,161.61 Number other and"
     },
     "VendorName": {
-      "value": "& &",
+      "value": "6161.61",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.157475144431009,
+          0.47983507994088404,
           0.0,
-          0.16717553405884722,
+          0.5371137310224372,
           0.0
         ],
         "token_span": [
-          "127",
-          "32"
+          "101",
+          "63",
+          "20",
+          "9",
+          "46",
+          "181",
+          "35",
+          "102"
         ]
       },
-      "raw_text": "& &"
+      "raw_text": "in your No Date amount 6,161.61 Number other"
     },
     "VendorAddress": {
-      "value": "- is Per",
+      "value": "208.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 0,
+        "page": 4,
         "bbox": [
-          0.41767264543866717,
+          0.07507053607416364,
           0.0,
-          0.43335180706704285,
+          0.13294370549509607,
           0.0
         ],
         "token_span": [
-          "51",
-          "86",
-          "65"
+          "136",
+          "134",
+          "34",
+          "3",
+          "21",
+          "19",
+          "12",
+          "44"
         ]
       },
-      "raw_text": "- is Per"
+      "raw_text": "Charge Invoice US AT&T Texas Dallas 208 M."
     },
     "CustomerName": {
-      "value": "- -",
+      "value": "208.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 4,
+        "bbox": [
+          0.07507053607416364,
+          0.0,
+          0.13294370549509607,
+          0.0
+        ],
+        "token_span": [
+          "134",
+          "34",
+          "3",
+          "21",
+          "19",
+          "12",
+          "44",
+          "81"
+        ]
+      },
+      "raw_text": "Invoice US AT&T Texas Dallas 208 M. ID"
+    },
+    "CustomerAccount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.8121002955797393,
+          0.0,
+          0.8627216887007928,
+          0.0
+        ],
+        "token_span": [
+          "103",
+          "92",
+          "154",
+          "159",
+          "32",
+          "182",
+          "166",
+          "33"
+        ]
+      },
+      "raw_text": "USD USD USD USD Desk) USD USD at"
+    },
+    "PurchaseOrder": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.8121002955797393,
+          0.0,
+          0.8627216887007928,
+          0.0
+        ],
+        "token_span": [
+          "164",
+          "173",
+          "32",
+          "200",
+          "183",
+          "186",
+          "203",
+          "33"
+        ]
+      },
+      "raw_text": "USD USD Desk) USD USD USD USD at"
+    },
+    "InvoiceReference": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.6333685965504501,
+          0.0,
+          0.6923737068386403,
+          0.0
+        ],
+        "token_span": [
+          "1",
+          "90",
+          "120",
+          "151",
+          "176",
+          "171",
+          "111",
+          "28"
+        ]
+      },
+      "raw_text": "INVOICE USD USD USD USD USD USD call"
+    },
+    "PaymentTerms": {
+      "value": "2024.20",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 4,
+        "bbox": [
+          0.5027996103721617,
+          0.0,
+          0.5610556899099826,
+          0.0
+        ],
+        "token_span": [
+          "24",
+          "64",
+          "58",
+          "59",
+          "36",
+          "175",
+          "65",
+          "25"
+        ]
+      },
+      "raw_text": "about Jun Jul 2024 or only. 2024 this"
+    },
+    "BankAccount": {
+      "value": "6.26",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 5,
         "bbox": [
-          0.24012494961708994,
+          0.6328278249025929,
           0.0,
-          0.2505374177079135,
+          0.6923737068386403,
           0.0
         ],
         "token_span": [
-          "126",
-          "157"
+          "162",
+          "1",
+          "90",
+          "120",
+          "151",
+          "176",
+          "171",
+          "111"
         ]
       },
-      "raw_text": "- -"
-    },
-    "CustomerAccount": {
-      "value": "208",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.07758800214967083,
-          0.0,
-          0.09999832056966278,
-          0.0
-        ],
-        "token_span": [
-          "13"
-        ]
-      },
-      "raw_text": "208"
-    },
-    "PurchaseOrder": {
-      "value": "IT IT",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.12161594787048233,
-          0.0,
-          0.13356005642885935,
-          0.0
-        ],
-        "token_span": [
-          "38",
-          "130"
-        ]
-      },
-      "raw_text": "IT IT"
-    },
-    "InvoiceReference": {
-      "value": "to IT",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.12034126024452506,
-          0.0,
-          0.13356005642885935,
-          0.0
-        ],
-        "token_span": [
-          "205",
-          "38"
-        ]
-      },
-      "raw_text": "to IT"
-    },
-    "PaymentTerms": {
-      "value": "ID S.",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.10344619105199516,
-          0.0,
-          0.11688163374983206,
-          0.0
-        ],
-        "token_span": [
-          "81",
-          "13"
-        ]
-      },
-      "raw_text": "ID S."
-    },
-    "BankAccount": {
-      "value": "at in",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 1,
-        "bbox": [
-          0.8515165294907967,
-          0.0,
-          0.8651182309720542,
-          0.0
-        ],
-        "token_span": [
-          "35",
-          "59"
-        ]
-      },
-      "raw_text": "at in"
+      "raw_text": "6.26USD INVOICE USD USD USD USD USD USD"
     },
     "RoutingNumber": {
-      "value": "to: :",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.7917439204621792,
-          0.0,
-          0.8066841327421738,
-          0.0
-        ],
-        "token_span": [
-          "155",
-          "194"
-        ]
-      },
-      "raw_text": "to: :"
-    },
-    "SWIFTCode": {
-      "value": "M. M.",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.09475849791750637,
-          0.0,
-          0.10968527475480318,
-          0.0
-        ],
-        "token_span": [
-          "30",
-          "125"
-        ]
-      },
-      "raw_text": "M. M."
-    },
-    "LineItemDescription": {
-      "value": "29 29",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.49243920462179225,
-          0.0,
-          0.5073794169017868,
-          0.0
-        ],
-        "token_span": [
-          "57",
-          "63"
-        ]
-      },
-      "raw_text": "29 29"
-    },
-    "LineItemQuantity": {
-      "value": "- =",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.25948542254467283,
-          0.0,
-          0.2744088346768776,
-          0.0
-        ],
-        "token_span": [
-          "118",
-          "175"
-        ]
-      },
-      "raw_text": "- ="
-    },
-    "LineItemUnitPrice": {
-      "value": "the =",
+      "value": "2024.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 4,
         "bbox": [
-          0.2629383313180169,
+          0.49243920462179225,
           0.0,
-          0.27805320435308345,
+          0.5544303372296117,
           0.0
         ],
         "token_span": [
-          "166",
-          "148"
+          "51",
+          "61",
+          "24",
+          "64",
+          "58",
+          "59",
+          "36",
+          "175"
         ]
       },
-      "raw_text": "the ="
+      "raw_text": "Invoice Applied about Jun Jul 2024 or only."
     },
-    "LineItemTotal": {
-      "value": "is Per",
+    "SWIFTCode": {
+      "value": "1.00",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
         "page": 0,
         "bbox": [
-          0.41767264543866717,
+          0.8572937659545886,
           0.0,
-          0.43335180706704285,
+          0.9148512057470105,
           0.0
         ],
         "token_span": [
-          "86",
-          "65"
-        ]
-      },
-      "raw_text": "is Per"
-    },
-    "Notes": {
-      "value": "ID &",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.1683931210533387,
-          0.0,
-          0.18453580545478973,
-          0.0
-        ],
-        "token_span": [
-          "149",
-          "46"
-        ]
-      },
-      "raw_text": "ID &"
-    },
-    "TaxID": {
-      "value": "2024",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 1,
-        "bbox": [
-          0.5854544538492543,
-          0.0,
-          0.6153348784092435,
-          0.0
-        ],
-        "token_span": [
-          "13"
-        ]
-      },
-      "raw_text": "2024"
-    },
-    "ContactName": {
-      "value": "0.00 0.00 0.00",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 2,
-        "bbox": [
-          0.7809166326749966,
-          0.0,
-          0.8070620041649872,
-          0.0
-        ],
-        "token_span": [
-          "113",
-          "102",
-          "124"
-        ]
-      },
-      "raw_text": "0.00 0.00 0.00"
-    },
-    "ContactEmail": {
-      "value": "this and",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.8881381835281477,
-          0.0,
-          0.9065884052129524,
-          0.0
-        ],
-        "token_span": [
+          "96",
+          "164",
+          "157",
+          "97",
+          "216",
+          "55",
           "80",
           "98"
         ]
       },
-      "raw_text": "this and"
+      "raw_text": "by York: AT&T you Page:1 USD this and"
     },
-    "ContactPhone": {
-      "value": "US US",
+    "LineItemDescription": {
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
-        "page": 0,
+        "page": 5,
         "bbox": [
-          0.07758800214967083,
+          0.7660133569965067,
           0.0,
-          0.09624983205696629,
+          0.8257742061164852,
           0.0
         ],
         "token_span": [
-          "141",
-          "57"
+          "185",
+          "199",
+          "182",
+          "202",
+          "31",
+          "163",
+          "152",
+          "112"
         ]
       },
-      "raw_text": "US US"
+      "raw_text": "55,350.00 55,941.44 55,941.44 55,350.00 (Help 0.00 0.00 0.00"
+    },
+    "LineItemQuantity": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.7660133569965067,
+          0.0,
+          0.8257742061164852,
+          0.0
+        ],
+        "token_span": [
+          "199",
+          "182",
+          "202",
+          "31",
+          "163",
+          "152",
+          "112",
+          "140"
+        ]
+      },
+      "raw_text": "55,941.44 55,941.44 55,350.00 (Help 0.00 0.00 0.00 0.00"
+    },
+    "LineItemUnitPrice": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.7660133569965067,
+          0.0,
+          0.8257742061164852,
+          0.0
+        ],
+        "token_span": [
+          "182",
+          "202",
+          "31",
+          "163",
+          "152",
+          "112",
+          "140",
+          "129"
+        ]
+      },
+      "raw_text": "55,941.44 55,350.00 (Help 0.00 0.00 0.00 0.00 0.00"
+    },
+    "LineItemTotal": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 5,
+        "bbox": [
+          0.7659764205461507,
+          0.0,
+          0.8257742061164852,
+          0.0
+        ],
+        "token_span": [
+          "100",
+          "185",
+          "199",
+          "182",
+          "202",
+          "31",
+          "163",
+          "152"
+        ]
+      },
+      "raw_text": "312.00 55,350.00 55,941.44 55,941.44 55,350.00 (Help 0.00 0.00"
+    },
+    "Notes": {
+      "value": "2024.20",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 4,
+        "bbox": [
+          0.49243920462179225,
+          0.0,
+          0.5589177750906892,
+          0.0
+        ],
+        "token_span": [
+          "61",
+          "24",
+          "64",
+          "58",
+          "59",
+          "36",
+          "175",
+          "65"
+        ]
+      },
+      "raw_text": "Applied about Jun Jul 2024 or only. 2024"
+    },
+    "TaxID": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.6446526938062608,
+          0.0,
+          0.7156187021362354,
+          0.0
+        ],
+        "token_span": [
+          "170",
+          "197",
+          "191",
+          "152",
+          "74",
+          "198",
+          "75",
+          "185"
+        ]
+      },
+      "raw_text": "021000089, A. the transfer, of M. your proper"
+    },
+    "ContactName": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.6441891749294639,
+          0.0,
+          0.7156187021362354,
+          0.0
+        ],
+        "token_span": [
+          "118",
+          "170",
+          "197",
+          "191",
+          "152",
+          "74",
+          "198",
+          "75"
+        ]
+      },
+      "raw_text": "e-mail 021000089, A. the transfer, of M. your"
+    },
+    "ContactEmail": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.642408974875722,
+          0.0,
+          0.7156187021362354,
+          0.0
+        ],
+        "token_span": [
+          "178",
+          "118",
+          "170",
+          "197",
+          "191",
+          "152",
+          "74",
+          "198"
+        ]
+      },
+      "raw_text": "CITIUS33 e-mail 021000089, A. the transfer, of M."
+    },
+    "ContactPhone": {
+      "value": "0.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 2,
+        "bbox": [
+          0.6275208249361817,
+          0.0,
+          0.6923737068386403,
+          0.0
+        ],
+        "token_span": [
+          "27",
+          "143",
+          "1",
+          "157",
+          "90",
+          "135",
+          "152",
+          "28"
+        ]
+      },
+      "raw_text": "please 0.00USD INVOICE USD USD USD USD call"
     }
   },
   "line_items": [],
