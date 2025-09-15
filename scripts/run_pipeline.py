@@ -263,13 +263,33 @@ def pipeline(
         with utils.Timer("Total emission"):
             emit_results = emit.emit_all_documents()
         
+        # Log version information (consistent with emit_cmd)
+        try:
+            version_log_dir = paths.get_logs_dir()
+            version_log_path = version_log_dir / "version_log.jsonl"
+            
+            log_entry = {
+                'timestamp': utils.get_current_utc_iso(),
+                'document_count': emit_results.get('documents_processed', 0),
+                **utils.get_version_info()
+            }
+            
+            # Append to JSONL
+            with open(version_log_path, 'a', encoding='utf-8') as f:
+                f.write(json.dumps(log_entry) + '\n')
+            
+            if verbose:
+                print(f"Version logged to: {version_log_path}")
+        except Exception as log_error:
+            print(f"Warning: Failed to log versions: {log_error}")
+        
         # Step 6: Report
         print("\n6. REPORTING")
         print("-" * 40)
         report_data = report.generate_report()
         
-        if save_report:
-            report_path = report.save_report(report_data)
+        # Always save report (was only saving if save_report=True)
+        report_path = report.save_report(report_data)
         
         print("\n" + "="*80)
         print("PIPELINE COMPLETE")
