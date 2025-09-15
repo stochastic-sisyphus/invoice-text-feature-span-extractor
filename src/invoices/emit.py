@@ -107,7 +107,7 @@ def create_review_queue_entry(doc_id: str, field: str, assignment: Dict[str, Any
 
 def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[Dict[str, Any]]]:
     """
-    Emit contract JSON for a single document and collect review queue entries.
+    Emit contract JSON for a single document using schema-driven fields.
     
     Args:
         sha256: Document SHA256 hash
@@ -123,25 +123,44 @@ def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[D
     
     doc_id = doc_info['doc_id']
     
+    # Load schema for field list
+    schema_obj = utils.load_contract_schema()
+    schema_fields = schema_obj.get('fields', [])
+    
+    if not schema_fields:
+        raise ValueError("Schema contains no fields")
+    
     # Get tokens to determine page count
     tokens_df = tokenize.get_document_tokens(sha256)
     page_count = tokens_df['page_idx'].nunique() if not tokens_df.empty else 0
     
-    # Create contract JSON
+    # Create contract JSON with version info
     contract = {
         'document_id': doc_id,
         'pages': page_count,
-        **utils.get_version_stamps(),
+        **utils.get_version_info(),
         'fields': {},
         'line_items': [],  # Empty for now as specified
+        'extensions': {},  # Top-level extensions object
+        'experimental': {}  # Top-level experimental object
     }
     
     review_queue_entries = []
     
-    # Process each field
-    for field in decoder.HEADER_FIELDS:
-        if field not in assignments:
-            # Missing assignment - should not happen but handle gracefully
+    # Process each schema field
+    for field in schema_fields:
+        if field in assignments:
+            # Field has assignment from decoder
+            assignment = assignments[field]
+            field_output = create_field_output(field, assignment)
+            contract['fields'][field] = field_output
+            
+            # Add to review queue if ABSTAIN
+            if field_output['status'] == 'ABSTAIN':
+                review_entry = create_review_queue_entry(doc_id, field, assignment, 'ABSTAIN')
+                review_queue_entries.append(review_entry)
+        else:
+            # Field missing from assignments - status MISSING
             contract['fields'][field] = {
                 'value': None,
                 'confidence': 0.0,
@@ -152,16 +171,6 @@ def emit_document(sha256: str, assignments: Dict[str, Any]) -> Tuple[str, List[D
             
             # Add to review queue
             review_entry = create_review_queue_entry(doc_id, field, {'assignment_type': 'NONE'}, 'MISSING')
-            review_queue_entries.append(review_entry)
-            continue
-        
-        assignment = assignments[field]
-        field_output = create_field_output(field, assignment)
-        contract['fields'][field] = field_output
-        
-        # Add to review queue if ABSTAIN
-        if field_output['status'] == 'ABSTAIN':
-            review_entry = create_review_queue_entry(doc_id, field, assignment, 'ABSTAIN')
             review_queue_entries.append(review_entry)
     
     # Write predictions JSON

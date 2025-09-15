@@ -2,28 +2,77 @@
 
 import hashlib
 import json
+import os
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-# Version stamps - fixed for today as specified
-CONTRACT_VERSION = "v1"
+from . import paths
+
+# Default version values
 FEATURE_VERSION = "v1"
 DECODER_VERSION = "v1"
-MODEL_VERSION = "unscored-baseline"
 CALIBRATION_VERSION = "none"
 
 
-def get_version_stamps() -> Dict[str, str]:
-    """Get all version stamps for consistent labeling."""
+def load_contract_schema() -> Dict[str, Any]:
+    """Load and canonicalize the contract schema."""
+    schema_path = paths.get_repo_root() / "schema" / "contract.invoice.json"
+    
+    if not schema_path.exists():
+        raise FileNotFoundError(f"Contract schema not found: {schema_path}")
+    
+    with open(schema_path, 'r', encoding='utf-8') as f:
+        schema_obj = json.load(f)
+    
+    # Canonicalize: sort keys for deterministic output
+    canonical_json = json.dumps(schema_obj, sort_keys=True, separators=(',', ':'))
+    return json.loads(canonical_json)
+
+
+def contract_fingerprint(schema_obj: Dict[str, Any]) -> str:
+    """Compute SHA256 fingerprint of canonical schema."""
+    canonical_json = json.dumps(schema_obj, sort_keys=True, separators=(',', ':'))
+    fingerprint = hashlib.sha256(canonical_json.encode('utf-8')).hexdigest()
+    return fingerprint[:12]
+
+
+def compute_contract_version(schema_obj: Dict[str, Any]) -> str:
+    """Generate contract version from semver + fingerprint."""
+    semver = schema_obj.get('version', '1.0.0')
+    fingerprint = contract_fingerprint(schema_obj)
+    return f"{semver}+{fingerprint}"
+
+
+def get_version_info() -> Dict[str, str]:
+    """Get comprehensive version information with contract versioning."""
+    # Load schema for contract version
+    schema_obj = load_contract_schema()
+    contract_version = compute_contract_version(schema_obj)
+    
+    # Model version from env or file
+    model_version = os.environ.get('MODEL_ID')
+    if not model_version:
+        model_file = paths.get_repo_root() / "data" / "models" / "current" / "model_id.txt"
+        if model_file.exists():
+            with open(model_file, 'r', encoding='utf-8') as f:
+                model_version = f.read().strip()
+        else:
+            model_version = "unscored-baseline"
+    
     return {
-        "contract_version": CONTRACT_VERSION,
+        "contract_version": contract_version,
         "feature_version": FEATURE_VERSION,
         "decoder_version": DECODER_VERSION,
-        "model_version": MODEL_VERSION,
+        "model_version": model_version,
         "calibration_version": CALIBRATION_VERSION,
     }
+
+
+def get_version_stamps() -> Dict[str, str]:
+    """Get all version stamps for consistent labeling (legacy compatibility)."""
+    return get_version_info()
 
 
 def compute_sha256(data: bytes) -> str:

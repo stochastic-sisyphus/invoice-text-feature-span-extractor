@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """CLI entrypoint for the invoice extraction pipeline."""
 
+import json
+import os
 import sys
 from pathlib import Path
 from typing import Optional
@@ -12,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from invoices import (
     paths, utils, ingest, tokenize, candidates, decoder, 
-    normalize, emit, report
+    emit, report, labels, train
 )
 
 app = typer.Typer(
@@ -130,10 +132,21 @@ def decode_cmd(
 
 @app.command(name="emit")
 def emit_cmd(
+    model_version: Optional[str] = typer.Option(None, "--model-version", help="Override model version"),
+    feature_version: Optional[str] = typer.Option(None, "--feature-version", help="Override feature version"),
+    decoder_version: Optional[str] = typer.Option(None, "--decoder-version", help="Override decoder version"),
+    calibration_version: Optional[str] = typer.Option(None, "--calibration-version", help="Override calibration version"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Emit predictions JSON and update review queue."""
     try:
+        # Set version overrides if provided
+        if model_version:
+            os.environ['MODEL_ID'] = model_version
+        
+        # Note: Other version overrides would require modifying utils constants
+        # For now, only model_version is fully supported via environment
+        
         print("Starting emission (normalization + JSON + review queue)...")
         
         with utils.Timer("Emission"):
@@ -149,6 +162,26 @@ def emit_cmd(
             print(f"  Predicted: {total_predicted}")
             print(f"  Abstain: {total_abstain}")
             print(f"  Review entries: {total_review_entries}")
+            
+            # Log to version log
+            try:
+                version_log_dir = paths.get_logs_dir()
+                version_log_path = version_log_dir / "version_log.jsonl"
+                
+                log_entry = {
+                    'timestamp': utils.get_current_utc_iso(),
+                    'document_count': docs_processed,
+                    **utils.get_version_info()
+                }
+                
+                # Append to JSONL
+                with open(version_log_path, 'a', encoding='utf-8') as f:
+                    f.write(json.dumps(log_entry) + '\n')
+                
+                if verbose:
+                    print(f"Logged to: {version_log_path}")
+            except Exception as log_error:
+                print(f"Warning: Failed to log versions: {log_error}")
             
             if verbose:
                 for sha256, result in results.get('results', {}).items():
@@ -301,6 +334,118 @@ def status() -> None:
         
     except Exception as e:
         print(f"✗ Status check failed: {e}")
+        raise typer.Exit(1)
+
+
+@app.command(name="labels")
+def labels_cmd() -> None:
+    """Labels management commands."""
+    print("Use subcommands: pull, import, align")
+    raise typer.Exit(1)
+
+
+@app.command(name="labels-pull")
+def labels_pull_cmd() -> None:
+    """Pull labels from Label Studio API."""
+    try:
+        print("Pulling labels from Label Studio...")
+        
+        result = labels.pull_labels()
+        
+        if result['status'] == 'success':
+            print(f"✓ Pulled {result['task_count']} tasks")
+            print(f"Raw labels saved to: {result['raw_file']}")
+        elif result['status'] == 'skipped':
+            print(f"✓ Pull skipped: {result['reason']}")
+        else:
+            print(f"✗ Pull failed: {result.get('error', 'unknown error')}")
+            raise typer.Exit(1)
+        
+    except Exception as e:
+        print(f"✗ Labels pull failed: {e}")
+        raise typer.Exit(1)
+
+
+@app.command(name="labels-import")
+def labels_import_cmd(
+    path: str = typer.Option(..., "--in", help="Path to Label Studio export file")
+) -> None:
+    """Import labels from local Label Studio export."""
+    try:
+        print(f"Importing labels from: {path}")
+        
+        result = labels.import_labels(path)
+        
+        if result['status'] == 'success':
+            print(f"✓ Imported {result['task_count']} tasks")
+            print(f"Saved to: {result['raw_file']}")
+        else:
+            print("✗ Import failed")
+            raise typer.Exit(1)
+        
+    except Exception as e:
+        print(f"✗ Labels import failed: {e}")
+        raise typer.Exit(1)
+
+
+@app.command(name="labels-align")
+def labels_align_cmd(
+    all_files: bool = typer.Option(False, "--all", help="Process all raw label files"),
+    iou_threshold: float = typer.Option(0.3, "--iou", help="IoU threshold for alignment")
+) -> None:
+    """Align labels with candidates using IoU matching."""
+    try:
+        print("Aligning labels with candidates...")
+        
+        result = labels.align_labels(iou_threshold=iou_threshold, all_files=all_files)
+        
+        if result['status'] == 'success':
+            print(f"✓ Aligned {result['total_aligned']} labels")
+            print(f"IoU threshold: {result['iou_threshold']}")
+            print(f"Files processed: {result['files_processed']}")
+            
+            for alignment in result['alignment_results']:
+                print(f"  {alignment['source_file']} -> {alignment['aligned_file']} ({alignment['aligned_count']} aligned)")
+        elif result['status'] == 'no_labels':
+            print("✓ No labels directory found")
+        elif result['status'] == 'no_files':
+            print("✓ No label files found")
+        else:
+            print("✗ Alignment failed")
+            raise typer.Exit(1)
+        
+    except Exception as e:
+        print(f"✗ Labels alignment failed: {e}")
+        raise typer.Exit(1)
+
+
+@app.command(name="train")
+def train_cmd() -> None:
+    """Train XGBoost models on aligned labels."""
+    try:
+        print("Starting XGBoost training...")
+        
+        result = train.train_models()
+        
+        if result['status'] == 'success':
+            print(f"✓ Training complete")
+            print(f"Models trained: {result['models_trained']}")
+            print(f"Total examples: {result['total_pos']} positive, {result['total_neg']} negative")
+            print(f"Model file: {result['model_file']}")
+            
+            for field, stats in result['training_stats'].items():
+                if 'status' in stats:
+                    print(f"  {field}: {stats['status']}")
+                else:
+                    print(f"  {field}: {stats['pos_count']} pos, {stats['neg_count']} neg")
+        elif result['status'] == 'skipped':
+            print(f"✓ Training skipped: {result['reason']}")
+        else:
+            print("✗ Training failed")
+            raise typer.Exit(1)
+        
+    except Exception as e:
+        print(f"✗ Training failed: {e}")
         raise typer.Exit(1)
 
 

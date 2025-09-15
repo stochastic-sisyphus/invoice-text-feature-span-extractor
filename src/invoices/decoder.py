@@ -1,12 +1,10 @@
 """Decoder module for Hungarian assignment with NONE option per field."""
 
-import warnings
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, Any, Optional, Tuple
 
 import numpy as np
-import pandas as pd
 
-from . import paths, utils, ingest, candidates
+from . import utils, ingest, candidates, train
 
 
 # Header field set as specified
@@ -25,6 +23,115 @@ HEADER_FIELDS = [
 
 # Default NONE bias (high cost to encourage abstaining)
 DEFAULT_NONE_BIAS = 10.0
+
+# Global cache for loaded models
+_LOADED_MODELS = None
+
+
+def maybe_load_model_v1() -> Optional[Dict[str, Any]]:
+    """
+    Load trained XGBoost models if available.
+    Graceful fallback when models not present.
+    
+    Returns:
+        Loaded models dict or None
+    """
+    global _LOADED_MODELS
+    
+    if _LOADED_MODELS is not None:
+        return _LOADED_MODELS
+    
+    try:
+        loaded_models = train.load_trained_models()
+        _LOADED_MODELS = loaded_models
+        return loaded_models
+    except Exception as e:
+        print(f"Could not load trained models: {e}")
+        print("Falling back to baseline weak-prior decoder")
+        _LOADED_MODELS = None
+        return None
+
+
+def compute_ml_cost(field: str, candidate: Dict[str, Any], loaded_models: Dict[str, Any]) -> float:
+    """
+    Compute ML-based cost using trained XGBoost model.
+    
+    Args:
+        field: Field name
+        candidate: Candidate dictionary
+        loaded_models: Loaded models from maybe_load_model_v1()
+        
+    Returns:
+        ML cost (lower = better match)
+    """
+    models_dict = loaded_models.get('models', {})
+    
+    if field not in models_dict:
+        # No model for this field, fall back to weak prior
+        return compute_weak_prior_cost(field, candidate)
+    
+    model_info = models_dict[field]
+    model = model_info['model']
+    feature_names = model_info['feature_names']
+    
+    # Create features for this candidate
+    try:
+        # Basic geometric features
+        center_x = (candidate['bbox_norm_x0'] + candidate['bbox_norm_x1']) / 2
+        center_y = (candidate['bbox_norm_y0'] + candidate['bbox_norm_y1']) / 2
+        width = candidate['bbox_norm_x1'] - candidate['bbox_norm_x0']
+        height = candidate['bbox_norm_y1'] - candidate['bbox_norm_y0']
+        area = width * height
+        
+        # Text features
+        text = str(candidate.get('text', ''))
+        char_count = len(text)
+        word_count = len(text.split())
+        digit_count = sum(1 for c in text if c.isdigit())
+        alpha_count = sum(1 for c in text if c.isalpha())
+        
+        # Bucket features (one-hot)
+        bucket = candidate.get('bucket', 'other')
+        bucket_features = {
+            'bucket_amount_like': int(bucket == 'amount_like'),
+            'bucket_date_like': int(bucket == 'date_like'),
+            'bucket_id_like': int(bucket == 'id_like'),
+            'bucket_keyword_proximal': int(bucket == 'keyword_proximal'),
+            'bucket_random_negative': int(bucket == 'random_negative'),
+            'bucket_other': int(bucket not in ['amount_like', 'date_like', 'id_like', 'keyword_proximal', 'random_negative'])
+        }
+        
+        # Page features
+        page_idx = candidate.get('page_idx', 0)
+        
+        features = {
+            'center_x': center_x,
+            'center_y': center_y,
+            'width': width,
+            'height': height,
+            'area': area,
+            'char_count': char_count,
+            'word_count': word_count,
+            'digit_count': digit_count,
+            'alpha_count': alpha_count,
+            'page_idx': page_idx,
+            **bucket_features
+        }
+        
+        # Create feature vector in correct order
+        feature_vector = [features.get(name, 0.0) for name in feature_names]
+        
+        # Get prediction probability
+        prob_positive = model.predict_proba([feature_vector])[0][1]
+        
+        # Convert to cost (lower probability = higher cost)
+        ml_cost = 1.0 - prob_positive
+        
+        return max(0.0, ml_cost)
+        
+    except Exception as e:
+        print(f"ML cost computation failed for {field}: {e}")
+        return compute_weak_prior_cost(field, candidate)
 
 
 def try_import_scipy_hungarian():
@@ -129,7 +236,7 @@ def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
 
 def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Any]:
     """
-    Decode a single document using Hungarian assignment.
+    Decode a single document using Hungarian assignment with ML models when available.
     
     Args:
         sha256: Document SHA256 hash
@@ -138,6 +245,16 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     Returns:
         Assignment results for each field
     """
+    # Try to load trained models
+    loaded_models = maybe_load_model_v1()
+    
+    # Get schema fields instead of hardcoded HEADER_FIELDS
+    schema_obj = utils.load_contract_schema()
+    schema_fields = schema_obj.get('fields', [])
+    
+    if not schema_fields:
+        raise ValueError("Schema contains no fields")
+    
     # Get candidates
     candidates_df = candidates.get_document_candidates(sha256)
     
@@ -148,7 +265,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     # If no candidates, return all NONE assignments
     if candidates_df.empty:
         assignments = {}
-        for field in HEADER_FIELDS:
+        for field in schema_fields:
             assignments[field] = {
                 'assignment_type': 'NONE',
                 'candidate_index': None,
@@ -159,16 +276,21 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     
     candidates_list = candidates_df.to_dict('records')
     n_candidates = len(candidates_list)
-    n_fields = len(HEADER_FIELDS)
+    n_fields = len(schema_fields)
     
     # Build cost matrix: fields × (candidates + NONE)
     # Each field can be assigned to any candidate or to NONE
     cost_matrix = np.full((n_fields, n_candidates + 1), 2.0)  # Base cost
     
     # Fill candidate costs
-    for field_idx, field in enumerate(HEADER_FIELDS):
+    for field_idx, field in enumerate(schema_fields):
         for cand_idx, candidate in enumerate(candidates_list):
-            cost = compute_weak_prior_cost(field, candidate)
+            if loaded_models:
+                # Use ML cost when models available
+                cost = compute_ml_cost(field, candidate, loaded_models)
+            else:
+                # Fall back to weak prior cost
+                cost = compute_weak_prior_cost(field, candidate)
             cost_matrix[field_idx, cand_idx] = cost
         
         # Set NONE cost (last column)
@@ -190,7 +312,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     # Build assignments
     assignments = {}
     
-    for field_idx, field in enumerate(HEADER_FIELDS):
+    for field_idx, field in enumerate(schema_fields):
         # Find assignment for this field
         field_assignment = None
         for i, (row_idx, col_idx) in enumerate(zip(row_indices, col_indices)):
@@ -255,15 +377,21 @@ def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Dict
             
         except Exception as e:
             print(f"Failed to decode {sha256[:16]}: {e}")
-            # Create default NONE assignments
-            assignments = {}
-            for field in HEADER_FIELDS:
-                assignments[field] = {
-                    'assignment_type': 'NONE',
-                    'candidate_index': None,
-                    'cost': none_bias,
-                    'field': field,
-                }
-            results[sha256] = assignments
+            # Create default NONE assignments using schema fields
+            try:
+                schema_obj = utils.load_contract_schema()
+                schema_fields = schema_obj.get('fields', [])
+                assignments = {}
+                for field in schema_fields:
+                    assignments[field] = {
+                        'assignment_type': 'NONE',
+                        'candidate_index': None,
+                        'cost': none_bias,
+                        'field': field,
+                    }
+                results[sha256] = assignments
+            except Exception as schema_error:
+                print(f"Could not create fallback assignments: {schema_error}")
+                results[sha256] = {}
     
     return results
