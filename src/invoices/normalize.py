@@ -272,7 +272,7 @@ def _looks_like_amount(text: str) -> bool:
     has_currency = any(symbol in text for symbol in currency_symbols)
     
     # Numeric patterns
-    digits = sum(1 for c in text if c.isdigit())
+    digits = sum(bool(c.isdigit())
     decimals = text.count('.')
     commas = text.count(',')
     
