@@ -1,6 +1,5 @@
 """Normalization module for cleaning predicted field values."""
 
-import re
 from decimal import Decimal, InvalidOperation
 from typing import Optional, Tuple, Dict, Any
 
@@ -81,7 +80,11 @@ def normalize_amount(raw_text: str) -> Tuple[Optional[str], Optional[str], str]:
     
     # Extract numeric value
     # Remove currency symbols and letters, keep digits, dots, commas
-    numeric_text = re.sub(r'[^\d\.\,\-]', '', clean_text)
+    numeric_chars = []
+    for char in clean_text:
+        if char.isdigit() or char in '.,:-':
+            numeric_chars.append(char)
+    numeric_text = ''.join(numeric_chars)
     
     if not numeric_text:
         return None, currency_code, clean_text

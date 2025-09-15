@@ -7,20 +7,6 @@ import numpy as np
 from . import utils, ingest, candidates, train
 
 
-# Header field set as specified
-HEADER_FIELDS = [
-    'invoice_number',
-    'invoice_date', 
-    'due_date',
-    'total_amount_due',
-    'previous_balance',
-    'payments_and_credits',
-    'account_number',
-    'carrier_name',
-    'document_type',
-    'currency_code',
-]
-
 # Default NONE bias (high cost to encourage abstaining)
 DEFAULT_NONE_BIAS = 10.0
 
@@ -229,7 +215,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     # Try to load trained models
     loaded_models = maybe_load_model_v1()
     
-    # Get schema fields instead of hardcoded HEADER_FIELDS
+    # Get schema fields dynamically
     schema_obj = utils.load_contract_schema()
     schema_fields = schema_obj.get('fields', [])
     
