@@ -165,8 +165,8 @@ def simple_hungarian_fallback(cost_matrix: np.ndarray) -> Tuple[np.ndarray, np.n
 
 def compute_weak_prior_cost(field: str, candidate: Dict[str, Any]) -> float:
     """
-    Compute weak prior cost for field-candidate assignment.
-    Uses ML features, not hard-coded rules.
+    Compute weak prior cost for field-candidate assignment based on heuristics.
+    This serves as a fallback when no ML model is available.
     Lower cost = better match.
     """
     bucket = candidate.get('bucket', '')
