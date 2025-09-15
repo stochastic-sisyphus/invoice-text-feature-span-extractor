@@ -82,7 +82,7 @@ def normalize_amount(raw_text: str) -> Tuple[Optional[str], Optional[str], str]:
     # Remove currency symbols and letters, keep digits, dots, commas
     numeric_chars = []
     for char in clean_text:
-        if char.isdigit() or char in '.,:-':
+        if char.isdigit() or char in '.,-':
             numeric_chars.append(char)
     numeric_text = ''.join(numeric_chars)
     
