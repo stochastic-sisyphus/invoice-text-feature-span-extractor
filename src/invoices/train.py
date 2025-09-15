@@ -225,7 +225,11 @@ def save_models(trained_models: Dict[str, Dict[str, Any]]) -> str:
         model = model_info['model']
         
         # Convert model to bytes for deterministic storage
-        model_bytes = model.save_raw(raw_format='json')
+        try:
+            model_bytes = model.save_raw(raw_format='json')
+        except (TypeError, ValueError, AttributeError) as e:
+            print(f"Warning: 'json' raw_format not supported for field '{field_name}', using default format. Error: {e}")
+            model_bytes = model.save_raw()
         
         model_data[field_name] = {
             'model_bytes': model_bytes.decode('utf-8'),
