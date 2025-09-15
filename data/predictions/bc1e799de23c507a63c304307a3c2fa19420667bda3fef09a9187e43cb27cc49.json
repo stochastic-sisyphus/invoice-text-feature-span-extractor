@@ -658,9 +658,9 @@
       "raw_text": "1. such time payment yb timbus $30. before"
     },
     "Notes": {
-      "value": "21202420242024.00",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
@@ -757,9 +757,9 @@
       "raw_text": "21, 2 21, 2024 pay 2024 due 2024"
     },
     "ContactPhone": {
-      "value": "5014.00",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [

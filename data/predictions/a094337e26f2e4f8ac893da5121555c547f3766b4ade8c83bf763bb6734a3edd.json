@@ -533,9 +533,9 @@
       "raw_text": "Invoice Applied about Jun Jul 2024 or only."
     },
     "SWIFTCode": {
-      "value": "1.00",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
