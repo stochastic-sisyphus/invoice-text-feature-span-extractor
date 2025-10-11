@@ -1,8 +1,6 @@
 """Path resolution utilities for the invoice extraction system."""
 
-import os
 from pathlib import Path
-from typing import Union
 
 
 def get_repo_root() -> Path:
@@ -40,7 +38,7 @@ def get_tokens_dir() -> Path:
 
 
 def get_candidates_dir() -> Path:
-    """Get the candidates directory path.""" 
+    """Get the candidates directory path."""
     return get_data_dir() / "candidates"
 
 
@@ -88,7 +86,7 @@ def ensure_directories() -> None:
     """Ensure all required directories exist."""
     directories = [
         get_data_dir(),
-        get_ingest_dir(), 
+        get_ingest_dir(),
         get_ingest_raw_dir(),
         get_tokens_dir(),
         get_candidates_dir(),
@@ -96,6 +94,6 @@ def ensure_directories() -> None:
         get_review_dir(),
         get_logs_dir(),
     ]
-    
+
     for directory in directories:
         directory.mkdir(parents=True, exist_ok=True)

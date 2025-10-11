@@ -20,22 +20,22 @@
           0.0
         ],
         "token_span": [
+          "181",
+          "187",
           "218",
           "206",
-          "187",
-          "181",
           "169",
           "201",
           "17",
           "219"
         ]
       },
-      "raw_text": "Do Make Nov 8529 check $ to not"
+      "raw_text": "8529 Nov Do Make check $ to not"
     },
     "InvoiceDate": {
-      "value": "8529.00",
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
         "page": 0,
         "bbox": [
@@ -45,9 +45,9 @@
           0.0
         ],
         "token_span": [
-          "206",
           "187",
-          "181",
+          "218",
+          "206",
           "169",
           "201",
           "17",
@@ -55,7 +55,7 @@
           "18"
         ]
       },
-      "raw_text": "Make Nov 8529 check $ to not Nov"
+      "raw_text": "Nov Do Make check $ to not Nov"
     },
     "DueDate": {
       "value": "234032023.00",
@@ -483,31 +483,6 @@
       "raw_text": "of 23, 403 2023 bill. cash your payable"
     },
     "BankAccount": {
-      "value": "41112.00",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 0,
-        "bbox": [
-          0.05352941176470588,
-          0.0,
-          0.11691503267973857,
-          0.0
-        ],
-        "token_span": [
-          "121",
-          "104",
-          "40",
-          "127",
-          "115",
-          "190",
-          "204",
-          "202"
-        ]
-      },
-      "raw_text": "Taxes, Balance For New Regular 41112 ATTN SPARROW"
-    },
-    "RoutingNumber": {
       "value": "1123403.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -532,7 +507,7 @@
       },
       "raw_text": "activity send 11 balance money of 23, 403"
     },
-    "SWIFTCode": {
+    "RoutingNumber": {
       "value": "203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -557,7 +532,7 @@
       },
       "raw_text": "page due your your 20, 3. BOX detailed"
     },
-    "LineItemDescription": {
+    "SWIFTCode": {
       "value": "101123.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -582,7 +557,7 @@
       },
       "raw_text": "10, activity send 11 balance money of 23,"
     },
-    "LineItemQuantity": {
+    "LineItemDescription": {
       "value": "10.11",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -607,7 +582,7 @@
       },
       "raw_text": "or 10, activity send 11 balance money of"
     },
-    "LineItemUnitPrice": {
+    "LineItemQuantity": {
       "value": "0.20",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -632,7 +607,7 @@
       },
       "raw_text": "bill. cash your payable 2023 begins order after"
     },
-    "LineItemTotal": {
+    "LineItemUnitPrice": {
       "value": "2023.20",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -657,7 +632,7 @@
       },
       "raw_text": "2023 bill. cash your payable 2023 begins order"
     },
-    "Notes": {
+    "LineItemTotal": {
       "value": "203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -682,7 +657,7 @@
       },
       "raw_text": "payments page due your your 20, 3. BOX"
     },
-    "TaxID": {
+    "Notes": {
       "value": "4032023.20",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -707,7 +682,7 @@
       },
       "raw_text": "403 2023 bill. cash your payable 2023 begins"
     },
-    "ContactName": {
+    "TaxID": {
       "value": "20203.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -732,7 +707,7 @@
       },
       "raw_text": "20, payments page due your your 20, 3."
     },
-    "ContactEmail": {
+    "ContactName": {
       "value": "2020.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -757,7 +732,7 @@
       },
       "raw_text": "number 20, payments page due your your 20,"
     },
-    "ContactPhone": {
+    "ContactEmail": {
       "value": "20.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -781,6 +756,31 @@
         ]
       },
       "raw_text": "A number 20, payments page due your your"
+    },
+    "ContactPhone": {
+      "value": "20.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 0,
+        "bbox": [
+          0.5760735294117647,
+          0.0,
+          0.6471127450490196,
+          0.0
+        ],
+        "token_span": [
+          "200",
+          "64",
+          "180",
+          "95",
+          "88",
+          "54",
+          "186",
+          "164"
+        ]
+      },
+      "raw_text": "enclosed A number 20, payments page due your"
     }
   },
   "line_items": [],

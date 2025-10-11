@@ -8,136 +8,11 @@
   "calibration_version": "none",
   "fields": {
     "InvoiceNumber": {
-      "value": "4 4 4 4 4 4 4 4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 51,
-        "bbox": [
-          0.07058823529411765,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "56",
-          "143",
-          "41",
-          "125",
-          "120",
-          "70",
-          "130",
-          "136"
-        ]
-      },
-      "raw_text": "4 4 4 4 4 4 4 4"
-    },
-    "InvoiceDate": {
-      "value": "8 8 8 8 8 8 8 8",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 47,
-        "bbox": [
-          0.07058823529411765,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "130",
-          "70",
-          "143",
-          "136",
-          "170",
-          "125",
-          "106",
-          "41"
-        ]
-      },
-      "raw_text": "8 8 8 8 8 8 8 8"
-    },
-    "DueDate": {
-      "value": "8 8 8 8 8 8 8 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 47,
-        "bbox": [
-          0.07058823529411765,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "143",
-          "136",
-          "170",
-          "125",
-          "106",
-          "41",
-          "166",
-          "157"
-        ]
-      },
-      "raw_text": "8 8 8 8 8 8 8 3"
-    },
-    "IssueDate": {
-      "value": "8 8 8 8 8 8 3 3",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 47,
-        "bbox": [
-          0.07058823529411765,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "136",
-          "170",
-          "125",
-          "106",
-          "41",
-          "166",
-          "157",
-          "176"
-        ]
-      },
-      "raw_text": "8 8 8 8 8 8 3 3"
-    },
-    "TotalAmount": {
-      "value": "8 8 8 8 8 3 3 8",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 47,
-        "bbox": [
-          0.07058823529411765,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "170",
-          "125",
-          "106",
-          "41",
-          "166",
-          "157",
-          "176",
-          "56"
-        ]
-      },
-      "raw_text": "8 8 8 8 8 3 3 8"
-    },
-    "Subtotal": {
       "value": "2 2 2 2 2 2 2 2",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 83,
+        "page": 119,
         "bbox": [
           0.07058823529411765,
           0.0,
@@ -145,120 +20,170 @@
           0.0
         ],
         "token_span": [
-          "157",
-          "41",
-          "143",
-          "130",
-          "70",
-          "125",
-          "120",
-          "56"
+          "209",
+          "217",
+          "43",
+          "172",
+          "182",
+          "188",
+          "101",
+          "151"
         ]
       },
       "raw_text": "2 2 2 2 2 2 2 2"
     },
-    "TaxAmount": {
-      "value": "5 5 5 5 5 5 5 5",
+    "InvoiceDate": {
+      "value": "20 VG VG 6 6 6 6 6",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 147,
+        "page": 87,
         "bbox": [
-          0.07058823529411765,
+          0.06372549019607843,
           0.0,
           0.07745098039215687,
           0.0
         ],
         "token_span": [
-          "136",
-          "157",
-          "160",
-          "125",
-          "106",
-          "130",
-          "41",
-          "143"
+          "72",
+          "229",
+          "237",
+          "148",
+          "166",
+          "143",
+          "153",
+          "159"
         ]
       },
-      "raw_text": "5 5 5 5 5 5 5 5"
+      "raw_text": "20 VG VG 6 6 6 6 6"
+    },
+    "DueDate": {
+      "value": "N N 2 2 2 2 2 2",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 119,
+        "bbox": [
+          0.06372549019607843,
+          0.0,
+          0.07745098039215687,
+          0.0
+        ],
+        "token_span": [
+          "249",
+          "253",
+          "209",
+          "217",
+          "43",
+          "172",
+          "182",
+          "188"
+        ]
+      },
+      "raw_text": "N N 2 2 2 2 2 2"
+    },
+    "IssueDate": {
+      "value": "N 2 2 2 2 2 2 2",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 119,
+        "bbox": [
+          0.06372549019607843,
+          0.0,
+          0.07745098039215687,
+          0.0
+        ],
+        "token_span": [
+          "253",
+          "209",
+          "217",
+          "43",
+          "172",
+          "182",
+          "188",
+          "101"
+        ]
+      },
+      "raw_text": "N 2 2 2 2 2 2 2"
+    },
+    "TotalAmount": {
+      "value": "W W W W 4 4 2 4",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 131,
+        "bbox": [
+          0.06372549019607843,
+          0.0,
+          0.07745098039215687,
+          0.0
+        ],
+        "token_span": [
+          "260",
+          "253",
+          "274",
+          "267",
+          "139",
+          "78",
+          "166",
+          "145"
+        ]
+      },
+      "raw_text": "W W W W 4 4 2 4"
+    },
+    "Subtotal": {
+      "value": "W W W 4 4 2 4 4",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 131,
+        "bbox": [
+          0.06372549019607843,
+          0.0,
+          0.07745098039215687,
+          0.0
+        ],
+        "token_span": [
+          "253",
+          "274",
+          "267",
+          "139",
+          "78",
+          "166",
+          "145",
+          "55"
+        ]
+      },
+      "raw_text": "W W W 4 4 2 4 4"
+    },
+    "TaxAmount": {
+      "value": "W W 4 4 2 4 4 4",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 131,
+        "bbox": [
+          0.06372549019607843,
+          0.0,
+          0.07745098039215687,
+          0.0
+        ],
+        "token_span": [
+          "274",
+          "267",
+          "139",
+          "78",
+          "166",
+          "145",
+          "55",
+          "134"
+        ]
+      },
+      "raw_text": "W W 4 4 2 4 4 4"
     },
     "Discount": {
-      "value": "VG VG 20 6 6 6 6 6",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 87,
-        "bbox": [
-          0.06372549019607843,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "237",
-          "229",
-          "72",
-          "191",
-          "153",
-          "87",
-          "143",
-          "166"
-        ]
-      },
-      "raw_text": "VG VG 20 6 6 6 6 6"
-    },
-    "Currency": {
-      "value": "VG 20 6 6 6 6 6 4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 87,
-        "bbox": [
-          0.06372549019607843,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "229",
-          "72",
-          "191",
-          "153",
-          "87",
-          "143",
-          "166",
-          "107"
-        ]
-      },
-      "raw_text": "VG 20 6 6 6 6 6 4"
-    },
-    "RemittanceAddress": {
-      "value": "20 6 6 6 6 6 4 6",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 87,
-        "bbox": [
-          0.06372549019607843,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "72",
-          "191",
-          "153",
-          "87",
-          "143",
-          "166",
-          "107",
-          "148"
-        ]
-      },
-      "raw_text": "20 6 6 6 6 6 4 6"
-    },
-    "BillToAddress": {
-      "value": "W W W W 4 3 4 4",
+      "value": "W 4 4 2 4 4 4 3",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
@@ -271,98 +196,23 @@
         ],
         "token_span": [
           "267",
-          "253",
-          "274",
-          "260",
+          "139",
+          "78",
+          "166",
           "145",
-          "40",
-          "152",
-          "134"
-        ]
-      },
-      "raw_text": "W W W W 4 3 4 4"
-    },
-    "ShipToAddress": {
-      "value": "W W W 4 3 4 4 4",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 131,
-        "bbox": [
-          0.06372549019607843,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "253",
-          "274",
-          "260",
-          "145",
-          "40",
-          "152",
+          "55",
           "134",
-          "125"
+          "40"
         ]
       },
-      "raw_text": "W W W 4 3 4 4 4"
+      "raw_text": "W 4 4 2 4 4 4 3"
     },
-    "VendorName": {
-      "value": "W W 4 3 4 4 4 4",
+    "Currency": {
+      "value": "Qty N N 2 2 2 2 2",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 131,
-        "bbox": [
-          0.06372549019607843,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "274",
-          "260",
-          "145",
-          "40",
-          "152",
-          "134",
-          "125",
-          "78"
-        ]
-      },
-      "raw_text": "W W 4 3 4 4 4 4"
-    },
-    "VendorAddress": {
-      "value": "Qty VG VG 20 6 6 6 6",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 87,
-        "bbox": [
-          0.05686274509803921,
-          0.0,
-          0.07745098039215687,
-          0.0
-        ],
-        "token_span": [
-          "61",
-          "237",
-          "229",
-          "72",
-          "191",
-          "153",
-          "87",
-          "143"
-        ]
-      },
-      "raw_text": "Qty VG VG 20 6 6 6 6"
-    },
-    "CustomerName": {
-      "value": "Qty 6 6 6 6 6 5 6",
-      "confidence": 0.0,
-      "status": "PREDICTED",
-      "provenance": {
-        "page": 15,
+        "page": 119,
         "bbox": [
           0.05686274509803921,
           0.0,
@@ -371,18 +221,18 @@
         ],
         "token_span": [
           "28",
-          "56",
-          "180",
-          "149",
-          "70",
-          "124",
-          "41",
-          "131"
+          "249",
+          "253",
+          "209",
+          "217",
+          "43",
+          "172",
+          "182"
         ]
       },
-      "raw_text": "Qty 6 6 6 6 6 5 6"
+      "raw_text": "Qty N N 2 2 2 2 2"
     },
-    "CustomerAccount": {
+    "RemittanceAddress": {
       "value": "25.00",
       "confidence": 0.0,
       "status": "PREDICTED",
@@ -395,69 +245,69 @@
           0.0
         ],
         "token_span": [
-          "166",
+          "199",
+          "142",
+          "155",
+          "130",
           "124",
           "245",
-          "222",
-          "220",
-          "110",
           "239",
           "41"
         ]
       },
-      "raw_text": "Federal MI Federal Federal Basic FTR MI $25.00"
+      "raw_text": "MI MI MI Federal MI Federal MI $25.00"
     },
-    "PurchaseOrder": {
-      "value": "25.00",
+    "BillToAddress": {
+      "value": "4.30",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
-        "page": 55,
+        "page": 115,
         "bbox": [
-          0.08431372549019608,
+          0.2009803921568628,
           0.0,
-          0.13235294117647062,
+          0.24901960784313731,
           0.0
         ],
         "token_span": [
-          "245",
-          "222",
-          "220",
-          "110",
-          "239",
-          "41",
-          "250",
-          "215"
+          "21",
+          "224",
+          "129",
+          "181",
+          "210",
+          "291",
+          "243",
+          "300"
         ]
       },
-      "raw_text": "Federal Federal Basic FTR MI $25.00 Non Basic"
+      "raw_text": "Care Sales Numbers Sales Listing Min 4 .3"
     },
-    "InvoiceReference": {
-      "value": "25.00",
+    "ShipToAddress": {
+      "value": null,
       "confidence": 0.0,
-      "status": "PREDICTED",
+      "status": "ABSTAIN",
       "provenance": {
-        "page": 55,
+        "page": 115,
         "bbox": [
-          0.08431372549019608,
+          0.5029411764705876,
           0.0,
-          0.13235294117647062,
+          0.5578431372549012,
           0.0
         ],
         "token_span": [
-          "124",
-          "245",
-          "222",
-          "220",
-          "110",
-          "239",
-          "41",
-          "250"
+          "196",
+          "90",
+          "101",
+          "336",
+          "322",
+          "206",
+          "235",
+          "226"
         ]
       },
-      "raw_text": "MI Federal Federal Basic FTR MI $25.00 Non"
+      "raw_text": "1,660.96 1,152.00 140.00 Amount Amount 744.00 897.36 49.40"
     },
-    "PaymentTerms": {
+    "VendorName": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -471,43 +321,18 @@
         ],
         "token_span": [
           "90",
-          "196",
-          "322",
-          "235",
           "101",
           "336",
-          "206",
-          "230"
-        ]
-      },
-      "raw_text": "1,152.00 1,660.96 Amount 897.36 140.00 Amount 744.00 24.71"
-    },
-    "BankAccount": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 115,
-        "bbox": [
-          0.5029411764705876,
-          0.0,
-          0.5578431372549012,
-          0.0
-        ],
-        "token_span": [
-          "196",
           "322",
-          "235",
-          "101",
-          "336",
           "206",
-          "230",
-          "226"
+          "235",
+          "226",
+          "133"
         ]
       },
-      "raw_text": "1,660.96 Amount 897.36 140.00 Amount 744.00 24.71 49.40"
+      "raw_text": "1,152.00 140.00 Amount Amount 744.00 897.36 49.40 45.00"
     },
-    "RoutingNumber": {
+    "VendorAddress": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -522,17 +347,67 @@
         "token_span": [
           "158",
           "46",
+          "203",
           "83",
           "169",
-          "203",
-          "108",
+          "185",
           "97",
-          "185"
+          "108"
         ]
       },
-      "raw_text": "1,118.74 185.00 728.46 133.97 162.57 29.76 60.98 15.00"
+      "raw_text": "1,118.74 185.00 162.57 728.46 133.97 15.00 60.98 29.76"
     },
-    "SWIFTCode": {
+    "CustomerName": {
+      "value": "4.30",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 115,
+        "bbox": [
+          0.2009803921568628,
+          0.0,
+          0.2558823529411765,
+          0.0
+        ],
+        "token_span": [
+          "224",
+          "129",
+          "181",
+          "210",
+          "291",
+          "243",
+          "300",
+          "16"
+        ]
+      },
+      "raw_text": "Sales Numbers Sales Listing Min 4 .3 Credits"
+    },
+    "CustomerAccount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 71,
+        "bbox": [
+          0.5029411764705876,
+          0.0,
+          0.5578431372549012,
+          0.0
+        ],
+        "token_span": [
+          "167",
+          "130",
+          "41",
+          "161",
+          "95",
+          "90",
+          "71",
+          "64"
+        ]
+      },
+      "raw_text": "1,041.47 1,330.86 1,091.47 46.00 20.98 35.42 15.00 46.00"
+    },
+    "PurchaseOrder": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -547,17 +422,17 @@
         "token_span": [
           "130",
           "41",
-          "167",
+          "161",
+          "95",
+          "90",
           "71",
-          "86",
-          "80",
           "64",
-          "161"
+          "156"
         ]
       },
-      "raw_text": "1,330.86 1,091.47 1,041.47 15.00 72.11 10.00 46.00 46.00"
+      "raw_text": "1,330.86 1,091.47 46.00 20.98 35.42 15.00 46.00 25.00"
     },
-    "LineItemDescription": {
+    "InvoiceReference": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -571,44 +446,19 @@
         ],
         "token_span": [
           "41",
-          "167",
-          "71",
-          "86",
-          "80",
-          "64",
           "161",
-          "107"
+          "95",
+          "90",
+          "71",
+          "64",
+          "156",
+          "86"
         ]
       },
-      "raw_text": "1,091.47 1,041.47 15.00 72.11 10.00 46.00 46.00 15.87"
+      "raw_text": "1,091.47 46.00 20.98 35.42 15.00 46.00 25.00 72.11"
     },
-    "LineItemQuantity": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 71,
-        "bbox": [
-          0.5029411764705876,
-          0.0,
-          0.5578431372549012,
-          0.0
-        ],
-        "token_span": [
-          "167",
-          "71",
-          "86",
-          "80",
-          "64",
-          "161",
-          "107",
-          "90"
-        ]
-      },
-      "raw_text": "1,041.47 15.00 72.11 10.00 46.00 46.00 15.87 35.42"
-    },
-    "LineItemUnitPrice": {
-      "value": ".69 .08 .63 .04 .15 .25 .07",
+    "PaymentTerms": {
+      "value": ".63 .15 .08 .69 .04 .25 .07",
       "confidence": 0.0,
       "status": "PREDICTED",
       "provenance": {
@@ -620,18 +470,43 @@
           0.0
         ],
         "token_span": [
-          "127",
-          "169",
           "79",
-          "143",
           "165",
+          "169",
+          "127",
+          "143",
           "132",
           "138"
         ]
       },
-      "raw_text": ".69 .08 .63 .04 .15 .25 .07"
+      "raw_text": ".63 .15 .08 .69 .04 .25 .07"
     },
-    "LineItemTotal": {
+    "BankAccount": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.3656862745098037,
+          0.0,
+          0.42058823529411726,
+          0.0
+        ],
+        "token_span": [
+          "51",
+          "19",
+          "53",
+          "47",
+          "25",
+          "75",
+          "87",
+          "55"
+        ]
+      },
+      "raw_text": "1,236.57 1,155.76 1,337.86 1,256.69 1,281.31 2,565.07 339.73 319.00"
+    },
+    "RoutingNumber": {
       "value": null,
       "confidence": 0.0,
       "status": "ABSTAIN",
@@ -645,141 +520,266 @@
         ],
         "token_span": [
           "19",
+          "53",
+          "47",
+          "25",
           "75",
-          "47",
-          "51",
-          "53",
-          "25",
-          "35",
-          "39"
-        ]
-      },
-      "raw_text": "1,155.76 2,565.07 1,256.69 1,236.57 1,337.86 1,281.31 146.07 122.98"
-    },
-    "Notes": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.3656862745098037,
-          0.0,
-          0.42058823529411726,
-          0.0
-        ],
-        "token_span": [
-          "75",
-          "47",
-          "51",
-          "53",
-          "25",
-          "35",
-          "39",
-          "71"
-        ]
-      },
-      "raw_text": "2,565.07 1,256.69 1,236.57 1,337.86 1,281.31 146.07 122.98 103.43"
-    },
-    "TaxID": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.3656862745098037,
-          0.0,
-          0.42058823529411726,
-          0.0
-        ],
-        "token_span": [
-          "47",
-          "51",
-          "53",
-          "25",
-          "35",
-          "39",
-          "71",
-          "77"
-        ]
-      },
-      "raw_text": "1,256.69 1,236.57 1,337.86 1,281.31 146.07 122.98 103.43 203.92"
-    },
-    "ContactName": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.3656862745098037,
-          0.0,
-          0.42058823529411726,
-          0.0
-        ],
-        "token_span": [
-          "51",
-          "53",
-          "25",
-          "35",
-          "39",
-          "71",
-          "77",
-          "91"
-        ]
-      },
-      "raw_text": "1,236.57 1,337.86 1,281.31 146.07 122.98 103.43 203.92 365.50"
-    },
-    "ContactEmail": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.3656862745098037,
-          0.0,
-          0.42058823529411726,
-          0.0
-        ],
-        "token_span": [
-          "53",
-          "25",
-          "35",
-          "39",
-          "71",
-          "77",
-          "91",
-          "87"
-        ]
-      },
-      "raw_text": "1,337.86 1,281.31 146.07 122.98 103.43 203.92 365.50 339.73"
-    },
-    "ContactPhone": {
-      "value": null,
-      "confidence": 0.0,
-      "status": "ABSTAIN",
-      "provenance": {
-        "page": 3,
-        "bbox": [
-          0.3656862745098037,
-          0.0,
-          0.42058823529411726,
-          0.0
-        ],
-        "token_span": [
-          "25",
-          "35",
-          "39",
-          "71",
-          "77",
-          "91",
           "87",
+          "55",
           "85"
         ]
       },
-      "raw_text": "1,281.31 146.07 122.98 103.43 203.92 365.50 339.73 130.93"
+      "raw_text": "1,155.76 1,337.86 1,256.69 1,281.31 2,565.07 339.73 319.00 130.93"
+    },
+    "SWIFTCode": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.3656862745098037,
+          0.0,
+          0.42058823529411726,
+          0.0
+        ],
+        "token_span": [
+          "53",
+          "47",
+          "25",
+          "75",
+          "87",
+          "55",
+          "85",
+          "71"
+        ]
+      },
+      "raw_text": "1,337.86 1,256.69 1,281.31 2,565.07 339.73 319.00 130.93 103.43"
+    },
+    "LineItemDescription": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.3656862745098037,
+          0.0,
+          0.42058823529411726,
+          0.0
+        ],
+        "token_span": [
+          "47",
+          "25",
+          "75",
+          "87",
+          "55",
+          "85",
+          "71",
+          "81"
+        ]
+      },
+      "raw_text": "1,256.69 1,281.31 2,565.07 339.73 319.00 130.93 103.43 152.60"
+    },
+    "LineItemQuantity": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.3656862745098037,
+          0.0,
+          0.42058823529411726,
+          0.0
+        ],
+        "token_span": [
+          "25",
+          "75",
+          "87",
+          "55",
+          "85",
+          "71",
+          "81",
+          "91"
+        ]
+      },
+      "raw_text": "1,281.31 2,565.07 339.73 319.00 130.93 103.43 152.60 365.50"
+    },
+    "LineItemUnitPrice": {
+      "value": null,
+      "confidence": 0.0,
+      "status": "ABSTAIN",
+      "provenance": {
+        "page": 3,
+        "bbox": [
+          0.3656862745098037,
+          0.0,
+          0.42058823529411726,
+          0.0
+        ],
+        "token_span": [
+          "75",
+          "87",
+          "55",
+          "85",
+          "71",
+          "81",
+          "91",
+          "83"
+        ]
+      },
+      "raw_text": "2,565.07 339.73 319.00 130.93 103.43 152.60 365.50 348.12"
+    },
+    "LineItemTotal": {
+      "value": "25.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 55,
+        "bbox": [
+          0.08431372549019608,
+          0.0,
+          0.14607843137254906,
+          0.0
+        ],
+        "token_span": [
+          "245",
+          "239",
+          "41",
+          "33",
+          "215",
+          "250",
+          "240",
+          "200"
+        ]
+      },
+      "raw_text": "Federal MI $25.00 Charges Basic Non State State"
+    },
+    "Notes": {
+      "value": "25.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 55,
+        "bbox": [
+          0.08431372549019608,
+          0.0,
+          0.14607843137254906,
+          0.0
+        ],
+        "token_span": [
+          "130",
+          "124",
+          "245",
+          "239",
+          "41",
+          "33",
+          "215",
+          "250"
+        ]
+      },
+      "raw_text": "Federal MI Federal MI $25.00 Charges Basic Non"
+    },
+    "TaxID": {
+      "value": "25.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 55,
+        "bbox": [
+          0.08431372549019608,
+          0.0,
+          0.14607843137254906,
+          0.0
+        ],
+        "token_span": [
+          "155",
+          "130",
+          "124",
+          "245",
+          "239",
+          "41",
+          "33",
+          "215"
+        ]
+      },
+      "raw_text": "MI Federal MI Federal MI $25.00 Charges Basic"
+    },
+    "ContactName": {
+      "value": "25.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 55,
+        "bbox": [
+          0.08431372549019608,
+          0.0,
+          0.14607843137254906,
+          0.0
+        ],
+        "token_span": [
+          "124",
+          "245",
+          "239",
+          "41",
+          "33",
+          "215",
+          "250",
+          "240"
+        ]
+      },
+      "raw_text": "MI Federal MI $25.00 Charges Basic Non State"
+    },
+    "ContactEmail": {
+      "value": "25.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 55,
+        "bbox": [
+          0.08431372549019608,
+          0.0,
+          0.14607843137254906,
+          0.0
+        ],
+        "token_span": [
+          "142",
+          "155",
+          "130",
+          "124",
+          "245",
+          "239",
+          "41",
+          "33"
+        ]
+      },
+      "raw_text": "MI MI Federal MI Federal MI $25.00 Charges"
+    },
+    "ContactPhone": {
+      "value": "5.00",
+      "confidence": 0.0,
+      "status": "PREDICTED",
+      "provenance": {
+        "page": 35,
+        "bbox": [
+          0.6982026437908497,
+          0.0,
+          0.7599673496732027,
+          0.0
+        ],
+        "token_span": [
+          "36",
+          "119",
+          "139",
+          "72",
+          "140",
+          "127",
+          "93",
+          "51"
+        ]
+      },
+      "raw_text": "your of a of printed charge version $5.00"
     }
   },
   "line_items": [],
