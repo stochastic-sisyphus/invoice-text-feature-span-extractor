@@ -50,8 +50,8 @@ def create_training_features(candidates_df: pd.DataFrame) -> pd.DataFrame:
         text = str(candidate.get('text', ''))
         char_count = len(text)
         word_count = len(text.split())
-        digit_count = sum(bool(c.isdigit())
-        alpha_count = sum(bool(c.isalpha())
+        digit_count = sum(bool(c.isdigit()) for c in text)
+        alpha_count = sum(bool(c.isalpha()) for c in text)
         
         # Bucket features (one-hot)
         bucket = candidate.get('bucket', 'other')
@@ -145,7 +145,7 @@ def prepare_training_data() -> Tuple[Dict[str, pd.DataFrame], int, int]:
     return field_datasets, total_docs, total_rows
 
 
-def train_field_model(field_name: str, training_data: pd.DataFrame) -> Optional[Dict[str, Any]]:
+def train_field_model(field_name: str, training_data: pd.DataFrame) -> dict[str, Any] | None:
     """
     Train XGBoost model for a single field.
     
@@ -160,28 +160,28 @@ def train_field_model(field_name: str, training_data: pd.DataFrame) -> Optional[
         import xgboost as xgb
     except ImportError:
         raise ImportError("XGBoost not installed. Run: pip install xgboost>=2.0.0")
-    
+
     # Separate features and labels
-    feature_cols = [col for col in training_data.columns 
+    feature_cols = [col for col in training_data.columns
                    if col not in ['label', 'doc_id', 'sha256']]
-    
+
     X = training_data[feature_cols]
     y = training_data['label']
-    
+
     # Check for sufficient positive examples
     pos_count = int(y.sum())
     neg_count = int((y == 0).sum())
-    
+
     if pos_count < 2:
         print(f"Insufficient positive examples for {field_name}: {pos_count}")
         return None
-    
+
     print(f"Training {field_name}: {pos_count} positive, {neg_count} negative examples")
-    
+
     # Train model with fixed hyperparameters
     model = xgb.XGBClassifier(**XGBOOST_PARAMS)
     model.fit(X, y)
-    
+
     return {
         'model': model,
         'feature_names': feature_cols,
@@ -191,19 +191,19 @@ def train_field_model(field_name: str, training_data: pd.DataFrame) -> Optional[
     }
 
 
-def save_models(trained_models: Dict[str, Dict[str, Any]]) -> str:
+def save_models(trained_models: dict[str, dict[str, Any]]) -> str:
     """
     Save trained models with byte-stable persistence.
-    
+
     Args:
         trained_models: Dictionary of field -> model_info
-        
+
     Returns:
         Path to saved model file
     """
     models_dir = paths.get_repo_root() / "data" / "models"
     models_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Create model data for persistence
     model_data = {}
     manifest = {
@@ -213,7 +213,7 @@ def save_models(trained_models: Dict[str, Dict[str, Any]]) -> str:
         'hyperparameters': XGBOOST_PARAMS,
         'fields': {}
     }
-    
+
     try:
         import xgboost as xgb
         manifest['xgboost_version'] = xgb.__version__
@@ -376,12 +376,12 @@ def load_trained_models() -> Optional[Dict[str, Any]]:
             }
         
         print(f"Loaded {len(loaded_models)} trained models")
-        
+
         return {
             'models': loaded_models,
             'manifest': manifest
         }
-        
+
     except Exception as e:
         print(f"Failed to load models: {e}")
         return None

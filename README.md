@@ -11,19 +11,58 @@ Yes robust feature-based machine learning operating on pdfplumber-extracted text
 ## Quick Start
 
 ```bash
-# Install dependencies
+# Install package
 pip install -e .
 
-# Run complete pipeline
-python scripts/run_pipeline.py pipeline --seed-folder /path/to/seed_pdfs
+# Extract single PDF → JSON
+make run FILE=path/to/invoice.pdf
 
-# Or run individual steps
-python scripts/run_pipeline.py ingest --seed-folder /path/to/seed_pdfs
-python scripts/run_pipeline.py tokenize
-python scripts/run_pipeline.py candidates  
-python scripts/run_pipeline.py decode
-python scripts/run_pipeline.py emit
-python scripts/run_pipeline.py report
+# Or use CLI directly
+invoicex pipeline --seed-folder path/to/pdfs/
+# Alternative entry point:
+run-pipeline pipeline --seed-folder path/to/pdfs/
+
+# Run individual stages
+invoicex ingest --seed-folder path/to/pdfs/
+invoicex tokenize
+invoicex candidates  
+invoicex decode
+invoicex emit
+invoicex report
+
+# Check pipeline status
+invoicex status
+
+# View outputs
+ls artifacts/predictions/  # JSON outputs here
+```
+
+### Adding New Vendor Support
+
+The system is designed for seamless vendor integration:
+
+1. **No vendor-specific rules** - The feature-based ML approach learns patterns automatically
+2. **Add training data** - Use Label Studio integration to annotate new vendor formats  
+3. **Retrain models** - `invoicex train` updates XGBoost models with new patterns
+4. **Deterministic outputs** - Same PDF always produces identical JSON across runs
+
+### Debug Tips
+
+```bash
+# Test determinism
+make determinism-check
+
+# Run with verbose output
+invoicex pipeline --seed-folder pdfs/ --verbose
+
+# Check individual document processing
+invoicex status
+invoicex report --save
+
+# Inspect intermediate outputs
+ls data/tokens/      # Text extraction
+ls data/candidates/  # Proposed field spans  
+ls data/predictions/ # Final JSON outputs
 ```
 
 ## Running Tests

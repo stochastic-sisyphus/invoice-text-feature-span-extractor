@@ -73,8 +73,8 @@ def compute_ml_cost(field: str, candidate: Dict[str, Any], loaded_models: Dict[s
         text = str(candidate.get('text', ''))
         char_count = len(text)
         word_count = len(text.split())
-        digit_count = sum(bool(c.isdigit())
-        alpha_count = sum(bool(c.isalpha())
+        digit_count = sum(bool(c.isdigit()) for c in text)
+        alpha_count = sum(bool(c.isalpha()) for c in text)
         
         # Bucket features (one-hot)
         bucket = candidate.get('bucket', 'other')
@@ -282,7 +282,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     for field_idx, field in enumerate(schema_fields):
         # Find assignment for this field
         field_assignment = None
-        for i, (row_idx, col_idx) in enumerate(zip(row_indices, col_indices)):
+        for i, (row_idx, col_idx) in enumerate(zip(row_indices, col_indices, strict=False)):
             if row_idx == field_idx:
                 field_assignment = (col_idx, cost_matrix[row_idx, col_idx])
                 break
@@ -317,7 +317,7 @@ def decode_document(sha256: str, none_bias: float = DEFAULT_NONE_BIAS) -> Dict[s
     return assignments
 
 
-def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> Dict[str, Dict[str, Any]]:
+def decode_all_documents(none_bias: float = DEFAULT_NONE_BIAS) -> dict[str, dict[str, Any]]:
     """Decode all documents in the index."""
     indexed_docs = ingest.get_indexed_documents()
     

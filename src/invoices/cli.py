@@ -1,24 +1,22 @@
-#!/usr/bin/env python3
 """CLI entrypoint for the invoice extraction pipeline."""
 
 import json
 import os
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 from typing import Optional
 
 import typer
 
-# Add src to path to import invoices package
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
-from invoices import (
+from . import (
     paths, utils, ingest, tokenize, candidates, decoder,
     emit, report, labels, train
 )
 
 app = typer.Typer(
-    name="run-pipeline",
+    name="invoicex",
     help="Invoice extraction pipeline CLI",
     add_completion=False,
 )
@@ -32,19 +30,19 @@ def ingest_cmd(
     """Ingest PDFs from seed folder into content-addressed storage."""
     try:
         print(f"Starting ingestion from: {seed_folder}")
-        
+
         with utils.Timer("Ingestion"):
             newly_ingested = ingest.ingest_seed_folder(seed_folder)
-        
+
         if newly_ingested > 0:
             print(f"✓ Successfully ingested {newly_ingested} new documents")
         else:
             print("✓ No new documents to ingest (all already present)")
-        
+
         if verbose:
             docs = ingest.list_ingested_documents()
             print(f"Total documents in index: {len(docs)}")
-        
+
     except Exception as e:
         print(f"✗ Ingestion failed: {e}")
         raise typer.Exit(1) from e
@@ -57,14 +55,14 @@ def tokenize_cmd(
     """Tokenize all ingested documents."""
     try:
         print("Starting tokenization...")
-        
+
         with utils.Timer("Tokenization"):
             results = tokenize.tokenize_all()
-        
+
         if results:
             total_tokens = sum(results.values())
             print(f"✓ Tokenized {len(results)} documents, {total_tokens:,} total tokens")
-            
+
             if verbose:
                 for sha256, token_count in results.items():
                     print(f"  {sha256[:16]}: {token_count:,} tokens")
@@ -73,7 +71,7 @@ def tokenize_cmd(
 
     except Exception as e:
         print(f"✗ Tokenization failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="candidates")
@@ -83,23 +81,23 @@ def candidates_cmd(
     """Generate candidates for all documents."""
     try:
         print("Starting candidate generation...")
-        
+
         with utils.Timer("Candidate generation"):
             results = candidates.generate_all_candidates()
-        
+
         if results:
             total_candidates = sum(results.values())
             print(f"✓ Generated candidates for {len(results)} documents, {total_candidates:,} total candidates")
-            
+
             if verbose:
                 for sha256, candidate_count in results.items():
                     print(f"  {sha256[:16]}: {candidate_count} candidates")
         else:
             print("✓ No documents to process")
-        
+
     except Exception as e:
         print(f"✗ Candidate generation failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="decode")
@@ -110,13 +108,13 @@ def decode_cmd(
     """Decode all documents using Hungarian assignment."""
     try:
         print(f"Starting decoding with NONE bias {none_bias}...")
-        
+
         with utils.Timer("Decoding"):
             results = decoder.decode_all_documents(none_bias)
-        
+
         if results:
             print(f"✓ Decoded {len(results)} documents")
-            
+
             if verbose:
                 for sha256, assignments in results.items():
                     candidate_count = sum(1 for a in assignments.values() if a['assignment_type'] == 'CANDIDATE')
@@ -124,10 +122,10 @@ def decode_cmd(
                     print(f"  {sha256[:16]}: {candidate_count} predictions, {none_count} abstains")
         else:
             print("✓ No documents to decode")
-        
+
     except Exception as e:
         print(f"✗ Decoding failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="emit")
@@ -143,46 +141,43 @@ def emit_cmd(
         # Set version overrides if provided
         if model_version:
             os.environ['MODEL_ID'] = model_version
-        
-        # Note: Other version overrides would require modifying utils constants
-        # For now, only model_version is fully supported via environment
-        
+
         print("Starting emission (normalization + JSON + review queue)...")
-        
+
         with utils.Timer("Emission"):
             results = emit.emit_all_documents()
-        
+
         if results:
             docs_processed = results.get('documents_processed', 0)
             total_predicted = results.get('total_predicted', 0)
             total_abstain = results.get('total_abstain', 0)
             total_review_entries = results.get('total_review_entries', 0)
-            
+
             print(f"✓ Emitted predictions for {docs_processed} documents")
             print(f"  Predicted: {total_predicted}")
             print(f"  Abstain: {total_abstain}")
             print(f"  Review entries: {total_review_entries}")
-            
+
             # Log to version log
             try:
                 version_log_dir = paths.get_logs_dir()
                 version_log_path = version_log_dir / "version_log.jsonl"
-                
+
                 log_entry = {
                     'timestamp': utils.get_current_utc_iso(),
                     'document_count': docs_processed,
                     **utils.get_version_info()
                 }
-                
+
                 # Append to JSONL
                 with open(version_log_path, 'a', encoding='utf-8') as f:
                     f.write(json.dumps(log_entry) + '\n')
-                
+
                 if verbose:
                     print(f"Logged to: {version_log_path}")
             except Exception as log_error:
                 print(f"Warning: Failed to log versions: {log_error}")
-            
+
             if verbose:
                 for sha256, result in results.get('results', {}).items():
                     if 'error' in result:
@@ -192,10 +187,10 @@ def emit_cmd(
                         print(f"  {result['doc_id']}: {status_counts}")
         else:
             print("✓ No documents to emit")
-        
+
     except Exception as e:
         print(f"✗ Emission failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="report")
@@ -206,18 +201,18 @@ def report_cmd(
     """Generate pipeline report with statistics."""
     try:
         print("Generating pipeline report...")
-        
+
         report_data = report.generate_report()
-        
+
         if save:
-            report_path = report.save_report(report_data)
-            print(f"Report saved to: {report_path}")
-        
+            report.save_report(report_data)
+            print("Report saved to logs directory")
+
         print("✓ Report generation complete")
-        
+
     except Exception as e:
         print(f"✗ Report generation failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -232,65 +227,65 @@ def pipeline(
         print("="*80)
         print("INVOICE EXTRACTION PIPELINE - FULL RUN")
         print("="*80)
-        
+
         # Step 1: Ingest
         print("\n1. INGESTION")
         print("-" * 40)
         with utils.Timer("Total ingestion"):
-            newly_ingested = ingest.ingest_seed_folder(seed_folder)
-        
+            ingest.ingest_seed_folder(seed_folder)
+
         # Step 2: Tokenize
         print("\n2. TOKENIZATION")
         print("-" * 40)
         with utils.Timer("Total tokenization"):
             tokenize_results = tokenize.tokenize_all()
-        
+
         # Step 3: Generate candidates
         print("\n3. CANDIDATE GENERATION")
         print("-" * 40)
         with utils.Timer("Total candidate generation"):
             candidate_results = candidates.generate_all_candidates()
-        
+
         # Step 4: Decode
         print("\n4. DECODING")
         print("-" * 40)
         with utils.Timer("Total decoding"):
-            decode_results = decoder.decode_all_documents(none_bias)
-        
+            decoder.decode_all_documents(none_bias)
+
         # Step 5: Emit
         print("\n5. EMISSION")
         print("-" * 40)
         with utils.Timer("Total emission"):
             emit_results = emit.emit_all_documents()
-        
-        # Log version information (consistent with emit_cmd)
+
+        # Log version information
         try:
             version_log_dir = paths.get_logs_dir()
             version_log_path = version_log_dir / "version_log.jsonl"
-            
+
             log_entry = {
                 'timestamp': utils.get_current_utc_iso(),
                 'document_count': emit_results.get('documents_processed', 0),
                 **utils.get_version_info()
             }
-            
+
             # Append to JSONL
             with open(version_log_path, 'a', encoding='utf-8') as f:
                 f.write(json.dumps(log_entry) + '\n')
-            
+
             if verbose:
                 print(f"Version logged to: {version_log_path}")
         except Exception as log_error:
             print(f"Warning: Failed to log versions: {log_error}")
-        
+
         # Step 6: Report
         print("\n6. REPORTING")
         print("-" * 40)
         report_data = report.generate_report()
-        
-        # Always save report (was only saving if save_report=True)
-        report_path = report.save_report(report_data)
-        
+
+        # Always save report
+        report.save_report(report_data)
+
         print("\n" + "="*80)
         print("PIPELINE COMPLETE")
         print("="*80)
@@ -298,10 +293,10 @@ def pipeline(
         print(f"✓ Generated {sum(candidate_results.values())} total candidates")
         print(f"✓ Emitted {emit_results.get('documents_processed', 0)} prediction files")
         print(f"✓ Created {emit_results.get('total_review_entries', 0)} review queue entries")
-        
+
     except Exception as e:
         print(f"✗ Pipeline failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -310,11 +305,11 @@ def status() -> None:
     try:
         print("PIPELINE STATUS")
         print("="*50)
-        
+
         # Check ingested documents
         indexed_docs = ingest.get_indexed_documents()
         print(f"Ingested documents: {len(indexed_docs)}")
-        
+
         if not indexed_docs.empty:
             # Check tokenization status
             tokenized_count = 0
@@ -323,9 +318,9 @@ def status() -> None:
                 tokens_path = paths.get_tokens_path(sha256)
                 if tokens_path.exists():
                     tokenized_count += 1
-            
+
             print(f"Tokenized documents: {tokenized_count}")
-            
+
             # Check candidates status
             candidates_count = 0
             for _, doc_info in indexed_docs.iterrows():
@@ -333,9 +328,9 @@ def status() -> None:
                 candidates_path = paths.get_candidates_path(sha256)
                 if candidates_path.exists():
                     candidates_count += 1
-            
+
             print(f"Documents with candidates: {candidates_count}")
-            
+
             # Check predictions status
             predictions_count = 0
             for _, doc_info in indexed_docs.iterrows():
@@ -343,25 +338,18 @@ def status() -> None:
                 predictions_path = paths.get_predictions_path(sha256)
                 if predictions_path.exists():
                     predictions_count += 1
-            
+
             print(f"Documents with predictions: {predictions_count}")
-            
+
             # Check review queue
             review_queue = emit.get_review_queue()
             print(f"Review queue entries: {len(review_queue)}")
-        
+
         print("✓ Status check complete")
-        
+
     except Exception as e:
         print(f"✗ Status check failed: {e}")
-        raise typer.Exit(1)
-
-
-@app.command(name="labels")
-def labels_cmd() -> None:
-    """Labels management commands."""
-    print("Use subcommands: pull, import, align")
-    raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="labels-pull")
@@ -369,9 +357,9 @@ def labels_pull_cmd() -> None:
     """Pull labels from Label Studio API."""
     try:
         print("Pulling labels from Label Studio...")
-        
+
         result = labels.pull_labels()
-        
+
         if result['status'] == 'success':
             print(f"✓ Pulled {result['task_count']} tasks")
             print(f"Raw labels saved to: {result['raw_file']}")
@@ -380,10 +368,10 @@ def labels_pull_cmd() -> None:
         else:
             print(f"✗ Pull failed: {result.get('error', 'unknown error')}")
             raise typer.Exit(1)
-        
+
     except Exception as e:
         print(f"✗ Labels pull failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="labels-import")
@@ -393,19 +381,19 @@ def labels_import_cmd(
     """Import labels from local Label Studio export."""
     try:
         print(f"Importing labels from: {path}")
-        
+
         result = labels.import_labels(path)
-        
+
         if result['status'] == 'success':
             print(f"✓ Imported {result['task_count']} tasks")
             print(f"Saved to: {result['raw_file']}")
         else:
             print("✗ Import failed")
             raise typer.Exit(1)
-        
+
     except Exception as e:
         print(f"✗ Labels import failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="labels-align")
@@ -416,14 +404,14 @@ def labels_align_cmd(
     """Align labels with candidates using IoU matching."""
     try:
         print("Aligning labels with candidates...")
-        
+
         result = labels.align_labels(iou_threshold=iou_threshold, all_files=all_files)
-        
+
         if result['status'] == 'success':
             print(f"✓ Aligned {result['total_aligned']} labels")
             print(f"IoU threshold: {result['iou_threshold']}")
             print(f"Files processed: {result['files_processed']}")
-            
+
             for alignment in result['alignment_results']:
                 print(f"  {alignment['source_file']} -> {alignment['aligned_file']} ({alignment['aligned_count']} aligned)")
         elif result['status'] == 'no_labels':
@@ -433,10 +421,10 @@ def labels_align_cmd(
         else:
             print("✗ Alignment failed")
             raise typer.Exit(1)
-        
+
     except Exception as e:
         print(f"✗ Labels alignment failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="train")
@@ -444,15 +432,15 @@ def train_cmd() -> None:
     """Train XGBoost models on aligned labels."""
     try:
         print("Starting XGBoost training...")
-        
+
         result = train.train_models()
-        
+
         if result['status'] == 'success':
-            print(f"✓ Training complete")
+            print("✓ Training complete")
             print(f"Models trained: {result['models_trained']}")
             print(f"Total examples: {result['total_pos']} positive, {result['total_neg']} negative")
             print(f"Model file: {result['model_file']}")
-            
+
             for field, stats in result['training_stats'].items():
                 if 'status' in stats:
                     print(f"  {field}: {stats['status']}")
@@ -463,10 +451,10 @@ def train_cmd() -> None:
         else:
             print("✗ Training failed")
             raise typer.Exit(1)
-        
+
     except Exception as e:
         print(f"✗ Training failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -476,106 +464,102 @@ def run(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output")
 ) -> None:
     """Extract data from a single PDF file → JSON output."""
-    import shutil
-    import tempfile
-    
     pdf_file = Path(pdf_path)
-    
+
     if not pdf_file.exists():
         print(f"✗ PDF file not found: {pdf_path}")
         raise typer.Exit(1)
-    
+
     if not pdf_file.suffix.lower() == '.pdf':
         print(f"✗ File must be a PDF: {pdf_path}")
         raise typer.Exit(1)
-    
+
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
     try:
         print(f"Processing: {pdf_file.name}")
-        
+
         # Create temporary directory for single file processing
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
-            
+
             # Copy PDF to temp directory
             temp_pdf = temp_path / pdf_file.name
             shutil.copy2(pdf_file, temp_pdf)
-            
+
             # Run pipeline on temp directory
             print("Running extraction pipeline...")
-            
+
             with utils.Timer("Total extraction"):
                 # Ingest
                 newly_ingested = ingest.ingest_seed_folder(str(temp_path))
                 if verbose:
                     print(f"  Ingested: {newly_ingested} documents")
-                
+
                 # Process
                 tokenize_results = tokenize.tokenize_all()
                 if verbose:
                     tokens = sum(tokenize_results.values()) if tokenize_results else 0
                     print(f"  Tokenized: {tokens:,} tokens")
-                
+
                 candidate_results = candidates.generate_all_candidates()
                 if verbose:
                     candidates_count = sum(candidate_results.values()) if candidate_results else 0
                     print(f"  Generated: {candidates_count} candidates")
-                
+
                 decode_results = decoder.decode_all_documents()
                 if verbose:
-                    predictions = sum(1 for doc_assignments in decode_results.values() 
-                                    for assignment in doc_assignments.values() 
+                    predictions = sum(1 for doc_assignments in decode_results.values()
+                                    for assignment in doc_assignments.values()
                                     if assignment['assignment_type'] == 'CANDIDATE')
                     print(f"  Decoded: {predictions} predictions")
-                
-                emit_results = emit.emit_all_documents()
-        
+
+                emit.emit_all_documents()
+
         # Find and copy the output JSON
         indexed_docs = ingest.get_indexed_documents()
         if indexed_docs.empty:
             print("✗ No documents were processed")
             raise typer.Exit(1)
-        
+
         # There should be exactly one document
         for _, doc_info in indexed_docs.iterrows():
             sha256 = doc_info['sha256']
-            doc_id = doc_info['doc_id']
             predictions_path = paths.get_predictions_path(sha256)
-            
+
             if predictions_path.exists():
                 # Copy to output directory with clean name
                 output_file = output_path / f"{pdf_file.stem}.json"
                 shutil.copy2(predictions_path, output_file)
-                
-                print(f"✓ Extraction complete")
+
+                print("✓ Extraction complete")
                 print(f"Output: {output_file}")
-                
+
                 if verbose:
                     # Show summary stats
                     with open(output_file, 'r', encoding='utf-8') as f:
                         result = json.load(f)
-                    
+
                     fields = result.get('fields', {})
                     predicted = sum(1 for field_data in fields.values() if field_data['status'] == 'PREDICTED')
                     abstain = sum(1 for field_data in fields.values() if field_data['status'] == 'ABSTAIN')
                     missing = sum(1 for field_data in fields.values() if field_data['status'] == 'MISSING')
-                    
+
                     print(f"  Fields: {predicted} predicted, {abstain} abstain, {missing} missing")
                     print(f"  Pages: {result.get('pages', 0)}")
-                
+
                 return
-        
+
         print("✗ No prediction output generated")
         raise typer.Exit(1)
-        
+
     except Exception as e:
         print(f"✗ Extraction failed: {e}")
         if verbose:
             import traceback
             traceback.print_exc()
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 def main() -> None:

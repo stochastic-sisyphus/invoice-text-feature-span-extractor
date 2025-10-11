@@ -1,7 +1,7 @@
 """Normalization module for cleaning predicted field values."""
 
 from decimal import Decimal, InvalidOperation
-from typing import Optional, Tuple, Dict, Any
+from typing import Any, Dict, Optional, Tuple
 
 from dateutil import parser as date_parser
 
@@ -31,7 +31,7 @@ def normalize_date(raw_text: str) -> Tuple[Optional[str], str]:
         
         return iso_date, clean_text
         
-    except (ValueError, TypeError, date_parser.ParserError) as e:
+    except (ValueError, TypeError, date_parser.ParserError):
         # If parsing fails, return None but keep original text
         return None, clean_text
 
@@ -39,10 +39,10 @@ def normalize_date(raw_text: str) -> Tuple[Optional[str], str]:
 def normalize_amount(raw_text: str) -> Tuple[Optional[str], Optional[str], str]:
     """
     Normalize amount text to decimal with currency code.
-    
+
     Args:
         raw_text: Original amount text from PDF
-        
+
     Returns:
         Tuple of (normalized_value, currency_code, original_raw_text)
         normalized_value is None if parsing fails
@@ -160,32 +160,32 @@ def normalize_id(raw_text: str) -> Tuple[Optional[str], str]:
 def normalize_text(raw_text: str) -> Tuple[Optional[str], str]:
     """
     Normalize general text fields (carrier name, document type, etc.).
-    
+
     Args:
         raw_text: Original text from PDF
-        
+
     Returns:
         Tuple of (normalized_value, original_raw_text)
     """
     if not raw_text or not raw_text.strip():
         return None, raw_text
-    
+
     clean_text = raw_text.strip()
-    
+
     # Basic normalization - remove extra whitespace
     normalized = ' '.join(clean_text.split())
-    
+
     return normalized, clean_text
 
 
 def normalize_field_value(field: str, raw_text: str) -> Dict[str, Any]:
     """
     Normalize a field value using pattern-based inference, not field name rules.
-    
+
     Args:
         field: Field name from schema
         raw_text: Raw text value to normalize
-        
+
     Returns:
         Dictionary with normalized value, currency_code (if applicable), and raw_text
     """
@@ -243,9 +243,8 @@ def _looks_like_date(text: str) -> bool:
         return False
     
     # Count digits, separators, and letters
-    digits = sum(bool(c.isdigit())
-    separators = sum(bool(c in '/-.')
-    letters = sum(bool(c.isalpha())
+    digits = sum(bool(c.isdigit()) for c in text)
+    separators = sum(bool(c in '/-.' ) for c in text)
     
     # Date-like if mostly digits with separators
     if digits >= 4 and separators >= 1:
@@ -272,7 +271,7 @@ def _looks_like_amount(text: str) -> bool:
     has_currency = any(symbol in text for symbol in currency_symbols)
     
     # Numeric patterns
-    digits = sum(bool(c.isdigit())
+    digits = sum(bool(c.isdigit()) for c in text)
     decimals = text.count('.')
     commas = text.count(',')
     
