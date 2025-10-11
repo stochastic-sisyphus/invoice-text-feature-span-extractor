@@ -1,9 +1,13 @@
 """Normalization module for cleaning predicted field values."""
 
 from decimal import Decimal, InvalidOperation
+from hashlib import sha256
 from typing import Any
 
 from dateutil import parser as date_parser
+
+# Normalization version for guard against drift
+NORMALIZE_VERSION = "1.0.0+text_layer"
 
 
 def normalize_date(raw_text: str) -> tuple[str | None, str]:
@@ -176,6 +180,11 @@ def normalize_text(raw_text: str) -> tuple[str | None, str]:
     normalized = " ".join(clean_text.split())
 
     return normalized, clean_text
+
+
+def text_len_checksum(text: str) -> str:
+    """Compute deterministic checksum of text length for normalization guard."""
+    return sha256(f"{len(text)}:{text[:100]}".encode()).hexdigest()[:16]
 
 
 def normalize_field_value(field: str, raw_text: str) -> dict[str, Any]:

@@ -1,0 +1,49 @@
+<View>
+  <Text name="text" value="$text" granularity="word" showLabels="true"/>
+  <Labels name="label" toName="text">
+    <!-- Invoice Header Fields -->
+    <Label value="InvoiceNumber" background="red"/>
+    <Label value="InvoiceDate" background="blue"/>
+    <Label value="DueDate" background="green"/>
+    <Label value="IssueDate" background="purple"/>
+    <Label value="TotalAmount" background="orange"/>
+    <Label value="Subtotal" background="pink"/>
+    <Label value="TaxAmount" background="brown"/>
+    <Label value="Discount" background="gray"/>
+    <Label value="Currency" background="cyan"/>
+    
+    <!-- Address Fields -->
+    <Label value="RemittanceAddress" background="yellow"/>
+    <Label value="BillToAddress" background="lime"/>
+    <Label value="ShipToAddress" background="teal"/>
+    
+    <!-- Entity Fields -->
+    <Label value="VendorName" background="indigo"/>
+    <Label value="VendorAddress" background="violet"/>
+    <Label value="CustomerName" background="maroon"/>
+    <Label value="CustomerAccount" background="navy"/>
+    
+    <!-- Reference Fields -->
+    <Label value="PurchaseOrder" background="olive"/>
+    <Label value="InvoiceReference" background="silver"/>
+    <Label value="PaymentTerms" background="gold"/>
+    
+    <!-- Banking Fields -->
+    <Label value="BankAccount" background="coral"/>
+    <Label value="RoutingNumber" background="salmon"/>
+    <Label value="SWIFTCode" background="khaki"/>
+    
+    <!-- Additional Fields -->
+    <Label value="Notes" background="lightblue"/>
+    <Label value="TaxID" background="lightgreen"/>
+    <Label value="ContactName" background="lightyellow"/>
+    <Label value="ContactEmail" background="lightpink"/>
+    <Label value="ContactPhone" background="lightgray"/>
+    
+    <!-- Line Item Fields -->
+    <Label value="LineItemDescription" background="darkred"/>
+    <Label value="LineItemQuantity" background="darkblue"/>
+    <Label value="LineItemUnitPrice" background="darkgreen"/>
+    <Label value="LineItemTotal" background="darkorange"/>
+  </Labels>
+</View>

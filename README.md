@@ -124,9 +124,33 @@ The pipeline is designed for seamless integration with external systems:
 
 **Tomorrow's Connectors**: The `doc_id` field supports multiple source prefixes (`fs:`, `dv:`, `sp:`, `ls:`) while `sha256` remains the stable content key. New connectors (Dynamics/SharePoint/Label Studio) can be added without changing downstream stages.
 
-**Model Evolution**: The `unscored-baseline` decoder will be replaced with trained LightGBM/XGBoost models using the same `features_v1`. Calibration and confidence thresholds can be updated via `calibration_version` without breaking contract compatibility.
+**Model Evolution**: The `unscored-baseline` decoder will be replaced with trained XGBoost models using the same `features_v1`. Calibration and confidence thresholds can be updated via `calibration_version` without breaking contract compatibility.
 
 **Review Integration**: Human corrections flow back through the review queue (`data/review/queue.parquet`) with full bbox provenance, enabling continuous model improvement and Label Studio integration.
+
+## Label Studio Integration
+
+Complete annotation workflow for training custom models:
+
+```bash
+# 1. Generate tasks with normalization guards
+cd tools/labelstudio
+python tasks_gen.py --seed-folder ../../seed_pdfs --output ./output
+
+# 2. Upload tasks.json to Label Studio and annotate
+# 3. Export annotations and import
+invoicex labels-import --in path/to/export.json
+
+# 4. Align labels with candidates using IoU
+invoicex labels-align --all --iou 0.3
+
+# 5. Train XGBoost models on aligned data
+invoicex train
+```
+
+**Normalization Guards**: Each task includes `normalize_version` and `text_checksum` to prevent drift between annotation and pipeline versions. Alignment validates text consistency before processing.
+
+**Field Mapping**: Label Studio labels map directly to contract fields (e.g., `InvoiceNumber` → `invoice_number`, `TotalAmount` → `total_amount`). Line items are spatially grouped when unambiguous.
 
 ## Pipeline Stages
 

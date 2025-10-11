@@ -233,124 +233,153 @@ def align_labels(iou_threshold: float = 0.3, all_files: bool = False) -> dict[st
 
             # Process annotations
             annotations = task.get("annotations", [])
-
+            
             for annotation in annotations:
                 results = annotation.get("result", [])
-
+                
                 for result in results:
                     # Extract label info
-                    label_field = result.get("from_name")
-                    label_value = result.get("value", {}).get("text", [""])[0]
-
-                    if not label_field or not label_value:
+                    value = result.get("value", {})
+                    field_name = value.get("labels", [None])[0]
+                    
+                    if not field_name:
                         continue
-
-                    # Extract bounding box (normalized)
-                    bbox_info = result.get("value", {})
-                    if "x" not in bbox_info or "y" not in bbox_info:
+                    
+                    # Extract span coordinates (character-based)
+                    char_start = value.get("start")
+                    char_end = value.get("end")
+                    labeled_text = value.get("text", "")
+                    
+                    if char_start is None or char_end is None:
                         continue
-
-                    # Convert percentage to normalized coordinates
-                    x_norm = bbox_info["x"] / 100.0
-                    y_norm = bbox_info["y"] / 100.0
-                    w_norm = bbox_info.get("width", 0) / 100.0
-                    h_norm = bbox_info.get("height", 0) / 100.0
-
-                    label_bbox = [x_norm, y_norm, x_norm + w_norm, y_norm + h_norm]
-
-                    # Find best matching candidate
-                    best_iou = 0.0
+                    
+                    # Find best matching candidate using IoU on character ranges
                     best_candidate_idx = None
-
-                    for idx, candidate in candidates_df.iterrows():
-                        candidate_bbox = [
-                            candidate["bbox_norm_x0"],
-                            candidate["bbox_norm_y0"],
-                            candidate["bbox_norm_x1"],
-                            candidate["bbox_norm_y1"],
-                        ]
-
-                        iou = compute_iou(label_bbox, candidate_bbox)
-
+                    best_iou = 0.0
+                    
+                    for cand_idx, candidate_row in candidates_df.iterrows():
+                        # Get candidate character range from candidates
+                        cand_start = candidate_row.get("char_start")
+                        cand_end = candidate_row.get("char_end")
+                        
+                        if cand_start is None or cand_end is None:
+                            continue
+                        
+                        # Compute character-level IoU
+                        iou = char_iou(char_start, char_end, cand_start, cand_end)
+                        
                         if iou > best_iou and iou >= iou_threshold:
                             best_iou = iou
-                            best_candidate_idx = idx
-
-                    # Create aligned row if match found
-                    if best_candidate_idx is not None:
-                        aligned_rows.append(
-                            {
-                                "doc_id": doc_id,
-                                "sha256": sha256,
-                                "field": label_field,
-                                "label_value": label_value,
-                                "candidate_idx": best_candidate_idx,
-                                "iou": best_iou,
-                                "label_bbox_x0": label_bbox[0],
-                                "label_bbox_y0": label_bbox[1],
-                                "label_bbox_x1": label_bbox[2],
-                                "label_bbox_y1": label_bbox[3],
-                            }
-                        )
-
-        # Save aligned data if any
+                            best_candidate_idx = cand_idx
+                    
+                    # Create alignment row
+                    alignment_row = {
+                        "sha256": sha256,
+                        "doc_id": doc_id,
+                        "field": field_name,
+                        "labeled_text": labeled_text,
+                        "char_start": char_start,
+                        "char_end": char_end,
+                        "candidate_idx": best_candidate_idx,
+                        "alignment_iou": best_iou if best_candidate_idx is not None else 0.0,
+                        "is_aligned": best_candidate_idx is not None
+                    }
+                    
+                    aligned_rows.append(alignment_row)
+        
+        # Save aligned results for this file
         if aligned_rows:
             aligned_df = pd.DataFrame(aligned_rows)
-            timestamp = utils.get_current_utc_iso().replace(":", "-").replace(".", "-")
-            aligned_file = (
-                aligned_dir / f"aligned_{label_file.stem}_{timestamp}.parquet"
-            )
+            aligned_file = aligned_dir / f"aligned_{label_file.stem}.parquet"
             aligned_df.to_parquet(aligned_file, index=False)
-
-            file_aligned_count = len(aligned_rows)
+            
+            file_aligned_count = len(aligned_df)
             total_aligned += file_aligned_count
-
-            print(f"Aligned {file_aligned_count} labels from {label_file.name}")
-            print(f"Saved to: {aligned_file}")
-
-            alignment_results.append(
-                {
-                    "source_file": label_file.name,
-                    "aligned_file": aligned_file.name,
-                    "aligned_count": file_aligned_count,
-                }
-            )
-
+            
+            alignment_results.append({
+                "source_file": label_file.name,
+                "aligned_file": aligned_file.name,
+                "aligned_count": file_aligned_count
+            })
+            
+            print(f"Saved {file_aligned_count} alignments to: {aligned_file.name}")
+    
     return {
         "status": "success",
         "total_aligned": total_aligned,
         "iou_threshold": iou_threshold,
-        "files_processed": len(label_files),
-        "alignment_results": alignment_results,
+        "files_processed": len(alignment_results),
+        "alignment_results": alignment_results
     }
 
 
-def get_aligned_label_files() -> list[Path]:
-    """Get list of all aligned label files."""
-    aligned_dir = paths.get_repo_root() / "data" / "labels" / "aligned"
-
-    if not aligned_dir.exists():
-        return []
-
-    return list(aligned_dir.glob("*.parquet"))
+def char_iou(a_start: int, a_end: int, b_start: int, b_end: int) -> float:
+    """
+    Compute Intersection over Union for character ranges.
+    
+    Args:
+        a_start, a_end: First character range
+        b_start, b_end: Second character range
+        
+    Returns:
+        IoU score between 0.0 and 1.0
+    """
+    if a_start >= a_end or b_start >= b_end:
+        return 0.0
+    
+    # Calculate intersection
+    intersection_start = max(a_start, b_start)
+    intersection_end = min(a_end, b_end)
+    
+    if intersection_start >= intersection_end:
+        return 0.0
+    
+    intersection_length = intersection_end - intersection_start
+    
+    # Calculate union
+    union_length = (a_end - a_start) + (b_end - b_start) - intersection_length
+    
+    if union_length == 0:
+        return 0.0
+    
+    return intersection_length / union_length
 
 
 def load_aligned_labels() -> pd.DataFrame:
-    """Load all aligned labels into a single DataFrame."""
-    aligned_files = get_aligned_label_files()
-
-    if not aligned_files:
+    """
+    Load all aligned labels from the aligned directory.
+    
+    Returns:
+        Combined DataFrame with all aligned labels
+    """
+    aligned_dir = paths.get_repo_root() / "data" / "labels" / "aligned"
+    
+    if not aligned_dir.exists():
+        print("No aligned labels directory found")
         return pd.DataFrame()
-
+    
+    parquet_files = list(aligned_dir.glob("*.parquet"))
+    
+    if not parquet_files:
+        print("No aligned label files found")
+        return pd.DataFrame()
+    
+    # Load and combine all aligned files
     dfs = []
-    for file_path in aligned_files:
+    for parquet_file in parquet_files:
         try:
-            df = pd.read_parquet(file_path)
+            df = pd.read_parquet(parquet_file)
+            # Only include successfully aligned labels
+            df = df[df["is_aligned"] == True].copy()
             dfs.append(df)
         except Exception as e:
-            print(f"Warning: Could not load {file_path}: {e}")
-
+            print(f"Warning: Could not load {parquet_file.name}: {e}")
+            continue
+    
     if not dfs:
         return pd.DataFrame()
-
-    return pd.concat(dfs, ignore_index=True)
+    
+    combined_df = pd.concat(dfs, ignore_index=True)
+    print(f"Loaded {len(combined_df)} aligned labels from {len(dfs)} files")
+    
+    return combined_df
