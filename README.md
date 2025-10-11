@@ -1,5 +1,8 @@
 # Text-Layer Feature-Based Span Extractor for Invoices
 
+> NOTE! this repo is said pipeline in question - but you will never see it as a grown up! I am keeping it a secret (for #internal reasons (among others) (this grew up to pay to save my cats life when he got FIP and was in ICU and had cerebellar herniation same day, and I materialized both life saving treatment that is not accessible and procured funds for them to actually treat him whilst I drove 5 hr to obtain said cure) (aka ya I committed to 2 hefty invoices in one day) (my cat is cured now tho! 90 days of GS treatment later!) (carry on))
+> ergo: public code = frozen at a pre-training state
+
 A deterministic, end-to-end pipeline for extracting structured information utilizing the benefits of PDFs with native-text layer. 
 To create a robust + maintainable system able to extract and process PDF invoices using only the native text layer. 
 If I didn't repeat it enough (actually its all ive said til this point); NO BRITTLE FRAGILE CRYBABY RULES NO DUMB OCR 
