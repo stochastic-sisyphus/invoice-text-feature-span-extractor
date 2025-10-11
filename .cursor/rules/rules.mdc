@@ -1,8 +1,0 @@
----
-description:
-globs:
-alwaysApply: true
----
-
-no OCR no vision (pdfs hve native text layer)
-no rules no regex no heuristics whatsoever. no brittle fragile rules or placehollder logic ever.
