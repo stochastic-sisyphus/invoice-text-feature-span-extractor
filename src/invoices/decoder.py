@@ -71,7 +71,7 @@ def compute_ml_cost(
         area = width * height
 
         # Text features
-        text = str(candidate.get("text", ""))
+        text = str(candidate.get("raw_text", ""))
         char_count = len(text)
         word_count = len(text.split())
         digit_count = sum(bool(c.isdigit()) for c in text)
@@ -188,18 +188,50 @@ def compute_weak_prior_cost(field: str, candidate: dict[str, Any]) -> float:
     # Feature-based cost using ML-extracted features
     base_cost = 1.0
 
-    # Use bucket affinity (learned from text patterns)
+    # Field-aware bucket affinity
     bucket_bonus = 0.0
-    if bucket == "amount_like":
-        bucket_bonus = 0.4
-    elif bucket == "date_like":
-        bucket_bonus = 0.3
-    elif bucket == "id_like":
-        bucket_bonus = 0.3
-    elif bucket == "keyword_proximal":
-        bucket_bonus = 0.2
+    
+    # Amount fields prefer amount_like candidates
+    if field.lower() in ["totalamount", "total_amount", "subtotal", "tax_amount", "discount"]:
+        if bucket == "amount_like":
+            bucket_bonus = 0.6
+        elif bucket == "date_like":
+            bucket_bonus = -0.2
+        elif bucket == "id_like":
+            bucket_bonus = -0.1
+    
+    # Date fields prefer date_like candidates  
+    elif field.lower() in ["invoicedate", "invoice_date", "due_date", "duedate", "issue_date", "issuedate"]:
+        if bucket == "date_like":
+            bucket_bonus = 0.6
+        elif bucket == "amount_like":
+            bucket_bonus = -0.2
+        elif bucket == "id_like":
+            bucket_bonus = -0.1
+    
+    # ID fields prefer id_like candidates
+    elif field.lower() in ["invoicenumber", "invoice_number", "account_number", "customer_account", "purchase_order"]:
+        if bucket == "id_like":
+            bucket_bonus = 0.6
+        elif bucket == "amount_like":
+            bucket_bonus = -0.2
+        elif bucket == "date_like":
+            bucket_bonus = -0.2
+    
+    # General bucket bonuses (weaker)
+    else:
+        if bucket == "amount_like":
+            bucket_bonus = 0.3
+        elif bucket == "date_like":
+            bucket_bonus = 0.3
+        elif bucket == "id_like":
+            bucket_bonus = 0.3
+    
+    # Keyword proximity and random negative penalties apply to all
+    if bucket == "keyword_proximal":
+        bucket_bonus += 0.2
     elif bucket == "random_negative":
-        bucket_bonus = -0.3  # Penalty
+        bucket_bonus = -0.4  # Strong penalty
 
     # Combine ML features
     feature_cost = base_cost - (

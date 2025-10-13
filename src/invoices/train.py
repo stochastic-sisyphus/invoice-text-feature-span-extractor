@@ -46,7 +46,7 @@ def create_training_features(candidates_df: pd.DataFrame) -> pd.DataFrame:
         area = width * height
 
         # Text features
-        text = str(candidate.get("text", ""))
+        text = str(candidate.get("raw_text", ""))
         char_count = len(text)
         word_count = len(text.split())
         digit_count = sum(bool(c.isdigit()) for c in text)
