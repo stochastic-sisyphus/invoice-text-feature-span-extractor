@@ -1,8 +1,0 @@
----
-description:
-globs:
-alwaysApply: true
----
-**[Code generation must adhere strictly to specified guidelines without deviation]**
-
-All code produced must be accurate, constrained, and structurally appropriate. Existing files should be used unless a new filename is provided. Modifications must be made in-place without creating redundant variants. Filenames should not be fabricated, and markdown files for tracking changes are prohibited. Code must be clean and direct, avoiding placeholders, stubs, or speculative scaffolding. Abstraction or modularization is only permitted when essential. Overengineering is to be avoided. Clarification is required for any ambiguous requests, with a default stance of not guessing. The focus is on precision, alignment, and producing usable output.

@@ -205,3 +205,67 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json  
+
+# ruff
+.ruff_cache/
+
+# pyright
+.pyrightconfig.json
+
+# pytype
+.pytype/
+
+# pycache
+__pycache__/
+
+# pyright
+.pyrightconfig.json
+
+# pytype
+.pytype/
+
+# pycache
+__pycache__/
+
+# pyright
+.pyrightconfig.json
+
+# pytype
+.pytype/
+
+# pycache
+__pycache__/
+
+# pyright
+.pyrightconfig.json
+
+# vscode
+.vscode/
+.vscodeignore           
+# Cursor
+.cursorignore
+.cursorindexingignore
+.cursor/*
+.cursor/rules/*
+.cursor/rules/
+.cursor/rules/always-follow-rule.mdc
+.cursor/rules/rules.mdc
+.cursor/rules/agent-regulations.mdc
+.cursor/rules/agent-regulations.mdc
+
+seed_pdfs/*.pdf
+
+data/ingest/raw/*.pdf
+data/ingest/index.parquet
+data/tokens/*.parquet
+data/candidates/*.parquet
+data/predictions/*.json
+data/review/queue.parquet
+data/logs/*.json
+data/models/*.json
+data/models/*.pkl

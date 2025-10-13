@@ -1,5 +1,8 @@
 # Text-Layer Feature-Based Span Extractor for Invoices
 
+> NOTE! this repo is said pipeline in question - but you will never see it as a grown up! I am keeping it a secret (for #internal reasons (among others) (this grew up to pay to save my cats life when he got FIP and was in ICU and had cerebellar herniation same day, and I materialized both life saving treatment that is not accessible and procured funds for them to actually treat him whilst I drove 5 hr to obtain said cure) (aka ya I committed to 2 hefty invoices in one day) (my cat is cured now tho! 90 days of GS treatment later!) (carry on))
+> ergo: public code = frozen at a pre-training state
+
 A deterministic, end-to-end pipeline for extracting structured information utilizing the benefits of PDFs with native-text layer. 
 To create a robust + maintainable system able to extract and process PDF invoices using only the native text layer. 
 If I didn't repeat it enough (actually its all ive said til this point); NO BRITTLE FRAGILE CRYBABY RULES NO DUMB OCR 
@@ -11,23 +14,64 @@ Yes robust feature-based machine learning operating on pdfplumber-extracted text
 ## Quick Start
 
 ```bash
-# Install dependencies
+# Install package
 pip install -e .
 
-# Run complete pipeline (uses contract_v2 by default)
-python scripts/run_pipeline.py pipeline --seed-folder /path/to/seed_pdfs
+# Extract single PDF → JSON
+make run FILE=path/to/invoice.pdf
 
-# Or run individual steps
-python scripts/run_pipeline.py ingest --seed-folder /path/to/seed_pdfs
-python scripts/run_pipeline.py tokenize
-python scripts/run_pipeline.py candidates  
-python scripts/run_pipeline.py decode  # Uses v2 by default
-python scripts/run_pipeline.py emit    # Uses v2 by default
-python scripts/run_pipeline.py report
+# Or use CLI directly
+invoicex pipeline --seed-folder path/to/pdfs/
+# Alternative entry point:
+run-pipeline pipeline --seed-folder path/to/pdfs/
 
-# Use legacy v1 contract explicitly
-python scripts/run_pipeline.py decode --contract-version v1
-python scripts/run_pipeline.py emit --contract-version v1
+# Run individual stages
+invoicex ingest --seed-folder path/to/pdfs/
+invoicex tokenize
+invoicex candidates  
+invoicex decode
+invoicex emit
+invoicex report
+
+# Check pipeline status
+invoicex status
+
+# View outputs
+ls artifacts/predictions/  # JSON outputs here
+```
+
+### Adding New Vendor Support
+
+The system is designed for seamless vendor integration:
+
+1. **No vendor-specific rules** - The feature-based ML approach learns patterns automatically
+2. **Add training data** - Use [Doccano](https://doccano.github.io/doccano/) integration to annotate new vendor formats  
+3. **Retrain models** - `invoicex train` updates XGBoost models with new patterns
+4. **Deterministic outputs** - Same PDF always produces identical JSON across runs
+
+### Debug Tips
+
+```bash
+# Test determinism
+make determinism-check
+
+# Run with verbose output
+invoicex pipeline --seed-folder pdfs/ --verbose
+
+# Check individual document processing
+invoicex status
+invoicex report --save
+
+# Doccano annotation workflow
+invoicex doccano-pull     # Pull from Doccano API
+invoicex doccano-import --in export.json  # Import local export
+invoicex doccano-align --all  # Align with candidates
+invoicex train            # Train models on aligned data
+
+# Inspect intermediate outputs
+ls data/tokens/      # Text extraction
+ls data/candidates/  # Proposed field spans  
+ls data/predictions/ # Final JSON outputs
 ```
 
 ## Running Tests
@@ -70,7 +114,7 @@ data/
 
 **Candidates**: Proposed field spans (≤200 per document) with `features_v1` including text analysis, geometric properties, style characteristics, and contextual information
 
-**Predictions**: Contract JSON with expanded field vocabulary (27 fields in v2 including `invoice_number`, `invoice_date`, `due_date`, `total_amount`, `vendor_name`, `customer_account`, etc.; 10 fields in legacy v1) containing `value`, `confidence`, `status` ∈ {PREDICTED, ABSTAIN, MISSING}, and full `provenance` (page, bbox, token_span)
+**Predictions**: Contract JSON with all header fields (`invoice_number`, `invoice_date`, `due_date`, `total_amount_due`, etc.) containing `value`, `confidence`, `status` ∈ {PREDICTED, ABSTAIN, MISSING}, and full `provenance` (page, bbox, token_span)
 
 ## Determinism & Idempotency
 
@@ -78,17 +122,45 @@ data/
 
 **Idempotency**: Re-running any pipeline stage skips already-processed work. Ingestion deduplicates by SHA256. Tokenization, candidate generation, and emission check for existing outputs before processing.
 
-**Version Stamping**: All outputs carry version stamps (`contract_version=v2` by default, `feature_version=v1`, `decoder_version=v1`, `model_version=unscored-baseline`, `calibration_version=none`) for reproducibility and change tracking. Legacy `contract_version=v1` available via `--contract-version v1` flag.
+**Version Stamping**: All outputs carry version stamps (`contract_version=v1`, `feature_version=v1`, `decoder_version=v1`, `model_version=unscored-baseline`, `calibration_version=none`) for reproducibility and change tracking.
 
 ## Architecture & Extensibility
 
 The pipeline is designed for seamless integration with external systems:
 
-**Tomorrow's Connectors**: The `doc_id` field supports multiple source prefixes (`fs:`, `dv:`, `sp:`, `ls:`) while `sha256` remains the stable content key. New connectors (Dynamics/SharePoint/Label Studio) can be added without changing downstream stages.
+**Tomorrow's Connectors**: The `doc_id` field supports multiple source prefixes (`fs:`, `dv:`, `sp:`, `dc:`) while `sha256` remains the stable content key. New connectors (Dynamics/SharePoint/Doccano) can be added without changing downstream stages.
 
-**Model Evolution**: The `unscored-baseline` decoder will be replaced with trained LightGBM/XGBoost models using the same `features_v1`. Calibration and confidence thresholds can be updated via `calibration_version` without breaking contract compatibility.
+**Model Evolution**: The `unscored-baseline` decoder will be replaced with trained XGBoost models using the same `features_v1`. Calibration and confidence thresholds can be updated via `calibration_version` without breaking contract compatibility.
 
-**Review Integration**: Human corrections flow back through the review queue (`data/review/queue.parquet`) with full bbox provenance, enabling continuous model improvement and Label Studio integration.
+**Review Integration**: Human corrections flow back through the review queue (`data/review/queue.parquet`) with full bbox provenance, enabling continuous model improvement and Doccano integration.
+
+## Doccano Integration
+
+Complete annotation workflow for training custom models using [Doccano](https://doccano.github.io/doccano/):
+
+```bash
+# 1. Install and start Doccano
+pip install doccano
+doccano init && doccano createuser && doccano webserver
+
+# 2. Generate tasks with normalization guards  
+cd tools/doccano
+python tasks_gen.py --seed-folder ../../seed_pdfs --output ./output
+
+# 3. Import tasks.json to Doccano project and annotate
+# 4. Export annotations and import
+invoicex doccano-import --in path/to/export.json
+
+# 5. Align labels with candidates using IoU
+invoicex doccano-align --all --iou 0.3
+
+# 6. Train XGBoost models on aligned data
+invoicex train
+```
+
+**Normalization Guards**: Each task includes `normalize_version` and `text_checksum` to prevent drift between annotation and pipeline versions. Alignment validates text consistency before processing.
+
+**Field Mapping**: Doccano labels map directly to contract fields (e.g., `InvoiceNumber` → `invoice_number`, `TotalAmount` → `total_amount`). Line items are spatially grouped when unambiguous.
 
 ## Pipeline Stages
 

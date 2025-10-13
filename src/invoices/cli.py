@@ -1,17 +1,14 @@
-#!/usr/bin/env python3
 """CLI entrypoint for the invoice extraction pipeline."""
 
 import json
 import os
-import sys
+import shutil
+import tempfile
 from pathlib import Path
 
 import typer
 
-# Add src to path to import invoices package
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
-from invoices import (
+from . import (
     candidates,
     decoder,
     emit,
@@ -25,7 +22,7 @@ from invoices import (
 )
 
 app = typer.Typer(
-    name="run-pipeline",
+    name="invoicex",
     help="Invoice extraction pipeline CLI",
     add_completion=False,
 )
@@ -84,7 +81,7 @@ def tokenize_cmd(
 
     except Exception as e:
         print(f"✗ Tokenization failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="candidates")
@@ -112,7 +109,7 @@ def candidates_cmd(
 
     except Exception as e:
         print(f"✗ Candidate generation failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="decode")
@@ -152,7 +149,7 @@ def decode_cmd(
 
     except Exception as e:
         print(f"✗ Decoding failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="emit")
@@ -174,9 +171,6 @@ def emit_cmd(
         # Set version overrides if provided
         if model_version:
             os.environ["MODEL_ID"] = model_version
-
-        # Note: Other version overrides would require modifying utils constants
-        # For now, only model_version is fully supported via environment
 
         print("Starting emission (normalization + JSON + review queue)...")
 
@@ -215,7 +209,7 @@ def emit_cmd(
                 print(f"Warning: Failed to log versions: {log_error}")
 
             if verbose:
-                for sha256, result in results.get("results", {}).items():
+                for _sha256, result in results.get("results", {}).items():
                     if "error" in result:
                         print(f"  {result['doc_id']}: ERROR - {result['error']}")
                     else:
@@ -226,7 +220,7 @@ def emit_cmd(
 
     except Exception as e:
         print(f"✗ Emission failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="report")
@@ -241,14 +235,14 @@ def report_cmd(
         report_data = report.generate_report()
 
         if save:
-            report_path = report.save_report(report_data)
-            print(f"Report saved to: {report_path}")
+            report.save_report(report_data)
+            print("Report saved to logs directory")
 
         print("✓ Report generation complete")
 
     except Exception as e:
         print(f"✗ Report generation failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -270,7 +264,7 @@ def pipeline(
         print("\n1. INGESTION")
         print("-" * 40)
         with utils.Timer("Total ingestion"):
-            newly_ingested = ingest.ingest_seed_folder(seed_folder)
+            ingest.ingest_seed_folder(seed_folder)
 
         # Step 2: Tokenize
         print("\n2. TOKENIZATION")
@@ -288,7 +282,7 @@ def pipeline(
         print("\n4. DECODING")
         print("-" * 40)
         with utils.Timer("Total decoding"):
-            decode_results = decoder.decode_all_documents(none_bias)
+            decoder.decode_all_documents(none_bias)
 
         # Step 5: Emit
         print("\n5. EMISSION")
@@ -296,7 +290,7 @@ def pipeline(
         with utils.Timer("Total emission"):
             emit_results = emit.emit_all_documents()
 
-        # Log version information (consistent with emit_cmd)
+        # Log version information
         try:
             version_log_dir = paths.get_logs_dir()
             version_log_path = version_log_dir / "version_log.jsonl"
@@ -321,8 +315,8 @@ def pipeline(
         print("-" * 40)
         report_data = report.generate_report()
 
-        # Always save report (was only saving if save_report=True)
-        report_path = report.save_report(report_data)
+        # Always save report
+        report.save_report(report_data)
 
         print("\n" + "=" * 80)
         print("PIPELINE COMPLETE")
@@ -338,7 +332,7 @@ def pipeline(
 
     except Exception as e:
         print(f"✗ Pipeline failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -391,14 +385,7 @@ def status() -> None:
 
     except Exception as e:
         print(f"✗ Status check failed: {e}")
-        raise typer.Exit(1)
-
-
-@app.command(name="labels")
-def labels_cmd() -> None:
-    """Labels management commands."""
-    print("Use subcommands: pull, import, align")
-    raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="doccano-pull")
@@ -420,7 +407,7 @@ def doccano_pull_cmd() -> None:
 
     except Exception as e:
         print(f"✗ Doccano pull failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="doccano-import")
@@ -442,7 +429,7 @@ def doccano_import_cmd(
 
     except Exception as e:
         print(f"✗ Doccano import failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command(name="doccano-align")
@@ -476,8 +463,8 @@ def doccano_align_cmd(
             raise typer.Exit(1)
 
     except Exception as e:
-        print(f"✗ Doccano alignment failed: {e}")
-        raise typer.Exit(1)
+        print(f"✗ Labels alignment failed: {e}")
+        raise typer.Exit(1) from e
 
 
 @app.command(name="train")
@@ -511,7 +498,7 @@ def train_cmd() -> None:
 
     except Exception as e:
         print(f"✗ Training failed: {e}")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 @app.command()
@@ -523,9 +510,6 @@ def run(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ) -> None:
     """Extract data from a single PDF file → JSON output."""
-    import shutil
-    import tempfile
-
     pdf_file = Path(pdf_path)
 
     if not pdf_file.exists():
@@ -582,7 +566,7 @@ def run(
                     )
                     print(f"  Decoded: {predictions} predictions")
 
-                emit_results = emit.emit_all_documents()
+                emit.emit_all_documents()
 
         # Find and copy the output JSON
         indexed_docs = ingest.get_indexed_documents()
@@ -593,7 +577,6 @@ def run(
         # There should be exactly one document
         for _, doc_info in indexed_docs.iterrows():
             sha256 = doc_info["sha256"]
-            doc_id = doc_info["doc_id"]
             predictions_path = paths.get_predictions_path(sha256)
 
             if predictions_path.exists():
@@ -642,7 +625,7 @@ def run(
             import traceback
 
             traceback.print_exc()
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 def main() -> None:

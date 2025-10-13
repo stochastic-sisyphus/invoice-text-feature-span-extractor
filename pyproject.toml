@@ -30,6 +30,8 @@ dependencies = [
     "python-dateutil>=2.8.0",
     "tqdm>=4.64.0",
     "scipy>=1.11.0",
+    "xgboost>=2.0.0,<2.1",
+    "doccano>=1.8.0",
 ]
 
 [project.optional-dependencies]
@@ -39,10 +41,12 @@ dev = [
     "black>=23.0.0",
     "isort>=5.12.0",
     "mypy>=1.5.0",
+    "ruff>=0.1.0",
 ]
 
 [project.scripts]
-run-pipeline = "scripts.run_pipeline:main"
+run-pipeline = "invoices.cli:main"
+invoicex = "invoices.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -60,3 +64,28 @@ python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "B904",  # raise from within except - too noisy
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011", "F841"]  # Allow unused variables in tests
+"scripts/*" = ["F841", "B007"]  # Allow unused variables in scripts
