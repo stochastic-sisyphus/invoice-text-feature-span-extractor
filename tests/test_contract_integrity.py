@@ -354,17 +354,14 @@ class TestContractIntegrity:
 
         print("✓ Model persistence test passed")
 
-    def test_labels_safe_no_op(self):
-        """Test that labels operations are safe no-ops without credentials."""
+    def test_doccano_safe_no_op(self):
+        """Test that Doccano operations are safe no-ops without credentials."""
         # Test pull without credentials
         import os
 
         # Ensure no credentials are set
-        old_url = os.environ.get("LABEL_STUDIO_URL")
-        old_token = os.environ.get("LABEL_STUDIO_TOKEN")
-
-        os.environ.pop("LABEL_STUDIO_URL", None)
-        os.environ.pop("LABEL_STUDIO_TOKEN", None)
+        old_pass = os.environ.get("DOCCANO_PASSWORD")
+        os.environ.pop("DOCCANO_PASSWORD", None)
 
         try:
             # Should be safe no-op
@@ -372,10 +369,8 @@ class TestContractIntegrity:
             assert result["status"] == "skipped"
             assert result["reason"] == "missing_credentials"
 
-            print("✓ Labels safe no-op test passed")
+            print("✓ Doccano safe no-op test passed")
         finally:
             # Restore environment
-            if old_url:
-                os.environ["LABEL_STUDIO_URL"] = old_url
-            if old_token:
-                os.environ["LABEL_STUDIO_TOKEN"] = old_token
+            if old_pass:
+                os.environ["DOCCANO_PASSWORD"] = old_pass

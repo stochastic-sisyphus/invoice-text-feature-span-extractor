@@ -1,4 +1,4 @@
-"""Label Studio integration for label pulling, import, and alignment."""
+"""Doccano integration for label pulling, import, and alignment."""
 
 import json
 import os
@@ -16,33 +16,62 @@ from . import ingest, paths, tokenize, utils
 
 def pull_labels() -> dict[str, Any]:
     """
-    Pull labels from Label Studio HTTP API.
+    Pull labels from Doccano HTTP API.
     Safe no-op when credentials missing.
 
     Returns:
         Summary of pulled labels or error info
     """
     # Check for credentials
-    api_url = os.environ.get("LABEL_STUDIO_URL")
-    api_token = os.environ.get("LABEL_STUDIO_TOKEN")
+    api_url = os.environ.get("DOCCANO_URL", "http://localhost:8000")
+    api_user = os.environ.get("DOCCANO_USERNAME", "admin")
+    api_pass = os.environ.get("DOCCANO_PASSWORD")
 
-    if not api_url or not api_token:
-        print("Label Studio credentials missing (LABEL_STUDIO_URL, LABEL_STUDIO_TOKEN)")
+    if not api_pass:
+        print("Doccano credentials missing (DOCCANO_PASSWORD required)")
+        print("Using DOCCANO_URL =", api_url)
+        print("Using DOCCANO_USERNAME =", api_user)
         print("Skipping label pull (safe no-op)")
         return {"status": "skipped", "reason": "missing_credentials"}
 
     try:
-        # Construct API endpoint for tasks
-        tasks_url = f"{api_url.rstrip('/')}/api/tasks/"
+        # Authenticate with Doccano
+        auth_url = f"{api_url.rstrip('/')}/auth/login/"
+        auth_data = json.dumps({
+            "username": api_user,
+            "password": api_pass
+        }).encode('utf-8')
 
-        # Create request with auth header
-        request = urllib.request.Request(tasks_url)
-        request.add_header("Authorization", f"Token {api_token}")
-        request.add_header("Content-Type", "application/json")
+        auth_request = urllib.request.Request(auth_url, data=auth_data)
+        auth_request.add_header("Content-Type", "application/json")
 
-        # Make request
-        with urllib.request.urlopen(request) as response:
-            tasks_data = json.loads(response.read().decode())
+        with urllib.request.urlopen(auth_request) as auth_response:
+            auth_result = json.loads(auth_response.read().decode())
+
+        # Get projects and their annotations
+        projects_url = f"{api_url.rstrip('/')}/api/projects/"
+        projects_request = urllib.request.Request(projects_url)
+        projects_request.add_header("Authorization", f"Bearer {auth_result.get('access')}")
+
+        with urllib.request.urlopen(projects_request) as response:
+            projects_data = json.loads(response.read().decode())
+
+        # Collect annotations from all projects
+        tasks_data = []
+        for project in projects_data:
+            project_id = project['id']
+            annotations_url = f"{api_url.rstrip('/')}/api/projects/{project_id}/annotations/"
+
+            annotations_request = urllib.request.Request(annotations_url)
+            annotations_request.add_header("Authorization", f"Bearer {auth_result.get('access')}")
+
+            try:
+                with urllib.request.urlopen(annotations_request) as ann_response:
+                    annotations = json.loads(ann_response.read().decode())
+                    tasks_data.extend(annotations)
+            except Exception as e:
+                print(f"Warning: Could not fetch annotations for project {project_id}: {e}")
+                continue
 
         # Save raw labels
         labels_raw_dir = paths.get_repo_root() / "data" / "labels" / "raw"
@@ -56,7 +85,7 @@ def pull_labels() -> dict[str, Any]:
 
         task_count = len(tasks_data) if isinstance(tasks_data, list) else 0
 
-        print(f"Pulled {task_count} tasks from Label Studio")
+        print(f"Pulled {task_count} annotations from Doccano")
         print(f"Saved raw labels to: {raw_file}")
 
         return {
@@ -78,10 +107,10 @@ def pull_labels() -> dict[str, Any]:
 
 def import_labels(path: str) -> dict[str, Any]:
     """
-    Import labels from local Label Studio export file.
+    Import labels from local Doccano export file.
 
     Args:
-        path: Path to Label Studio export JSON file
+        path: Path to Doccano export JSON file
 
     Returns:
         Summary of imported labels
@@ -233,45 +262,45 @@ def align_labels(iou_threshold: float = 0.3, all_files: bool = False) -> dict[st
 
             # Process annotations
             annotations = task.get("annotations", [])
-            
+
             for annotation in annotations:
                 results = annotation.get("result", [])
-                
+
                 for result in results:
                     # Extract label info
                     value = result.get("value", {})
                     field_name = value.get("labels", [None])[0]
-                    
+
                     if not field_name:
                         continue
-                    
+
                     # Extract span coordinates (character-based)
                     char_start = value.get("start")
                     char_end = value.get("end")
                     labeled_text = value.get("text", "")
-                    
+
                     if char_start is None or char_end is None:
                         continue
-                    
+
                     # Find best matching candidate using IoU on character ranges
                     best_candidate_idx = None
                     best_iou = 0.0
-                    
+
                     for cand_idx, candidate_row in candidates_df.iterrows():
                         # Get candidate character range from candidates
                         cand_start = candidate_row.get("char_start")
                         cand_end = candidate_row.get("char_end")
-                        
+
                         if cand_start is None or cand_end is None:
                             continue
-                        
+
                         # Compute character-level IoU
                         iou = char_iou(char_start, char_end, cand_start, cand_end)
-                        
+
                         if iou > best_iou and iou >= iou_threshold:
                             best_iou = iou
                             best_candidate_idx = cand_idx
-                    
+
                     # Create alignment row
                     alignment_row = {
                         "sha256": sha256,
@@ -284,26 +313,26 @@ def align_labels(iou_threshold: float = 0.3, all_files: bool = False) -> dict[st
                         "alignment_iou": best_iou if best_candidate_idx is not None else 0.0,
                         "is_aligned": best_candidate_idx is not None
                     }
-                    
+
                     aligned_rows.append(alignment_row)
-        
+
         # Save aligned results for this file
         if aligned_rows:
             aligned_df = pd.DataFrame(aligned_rows)
             aligned_file = aligned_dir / f"aligned_{label_file.stem}.parquet"
             aligned_df.to_parquet(aligned_file, index=False)
-            
+
             file_aligned_count = len(aligned_df)
             total_aligned += file_aligned_count
-            
+
             alignment_results.append({
                 "source_file": label_file.name,
                 "aligned_file": aligned_file.name,
                 "aligned_count": file_aligned_count
             })
-            
+
             print(f"Saved {file_aligned_count} alignments to: {aligned_file.name}")
-    
+
     return {
         "status": "success",
         "total_aligned": total_aligned,
@@ -316,70 +345,70 @@ def align_labels(iou_threshold: float = 0.3, all_files: bool = False) -> dict[st
 def char_iou(a_start: int, a_end: int, b_start: int, b_end: int) -> float:
     """
     Compute Intersection over Union for character ranges.
-    
+
     Args:
         a_start, a_end: First character range
         b_start, b_end: Second character range
-        
+
     Returns:
         IoU score between 0.0 and 1.0
     """
     if a_start >= a_end or b_start >= b_end:
         return 0.0
-    
+
     # Calculate intersection
     intersection_start = max(a_start, b_start)
     intersection_end = min(a_end, b_end)
-    
+
     if intersection_start >= intersection_end:
         return 0.0
-    
+
     intersection_length = intersection_end - intersection_start
-    
+
     # Calculate union
     union_length = (a_end - a_start) + (b_end - b_start) - intersection_length
-    
+
     if union_length == 0:
         return 0.0
-    
+
     return intersection_length / union_length
 
 
 def load_aligned_labels() -> pd.DataFrame:
     """
     Load all aligned labels from the aligned directory.
-    
+
     Returns:
         Combined DataFrame with all aligned labels
     """
     aligned_dir = paths.get_repo_root() / "data" / "labels" / "aligned"
-    
+
     if not aligned_dir.exists():
         print("No aligned labels directory found")
         return pd.DataFrame()
-    
+
     parquet_files = list(aligned_dir.glob("*.parquet"))
-    
+
     if not parquet_files:
         print("No aligned label files found")
         return pd.DataFrame()
-    
+
     # Load and combine all aligned files
     dfs = []
     for parquet_file in parquet_files:
         try:
             df = pd.read_parquet(parquet_file)
             # Only include successfully aligned labels
-            df = df[df["is_aligned"] == True].copy()
+            df = df[df["is_aligned"]].copy()
             dfs.append(df)
         except Exception as e:
             print(f"Warning: Could not load {parquet_file.name}: {e}")
             continue
-    
+
     if not dfs:
         return pd.DataFrame()
-    
+
     combined_df = pd.concat(dfs, ignore_index=True)
     print(f"Loaded {len(combined_df)} aligned labels from {len(dfs)} files")
-    
+
     return combined_df

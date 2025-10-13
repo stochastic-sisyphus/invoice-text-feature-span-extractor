@@ -45,7 +45,7 @@ ls artifacts/predictions/  # JSON outputs here
 The system is designed for seamless vendor integration:
 
 1. **No vendor-specific rules** - The feature-based ML approach learns patterns automatically
-2. **Add training data** - Use Label Studio integration to annotate new vendor formats  
+2. **Add training data** - Use [Doccano](https://doccano.github.io/doccano/) integration to annotate new vendor formats  
 3. **Retrain models** - `invoicex train` updates XGBoost models with new patterns
 4. **Deterministic outputs** - Same PDF always produces identical JSON across runs
 
@@ -61,6 +61,12 @@ invoicex pipeline --seed-folder pdfs/ --verbose
 # Check individual document processing
 invoicex status
 invoicex report --save
+
+# Doccano annotation workflow
+invoicex doccano-pull     # Pull from Doccano API
+invoicex doccano-import --in export.json  # Import local export
+invoicex doccano-align --all  # Align with candidates
+invoicex train            # Train models on aligned data
 
 # Inspect intermediate outputs
 ls data/tokens/      # Text extraction
@@ -122,35 +128,39 @@ data/
 
 The pipeline is designed for seamless integration with external systems:
 
-**Tomorrow's Connectors**: The `doc_id` field supports multiple source prefixes (`fs:`, `dv:`, `sp:`, `ls:`) while `sha256` remains the stable content key. New connectors (Dynamics/SharePoint/Label Studio) can be added without changing downstream stages.
+**Tomorrow's Connectors**: The `doc_id` field supports multiple source prefixes (`fs:`, `dv:`, `sp:`, `dc:`) while `sha256` remains the stable content key. New connectors (Dynamics/SharePoint/Doccano) can be added without changing downstream stages.
 
 **Model Evolution**: The `unscored-baseline` decoder will be replaced with trained XGBoost models using the same `features_v1`. Calibration and confidence thresholds can be updated via `calibration_version` without breaking contract compatibility.
 
-**Review Integration**: Human corrections flow back through the review queue (`data/review/queue.parquet`) with full bbox provenance, enabling continuous model improvement and Label Studio integration.
+**Review Integration**: Human corrections flow back through the review queue (`data/review/queue.parquet`) with full bbox provenance, enabling continuous model improvement and Doccano integration.
 
-## Label Studio Integration
+## Doccano Integration
 
-Complete annotation workflow for training custom models:
+Complete annotation workflow for training custom models using [Doccano](https://doccano.github.io/doccano/):
 
 ```bash
-# 1. Generate tasks with normalization guards
-cd tools/labelstudio
+# 1. Install and start Doccano
+pip install doccano
+doccano init && doccano createuser && doccano webserver
+
+# 2. Generate tasks with normalization guards  
+cd tools/doccano
 python tasks_gen.py --seed-folder ../../seed_pdfs --output ./output
 
-# 2. Upload tasks.json to Label Studio and annotate
-# 3. Export annotations and import
-invoicex labels-import --in path/to/export.json
+# 3. Import tasks.json to Doccano project and annotate
+# 4. Export annotations and import
+invoicex doccano-import --in path/to/export.json
 
-# 4. Align labels with candidates using IoU
-invoicex labels-align --all --iou 0.3
+# 5. Align labels with candidates using IoU
+invoicex doccano-align --all --iou 0.3
 
-# 5. Train XGBoost models on aligned data
+# 6. Train XGBoost models on aligned data
 invoicex train
 ```
 
 **Normalization Guards**: Each task includes `normalize_version` and `text_checksum` to prevent drift between annotation and pipeline versions. Alignment validates text consistency before processing.
 
-**Field Mapping**: Label Studio labels map directly to contract fields (e.g., `InvoiceNumber` → `invoice_number`, `TotalAmount` → `total_amount`). Line items are spatially grouped when unambiguous.
+**Field Mapping**: Doccano labels map directly to contract fields (e.g., `InvoiceNumber` → `invoice_number`, `TotalAmount` → `total_amount`). Line items are spatially grouped when unambiguous.
 
 ## Pipeline Stages
 

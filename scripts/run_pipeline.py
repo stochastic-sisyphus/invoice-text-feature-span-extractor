@@ -401,16 +401,16 @@ def labels_cmd() -> None:
     raise typer.Exit(1)
 
 
-@app.command(name="labels-pull")
-def labels_pull_cmd() -> None:
-    """Pull labels from Label Studio API."""
+@app.command(name="doccano-pull")
+def doccano_pull_cmd() -> None:
+    """Pull labels from Doccano API."""
     try:
-        print("Pulling labels from Label Studio...")
+        print("Pulling labels from Doccano...")
 
         result = labels.pull_labels()
 
         if result["status"] == "success":
-            print(f"✓ Pulled {result['task_count']} tasks")
+            print(f"✓ Pulled {result['task_count']} annotations")
             print(f"Raw labels saved to: {result['raw_file']}")
         elif result["status"] == "skipped":
             print(f"✓ Pull skipped: {result['reason']}")
@@ -419,40 +419,40 @@ def labels_pull_cmd() -> None:
             raise typer.Exit(1)
 
     except Exception as e:
-        print(f"✗ Labels pull failed: {e}")
+        print(f"✗ Doccano pull failed: {e}")
         raise typer.Exit(1)
 
 
-@app.command(name="labels-import")
-def labels_import_cmd(
-    path: str = typer.Option(..., "--in", help="Path to Label Studio export file")
+@app.command(name="doccano-import")
+def doccano_import_cmd(
+    path: str = typer.Option(..., "--in", help="Path to Doccano export file")
 ) -> None:
-    """Import labels from local Label Studio export."""
+    """Import labels from local Doccano export."""
     try:
         print(f"Importing labels from: {path}")
 
         result = labels.import_labels(path)
 
         if result["status"] == "success":
-            print(f"✓ Imported {result['task_count']} tasks")
+            print(f"✓ Imported {result['task_count']} annotations")
             print(f"Saved to: {result['raw_file']}")
         else:
             print("✗ Import failed")
             raise typer.Exit(1)
 
     except Exception as e:
-        print(f"✗ Labels import failed: {e}")
+        print(f"✗ Doccano import failed: {e}")
         raise typer.Exit(1)
 
 
-@app.command(name="labels-align")
-def labels_align_cmd(
+@app.command(name="doccano-align")
+def doccano_align_cmd(
     all_files: bool = typer.Option(False, "--all", help="Process all raw label files"),
     iou_threshold: float = typer.Option(
         0.3, "--iou", help="IoU threshold for alignment"
     ),
 ) -> None:
-    """Align labels with candidates using IoU matching."""
+    """Align Doccano labels with candidates using IoU matching."""
     try:
         print("Aligning labels with candidates...")
 
@@ -476,7 +476,7 @@ def labels_align_cmd(
             raise typer.Exit(1)
 
     except Exception as e:
-        print(f"✗ Labels alignment failed: {e}")
+        print(f"✗ Doccano alignment failed: {e}")
         raise typer.Exit(1)
 
 

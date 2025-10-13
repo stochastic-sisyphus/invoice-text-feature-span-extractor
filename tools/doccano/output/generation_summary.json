@@ -34,8 +34,8 @@
     }
   ],
   "output_paths": {
-    "tasks": "tools/labelstudio/output/tasks.json",
-    "labeled_pdfs": "tools/labelstudio/output/labeled_pdfs",
-    "summary": "tools/labelstudio/output/generation_summary.json"
+    "tasks": "tools/doccano/output/tasks.json",
+    "labeled_pdfs": "tools/doccano/output/labeled_pdfs",
+    "summary": "tools/doccano/output/generation_summary.json"
   }
 }
