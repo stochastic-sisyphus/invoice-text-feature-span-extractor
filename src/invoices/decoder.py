@@ -71,7 +71,7 @@ def compute_ml_cost(
         area = width * height
 
         # Text features
-        text = str(candidate.get("raw_text", ""))
+        text = str(candidate.get("raw_text") or candidate.get("text", ""))
         char_count = len(text)
         word_count = len(text.split())
         digit_count = sum(bool(c.isdigit()) for c in text)
